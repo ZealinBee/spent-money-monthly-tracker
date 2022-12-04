@@ -63,3 +63,9 @@ h2 {
 .used {
   color:red;
 }
+
+.reset-button {
+  position: absolute;
+  top:0;
+  right:0;
+}
