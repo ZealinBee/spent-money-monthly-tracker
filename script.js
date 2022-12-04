@@ -76,6 +76,8 @@ const submitSpentMoneyHandler = () => {
     });
     currentDay = i + 1;
   }
+
+  localStorage.setItem("local-calendar", calendar)
   
 };
 
