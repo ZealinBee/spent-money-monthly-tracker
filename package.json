@@ -4,6 +4,28 @@
     "@fullcalendar/daygrid": "^5.11.3",
     "@fullcalendar/list": "^5.11.3",
     "@fullcalendar/timegrid": "^5.11.3",
-    "fullcalendar": "^5.11.3"
-  }
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "fullcalendar": "^5.11.3",
+    "pg": "^8.8.0"
+  },
+  "name": "spent-money-monthly-tracker",
+  "description": "An application requested by one of my friend.\r Functionalities\r To be able to set how much money you are allowed to spend every month.\r The application generates a daily allowance based on your budget.\r Every time you spend money, input the amount you have spent and the app will tell you how much days of daily allowance you have spent.",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZealinBee/spent-money-monthly-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZealinBee/spent-money-monthly-tracker/issues"
+  },
+  "homepage": "https://github.com/ZealinBee/spent-money-monthly-tracker#readme"
 }
