@@ -9,7 +9,7 @@
   let monthlyAllowance = 0;
   let dailyAllowance = 0;
   let totalDaysUsed = 0;
-  let currentDay = 0
+  let currentDay = 0;
 
   //Month set money part
   const monthlyAllowanceInput = document.querySelector(
@@ -67,7 +67,7 @@
     calendar.removeAllEvents()
     currentDay = 0;
     for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-      currentDay += 1;
+      currentDay += 21;
       if(currentDay < 10) {
         currentDay = `0${currentDay}`
       }
