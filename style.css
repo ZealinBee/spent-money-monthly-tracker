@@ -17,43 +17,8 @@ main {
 }
 
 .hide {
-  display: none!important;
-}
-
-h1,
-h2 {
-  color: rgb(234, 228, 228);
-  font-size: 1.5rem;
-}
-
-.monthly-allowance-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 30% 1fr;
-  margin-top:5rem;
-  margin-bottom:1.5rem;
-}
-
-.monthly-allowance-container > :nth-child(1) {
-  grid-column: 1/2;
-  grid-row: 1/2;
-}
-.monthly-allowance-container > :nth-child(2) {
-  grid-column: 1/2;
-  grid-row: 2/3;
-}
-.monthly-allowance-container > :nth-child(3) {
-  grid-column: 2/3;
-  grid-row: 1/2;
-}
-.monthly-allowance-container > :nth-child(4) {
-  grid-column: 2/3;
-  grid-row: 2/3;
-}
-.monthly-allowance-container > :nth-child(5) {
-  grid-column: 1/3;
-  grid-row: 3/4;
-  cursor: pointer;
+  opacity:0;
+  pointer-events: none;
 }
 
 .used {
@@ -76,9 +41,6 @@ h2 {
 input {
   outline:none;
   border-radius: 1.2rem;
-  border:3px white solid;
-  background:rgba(235, 230, 230, 0.5);
-  color:white;
 }
 
 input::-webkit-outer-spin-button,
@@ -98,9 +60,11 @@ button {
   color:white;;
 }
 
-
-
 .fc-scrollgrid {
+  color:white;
+}
+
+.fc-toolbar-title {
   color:white;
 }
 
@@ -111,23 +75,61 @@ button {
 
 /* Actually in order here */
 
-.monthly-allowance-container input {
-  font-size:1.5rem;
-  padding-left:1rem;
+.monthly-allowance-container {
+  display: flex;
+  flex-direction: column;
+  position:absolute;
+  background:white;
+  margin-top:5rem;
+  margin-bottom:1.5rem;
+  left: 50%;
+  top:30%;
+  transform: translate(-50%,-50%);
+  padding:2rem;
+  border-radius: 1rem;
+  z-index:999;
+  font-size:0.8rem;
 }
 
-.monthly-allowance-container #monthly-allowance-input {
-  margin-right:1rem;
- 
+.monthly-allowance-container > * {
+  margin-bottom:1rem;
+}
+
+.monthly-allowance-container button{
+  cursor: pointer;
+}
+
+
+.monthly-allowance-container input {
+  font-size:1.2rem;
+  padding:0.3rem 0;
+  padding-left:1rem;
+  border:2px black solid;
 }
 
 .monthly-allowance-container button{
   margin-top:1.2rem;
-  font-size:1.5rem;
+  font-size:1.2rem;
   padding:0.5rem 0;
+  color:black;
+  border:3px black solid;
+  transition: all 0.3s ease;
+}
+
+.monthly-allowance-container button:hover {
+  color:white;
+  background:black;
+}
+
+.monthly-allowance-container h1 {
+  font-size:1.2rem;
 }
 
 .total-money-you-can-use-text {
+  margin-top:2rem;
+}
+
+.money-input-wrapper {
   margin-top:2rem;
 }
 
@@ -144,4 +146,11 @@ button {
   font-size:1rem;
   padding:0.5rem 1rem;
   margin-left:0.5rem;
+  cursor:pointer;
+}
+
+.money-input-wrapper h1,
+.money-input-wrapper h2 {
+  color:white;
+  font-size:1.5rem;
 }

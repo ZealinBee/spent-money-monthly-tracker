@@ -5,29 +5,33 @@
     <link rel="stylesheet" href="./main.css" />
     <script src="./main.js"></script>
     <script type="module" src="./script.js"></script>
-    <link rel="stylesheet" href="./style.css" >
-
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <main>
       <div class="monthly-allowance-container">
         <h1>Total Money You have</h1>
         <input type="number" id="monthly-allowance-input" />
-        <h1>Total Money You Want to Save</h1>
+        <h1>You Want to Save</h1>
         <input type="number" id="monthly-save-input" />
         <button id="submit-monthly-money">Submit</button>
       </div>
       <div class="money-input-wrapper">
-      <h1 class="total-money-you-can-use-text">
-        Total Money You can Use:
-        <span id="total-monthly-allowance-span">0</span>
-      </h1>
-      <h2>Daily Allowance: <span id="daily-allowance-span">0</span></h2>
-      <input type="number" placeholder="I spent" id="spent-money-input" />
-      <button id="submit-spent-money">Submit</button>
-      <h1>Total You spent: <span id="total-spent-money-span"></span></h1>
-      <h1>Total Days Used: <span id="total-days-used-span"></span></h1>
-    </div>
+        <h1 class="total-money-you-can-use-text">
+          Total Money You can Use:
+          <span id="total-monthly-allowance-span">0</span>
+        </h1>
+        <h2>Daily Allowance: <span id="daily-allowance-span">0</span></h2>
+        <input
+          type="number"
+          placeholder="I spent"
+          id="spent-money-input"
+          aria-placeholder="How much you spent"
+        />
+        <button id="submit-spent-money">Submit</button>
+        <h1>Total You spent: <span id="total-spent-money-span"></span></h1>
+        <h1>Total Days Used: <span id="total-days-used-span"></span></h1>
+      </div>
       <h1 id="warning"></h1>
     </main>
     <div id="calendar"></div>
