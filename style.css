@@ -121,7 +121,23 @@ section p {
 
 section p:hover {
   color:rgb(0, 0, 236, 0.5);
+}
 
+.error-login {
+  border:2px red solid;
+
+}
+
+.login-error-message {
+  color:red;
+  pointer-events: none;
+  display:none;
+}
+
+.fill-empty-error-message {
+  color:red;
+  pointer-events: none;
+  display:none;
 }
 
 .signup-section {

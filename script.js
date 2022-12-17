@@ -1,5 +1,10 @@
+
+
 //Imports
 import numberOfDaysInAMonth from "./daysCount.js";
+
+//Program
+const program = document.querySelector('#program')
 
 //Editable variables
 let totalSpentMoney = 0;
@@ -20,7 +25,10 @@ const signUpPasswordInput = document.querySelector("#sign-up-password-input");
 const loginUserNameInput = document.querySelector("#login-username-input");
 const loginPasswordInput = document.querySelector("#login-password-input");
 const loginButton = document.querySelector("#login-button");
-
+const loginErrorMessage = document.querySelector(".login-error-message");
+const fillEmptyErrorMessage = document.querySelector(
+  ".fill-empty-error-message"
+);
 //Month set money part
 const monthlyAllowanceInput = document.querySelector(
   "#monthly-allowance-input"
@@ -120,22 +128,81 @@ signUpButton.addEventListener("click", function (e) {
 loginButton.addEventListener("click", loginUser);
 
 async function loginUser(e) {
+  e.preventDefault();
+
   let userNameInputValue = loginUserNameInput.value;
   let passwordInputValue = loginPasswordInput.value;
-  e.preventDefault();
-  const response = await fetch("/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: userNameInputValue,
-      password: passwordInputValue,
-      totalHave: 0,
-      totalSpend: 0,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data));
+  if (passwordInputValue.length == 0 || userNameInputValue.length == 0) {
+    fillEmptyErrorMessage.classList.add("show");
+    loginUserNameInput.classList.add("error-login");
+    loginPasswordInput.classList.add("error-login");
+  } else {
+    fillEmptyErrorMessage.classList.remove("show");
+    loginUserNameInput.classList.remove("error-login");
+    loginPasswordInput.classList.remove("error-login");
+    const response = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: userNameInputValue,
+        password: passwordInputValue,
+        totalHave: 0,
+        totalSpend: 0,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => checkLogin(data));
+  }
 }
 
+function checkLogin(data) {
+  let answer = data.answer;
+  let totalSpend = data.totalSpend
+  let totalHave = data.totalHave
+  console.log(data)
+  if (!answer) {
+    loginUserNameInput.classList.add("error-login");
+    loginPasswordInput.classList.add("error-login");
+    loginErrorMessage.classList.add("show");
+  }else {
+    loginUserNameInput.classList.remove("error-login");
+    loginPasswordInput.classList.remove("error-login");
+    loginErrorMessage.classList.remove("show");
+    program.classList.add('show')
+    loginSection.classList.add('hide')
+    monthlyAllowance = totalHave
+    totalMonthlyAllowanceSpan.textContent = monthlyAllowance
+    totalSpentMoney = totalSpend
+    totalSpentMoneySpan.textContent = totalSpentMoney
+    dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
+  dailyAllowanceSpan.textContent = dailyAllowance;
+  totalDaysUsed = totalSpentMoney / dailyAllowance;
+  totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
+  if (totalDaysUsed > numberOfDaysInAMonth) {
+    warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
+      totalDaysUsed - numberOfDaysInAMonth
+    ).toFixed(0)} day(s)`;
+  }
+  calendar.removeAllEvents();
+  currentDay = 0;
+  for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
+    currentDay += 21;
+    if (currentDay < 10) {
+      currentDay = `0${currentDay}`;
+    }
+    calendar.addEvent({
+      title: "day used!",
+      start: `2022-12-${currentDay}`,
+      end: `2022-12-${currentDay}`,
+    });
+    currentDay = i + 1;
+  } 
+  calendar.render();
+  }
+  if(monthlyAllowance > 0) {
+    monthlyAllowanceContainer.classList.add('hide')
+  }
+
+}
