@@ -22,12 +22,16 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-        user=User.find({username: req.body.username})
-        if (user.password==req.body.password)
-            answer='fine'
-        else
-            answer='bad'
-        return res.status(200).json({answer: 'fine'})
+        let user=User.find({username: req.body.username})
+        let password;
+        let answer='bad'
+        for await (const doc of user) {
+            password=doc.password;
+            break;
+            }
+        if (password==req.body.password)
+            answer='fine'    
+        return res.status(200).json({answer: answer})
       } catch(err) {
         return res.status(500).json({ message: err.message });
       }
