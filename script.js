@@ -64,7 +64,7 @@ const submitMonthlyMoneyHandler = () => {
   dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
   dailyAllowanceSpan.textContent = dailyAllowance;
   const xhr = new XMLHttpRequest();
-  xhr.open("PUT", "https://zealinbee.github.io/spent-money-monthly-tracker/money");
+  xhr.open("PUT", "/money");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(
     JSON.stringify({
@@ -101,7 +101,7 @@ const submitSpentMoneyHandler = () => {
   }
 
   const xhr = new XMLHttpRequest();
-  xhr.open("PUT", "https://zealinbee.github.io/spent-money-monthly-tracker/money");
+  xhr.open("PUT", "/money");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(
     JSON.stringify({
@@ -131,7 +131,7 @@ signUpButton.addEventListener("click", function (e) {
   console.log(userNameInputValue);
   console.log(passwordInputValue);
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://zealinbee.github.io/spent-money-monthly-tracker/register");
+  xhr.open("POST", "/register");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(
     JSON.stringify({
@@ -157,7 +157,7 @@ async function loginUser(e) {
     fillEmptyErrorMessage.classList.remove("show");
     loginUserNameInput.classList.remove("error-login");
     loginPasswordInput.classList.remove("error-login");
-    const response = await fetch("https://zealinbee.github.io/spent-money-monthly-tracker/login", {
+    const response = await fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
