@@ -1,6 +1,5 @@
 //Imports
 import numberOfDaysInAMonth from "./daysCount.js";
-const ssh = "test"
 
 //Editable variables
 let totalSpentMoney = 0;
@@ -17,9 +16,10 @@ const goToLoginLink = document.querySelector("#go-to-login-link");
 const toggleLogin = document.querySelector(".toggle-login");
 const signUpButton = document.querySelector("#sign-up-button");
 const signUpUserNameInput = document.querySelector("#sign-up-username-input");
-const signUpPasswordInput = document.querySelector(
-  "#sign-up-password-input"
-);
+const signUpPasswordInput = document.querySelector("#sign-up-password-input");
+const loginUserNameInput = document.querySelector("#login-username-input");
+const loginPasswordInput = document.querySelector("#login-password-input");
+const loginButton = document.querySelector("#login-button");
 
 //Month set money part
 const monthlyAllowanceInput = document.querySelector(
@@ -103,8 +103,8 @@ signUpButton.addEventListener("click", function (e) {
   e.preventDefault();
   let userNameInputValue = signUpUserNameInput.value;
   let passwordInputValue = signUpPasswordInput.value;
-  console.log(userNameInputValue)
-  console.log(passwordInputValue)
+  console.log(userNameInputValue);
+  console.log(passwordInputValue);
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "/register");
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -113,7 +113,29 @@ signUpButton.addEventListener("click", function (e) {
       username: userNameInputValue,
       password: passwordInputValue,
       totalHave: 0,
-      totalSpend: 0
+      totalSpend: 0,
     })
   );
 });
+loginButton.addEventListener("click", loginUser);
+
+async function loginUser(e) {
+  let userNameInputValue = loginUserNameInput.value;
+  let passwordInputValue = loginPasswordInput.value;
+  e.preventDefault();
+  const response = await fetch("/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: userNameInputValue,
+      password: passwordInputValue,
+      totalHave: 0,
+      totalSpend: 0,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+}
+

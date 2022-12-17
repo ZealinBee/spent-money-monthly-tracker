@@ -37,13 +37,6 @@ router.post("/login", async (req, res) => {
       }
 })
 
-router.get("/login", async (req, res) => {
-    try {
-          return res.status(200).json({answer: answer})
-        } catch(err) {
-          return res.status(500).json({ message: err.message });
-        }
-  })
 
 
 router.get("/", async (req, res) => {
