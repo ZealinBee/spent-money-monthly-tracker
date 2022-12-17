@@ -8,7 +8,7 @@ app.use('/', routes);
 
 //MongoDB connection
 const mongoose = require('mongoose');
-const mongoURL = 'mongodb+srv://user1:LmaoThisIsMyPassword@cluster0.q7wn3ji.mongodb.net/carddb?retryWrites=true&w=majority';
+const mongoURL = 'mongodb+srv://user1:LmaoThisIsMyPassword@cluster0.q7wn3ji.mongodb.net/spentmoneyAPP?retryWrites=true&w=majority';
 mongoose.connect(mongoURL, { useFindAndModify: false, useNewUrlParser: true , useUnifiedTopology: true});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
