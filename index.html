@@ -8,7 +8,28 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <main>
+    <section class="login-section" ">
+      <form action="submit">
+        <h1>Login</h1>
+        <input type="text" placeholder="User Name" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Log In</button>
+      </form>
+      <p id="go-to-sign-up-link">Don't have an account yet? Sign up Here</p>
+      <p class="toggle-login-signup">Use website as an user (data won't be deleted)</p>
+    </section>
+
+    <section class="signup-section">
+      <form action="submit">
+        <h1>Sign Up</h1>
+        <input type="text" placeholder="User Name" id="sign-up-username-input" required>
+        <input type="password" placeholder="Password" id="sign-up-password-input" required>
+        <button type="submit" id="sign-up-button">Sign Up</button>
+      </form>
+      <p id="go-to-login-link">Already have an account? Log in here</p>
+      <p class="toggle-login">Use website as an user (data won't be deleted)</p>
+    </section>
+    <main>                                                                                                                                                                                                           
       <div class="monthly-allowance-container">
         <h1>Total Money You have</h1>
         <input type="number" id="monthly-allowance-input" />
@@ -33,8 +54,9 @@
         <h1>Total Days Used: <span id="total-days-used-span"></span></h1>
       </div>
       <h1 id="warning"></h1>
-    </main>
+   
     <div id="calendar"></div>
     <button class="reset-button">Reset Everything</button>
+  </main>
   </body>
 </html>

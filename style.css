@@ -8,7 +8,6 @@
 }
 
 body {
-  background-color: #d9afd9;
   background:rgb(14, 14, 14);
 }
 
@@ -16,10 +15,7 @@ main {
   margin:0 2rem;
 }
 
-.hide {
-  opacity:0;
-  pointer-events: none;
-}
+
 
 .used {
   color:red;
@@ -68,12 +64,69 @@ button {
   color:white;
 }
 
-#calendar {
-  margin: 0 2rem;
-}
-
 
 /* Actually in order here */
+
+main {
+  display:none;
+}
+
+section {
+  position:absolute;
+  background:white;
+  border-radius: 1rem;
+  padding:2rem 1rem;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
+
+section h1 {
+  text-align: center;
+}
+
+section form {
+  display:flex;
+  flex-direction: column;
+}
+
+section button {
+  border:2px black solid;
+  color:black;
+  padding:0.5rem;
+  margin-top:1.5rem;
+  font-size:1rem;
+  margin-bottom:0.5rem;
+  cursor:pointer;
+}
+
+section button:hover {
+  background-color:black;
+  color:white;  
+}
+
+section input{
+  padding:0.5rem;
+  margin-top:1.5rem;
+  outline:none;
+  border:2px black solid;
+  padding-left:1rem;
+}
+
+section p {
+  padding:0.5rem;
+  cursor:pointer;
+  color:rgb(0, 0, 236);
+}
+
+section p:hover {
+  color:rgb(0, 0, 236, 0.5);
+
+}
+
+.signup-section {
+  display:none;
+}
 
 .monthly-allowance-container {
   display: flex;
@@ -157,4 +210,13 @@ button {
 
 #warning {
   color:white;
+}
+
+.hide {
+  opacity:0;
+  pointer-events: none;
+}
+
+.show {
+  display:block;
 }
