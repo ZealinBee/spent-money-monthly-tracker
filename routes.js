@@ -1,7 +1,24 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const Car = require('./models/car');
+const User = require('./models/user');
+
+router.post("/register", async (req, res) => {
+  const user = new User({
+    name: req.body.name,
+    surnamepassword: req.body.surnamepassword,
+    password: req.body.password,
+    totalHave: req.body.totalHave,
+    totalSpend: req.body.totalSpend
+  })
+  try {
+        const newUser = await user.save();
+        res.status(201).json({ newUser });
+      } catch(err) {
+        return res.status(500).json({ message: err.message });
+      }
+})
+
 
 router.get("/", async (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'))
