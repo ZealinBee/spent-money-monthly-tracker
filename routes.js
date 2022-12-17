@@ -19,21 +19,20 @@ router.post("/register", async (req, res) => {
       }
 })
 
-let answer=false
-
 router.post("/login", async (req, res) => {
   try {
         let user=User.find({username: req.body.username})
         let password;
         let totalHave=0;
         let totalSpend=0;
+        let answer=false
         for await (const doc of user) {
             passwordUser=doc.password;
             totalHaveUser=doc.totalHave
             totalSpendUser=doc.totalSpend
             break;
             }
-        if (password==req.body.password){
+        if (passwordUser==req.body.password){
             answer=true
             totalHave=totalHaveUser
             totalSpend=totalSpendUser   
