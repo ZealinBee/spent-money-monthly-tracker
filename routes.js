@@ -24,8 +24,10 @@ router.post("/login", async (req, res) => {
   try {
         user=User.find({username: req.body.username})
         if (user.password==req.body.password)
-                return 'fine'
-        return 'bad'
+            answer='fine'
+        else
+            answer='bad'
+        return res.status(200).json({answer: 'fine'})
       } catch(err) {
         return res.status(500).json({ message: err.message });
       }
