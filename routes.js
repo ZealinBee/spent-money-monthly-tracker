@@ -37,6 +37,12 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.get("/register", async (req, res) => {
+    
+    return res.status(200).json({ answer:"lmao" });
+
+  });
+
 router.post("/login", async (req, res) => {
   try {
     let user = User.find({ username: req.body.username });
