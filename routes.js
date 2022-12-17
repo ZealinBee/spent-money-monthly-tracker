@@ -4,23 +4,7 @@ const user = require("./models/user");
 const router = express.Router();
 const User = require("./models/user");
 
-
-let username='NaN'
-
-router.post("/register", async (req, res) => {
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password,
-    totalHave: req.body.totalHave,
-    totalSpend: req.body.totalSpend,
-  });
-  try {
-    const newUser = await user.save();
-    res.status(201).json({ newUser });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-});
+let username = "NaN";
 
 router.put("/existingmoney", async (req, res) => {
   await User.findOneAndUpdate(
@@ -35,6 +19,36 @@ router.put("/existingmoney", async (req, res) => {
       }
     }
   );
+});
+
+router.put("/spendingmoney", async (req, res) => {
+  await User.findOneAndUpdate(
+    { username: username },
+    { totalSpend: req.body.totalSpend },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        res.status(200).json({ result });
+      }
+    }
+  );
+});
+
+router.post("/register", async (req, res) => {
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password,
+    totalHave: req.body.totalHave,
+    totalSpend: req.body.totalSpend,
+  });
+  try {
+    const newUser = await user.save();
+    res.status(201).json({ newUser });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
 });
 
 router.post("/login", async (req, res) => {
@@ -54,7 +68,7 @@ router.post("/login", async (req, res) => {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
-      username=req.body.username
+      username = req.body.username;
     }
     return res
       .status(200)
