@@ -19,12 +19,12 @@ router.post("/register", async (req, res) => {
       }
 })
 
+let answer='bad'
 
 router.post("/login", async (req, res) => {
   try {
         let user=User.find({username: req.body.username})
         let password;
-        let answer='bad'
         for await (const doc of user) {
             password=doc.password;
             break;
@@ -36,6 +36,14 @@ router.post("/login", async (req, res) => {
         return res.status(500).json({ message: err.message });
       }
 })
+
+router.get("/login", async (req, res) => {
+    try {
+          return res.status(200).json({answer: answer})
+        } catch(err) {
+          return res.status(500).json({ message: err.message });
+        }
+  })
 
 
 router.get("/", async (req, res) => {
