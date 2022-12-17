@@ -25,13 +25,20 @@ router.post("/login", async (req, res) => {
   try {
         let user=User.find({username: req.body.username})
         let password;
+        let totalHave=0;
+        let totalSpend=0;
         for await (const doc of user) {
-            password=doc.password;
+            passwordUser=doc.password;
+            totalHaveUser=doc.totalHave
+            totalSpendUser=doc.totalSpend
             break;
             }
-        if (password==req.body.password)
-            answer=true   
-        return res.status(200).json({answer: answer})
+        if (password==req.body.password){
+            answer=true
+            totalHave=totalHaveUser
+            totalSpend=totalSpendUser   
+        }
+        return res.status(200).json({answer: answer, totalSpend:totalSpend,totalHave:totalHave})
       } catch(err) {
         return res.status(500).json({ message: err.message });
       }
