@@ -73,7 +73,6 @@ router.post("/login", async (req, res) => {
 
 router.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));
-  res.end()
 });
 
 router.get("/daysCount.js", async (req, res) => {
