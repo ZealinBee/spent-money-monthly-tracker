@@ -4,6 +4,9 @@ const user = require("./models/user");
 const router = express.Router();
 const User = require("./models/user");
 
+
+let username='NaN'
+
 router.post("/register", async (req, res) => {
   const user = new User({
     username: req.body.username,
@@ -21,7 +24,7 @@ router.post("/register", async (req, res) => {
 
 router.put("/existingmoney", async (req, res) => {
   await User.findOneAndUpdate(
-    { username: req.body.username },
+    { username: username },
     { totalHave: req.body.totalHave },
     { new: true },
     (err, result) => {
@@ -51,6 +54,7 @@ router.post("/login", async (req, res) => {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
+      username=req.body.username
     }
     return res
       .status(200)
