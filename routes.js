@@ -1,77 +1,92 @@
-const express = require('express');
-const path = require('path');
-const user = require('./models/user');
+const express = require("express");
+const path = require("path");
+const user = require("./models/user");
 const router = express.Router();
-const User = require('./models/user');
+const User = require("./models/user");
 
 router.post("/register", async (req, res) => {
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password,
-        totalHave: req.body.totalHave,
-        totalSpend:req.body.totalSpend
-      })
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password,
+    totalHave: req.body.totalHave,
+    totalSpend: req.body.totalSpend,
+  });
   try {
-        const newUser = await user.save();
-        res.status(201).json({ newUser });
-      } catch(err) {
+    const newUser = await user.save();
+    res.status(201).json({ newUser });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
+router.put("/existingmoney", async (req, res) => {
+  await User.findOneAndUpdate(
+    { username: req.body.username },
+    { totalHave: req.body.totalHave },
+    { new: true },
+    (err, result) => {
+      if (err) {
         return res.status(500).json({ message: err.message });
+      } else {
+        res.status(200).json({ result });
       }
-})
+    }
+  );
+});
 
 router.post("/login", async (req, res) => {
   try {
-        let user=User.find({username: req.body.username})
-        let password;
-        let totalHave=0;
-        let totalSpend=0;
-        let answer=false
-        for await (const doc of user) {
-            passwordUser=doc.password;
-            totalHaveUser=doc.totalHave
-            totalSpendUser=doc.totalSpend
-            break;
-            }
-        if (passwordUser==req.body.password){
-            answer=true
-            totalHave=totalHaveUser
-            totalSpend=totalSpendUser   
-        }
-        return res.status(200).json({answer: answer, totalSpend:totalSpend,totalHave:totalHave})
-      } catch(err) {
-        return res.status(500).json({ message: err.message });
-      }
-})
-
-
+    let user = User.find({ username: req.body.username });
+    let password;
+    let totalHave = 0;
+    let totalSpend = 0;
+    let answer = false;
+    for await (const doc of user) {
+      passwordUser = doc.password;
+      totalHaveUser = doc.totalHave;
+      totalSpendUser = doc.totalSpend;
+      break;
+    }
+    if (passwordUser == req.body.password) {
+      answer = true;
+      totalHave = totalHaveUser;
+      totalSpend = totalSpendUser;
+    }
+    return res
+      .status(200)
+      .json({ answer: answer, totalSpend: totalSpend, totalHave: totalHave });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
 
 router.get("/", async (req, res) => {
-    res.sendFile(path.join(__dirname + '/index.html'))
-})
+  res.sendFile(path.join(__dirname + "/index.html"));
+});
 
 router.get("/daysCount.js", async (req, res) => {
-    res.sendFile(path.join(__dirname + '/daysCount.js'))
-})
+  res.sendFile(path.join(__dirname + "/daysCount.js"));
+});
 
 router.get("/index.js", async (req, res) => {
-    res.sendFile(path.join(__dirname + '/index.js'))
-})
+  res.sendFile(path.join(__dirname + "/index.js"));
+});
 
 router.get("/main.js", async (req, res) => {
-    res.sendFile(path.join(__dirname + '/main.js'))
-})
+  res.sendFile(path.join(__dirname + "/main.js"));
+});
 
 router.get("/main.css", async (req, res) => {
-    res.sendFile(path.join(__dirname + '/main.css'))
-})
+  res.sendFile(path.join(__dirname + "/main.css"));
+});
 
 router.get("/style.css", async (req, res) => {
-    res.sendFile(path.join(__dirname + '/style.css'))
-})
+  res.sendFile(path.join(__dirname + "/style.css"));
+});
 
 router.get("/script.js", async (req, res) => {
-    res.sendFile(path.join(__dirname + '/script.js'))
-})
+  res.sendFile(path.join(__dirname + "/script.js"));
+});
 
 // router.get("/cars", async (req, res) => {
 //   try {
@@ -81,7 +96,6 @@ router.get("/script.js", async (req, res) => {
 //     return res.status(500).json({ message: err.message });
 //   }
 // })
-
 
 // router.post("/cars", async (req, res) => {
 //   const car = new Car({
@@ -99,7 +113,6 @@ router.get("/script.js", async (req, res) => {
 //   }
 // })
 
-
 // router.delete("/cars", async (req, res) => {
 //   await Car.deleteOne({_id: req.body.id}, (err, result) => {
 //     if (err) {
@@ -112,16 +125,15 @@ router.get("/script.js", async (req, res) => {
 //   });
 // })
 
-
 // router.put("/cars/:id", async (req, res) => {
-//   await Car.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true}, (err, result) => { 
-//     if (err){ 
+//   await Car.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true}, (err, result) => {
+//     if (err){
 //       return res.status(500).json({ message: err.message });
-//     } 
-//     else{ 
+//     }
+//     else{
 //       res.status(200).json({ result });
-//     } 
-//   }); 
+//     }
+//   });
 // })
 
 module.exports = router;
