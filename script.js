@@ -109,10 +109,10 @@ signUpButton.addEventListener("click", function (e) {
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(
     JSON.stringify({
-      password: passwordInputValue,
       username: userNameInputValue,
-      totalSpent: 0,
+      password: passwordInputValue,
       totalHave: 0,
+      totalSpend: 0
     })
   );
 });

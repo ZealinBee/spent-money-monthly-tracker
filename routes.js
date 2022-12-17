@@ -8,14 +8,19 @@ router.post("/register", async (req, res) => {
     username: req.body.username,
     password: req.body.password,
     totalHave: req.body.totalHave,
-    totalSpend: req.body.totalSpend
+    totalSpend:req.body.totalSpend
   })
-  try {
         const newUser = await user.save();
         res.status(201).json({ newUser });
-      } catch(err) {
-        return res.status(500).json({ message: err.message });
-      }
+})
+
+router.get("/c", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.send(users)
+  } catch(err) {
+    return res.status(500).json({ message: err.message });
+  }
 })
 
 

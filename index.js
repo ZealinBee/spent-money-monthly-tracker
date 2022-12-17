@@ -6,6 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/', routes);
 
+const us=1;
 //MongoDB connection
 const mongoose = require('mongoose');
 const mongoURL = 'mongodb+srv://user1:LmaoThisIsMyPassword@cluster0.q7wn3ji.mongodb.net/spentmoneyAPP?retryWrites=true&w=majority';
