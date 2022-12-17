@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
       }
 })
 
-let answer='bad'
+let answer=false
 
 router.post("/login", async (req, res) => {
   try {
@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
             break;
             }
         if (password==req.body.password)
-            answer='fine'    
+            answer=true   
         return res.status(200).json({answer: answer})
       } catch(err) {
         return res.status(500).json({ message: err.message });
