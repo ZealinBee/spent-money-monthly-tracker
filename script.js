@@ -63,6 +63,14 @@ const submitMonthlyMoneyHandler = () => {
   totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
   dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
   dailyAllowanceSpan.textContent = dailyAllowance;
+  const xhr = new XMLHttpRequest();
+  xhr.open("PUT", "/money");
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(
+    JSON.stringify({
+      totalHave: monthlyAllowance,
+    })
+  );
 };
 
 const submitSpentMoneyHandler = () => {
@@ -91,6 +99,15 @@ const submitSpentMoneyHandler = () => {
     });
     currentDay = i + 1;
   }
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("PUT", "/money");
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(
+    JSON.stringify({
+      totalSpend: totalSpentMoney,
+    })
+  );
 };
 
 //Events
