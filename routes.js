@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const user = require('./models/user');
 const router = express.Router();
 const User = require('./models/user');
 
@@ -18,6 +19,17 @@ router.post("/register", async (req, res) => {
       }
 })
 
+
+router.post("/login", async (req, res) => {
+  try {
+        user=User.find({username: req.body.username})
+        if (user.password==req.body.password)
+                return 'fine'
+        return 'bad'
+      } catch(err) {
+        return res.status(500).json({ message: err.message });
+      }
+})
 
 
 router.get("/", async (req, res) => {
