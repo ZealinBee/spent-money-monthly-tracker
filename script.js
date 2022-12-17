@@ -1,5 +1,6 @@
 //Imports
 import numberOfDaysInAMonth from "./daysCount.js";
+const ssh = "test"
 
 //Editable variables
 let totalSpentMoney = 0;
