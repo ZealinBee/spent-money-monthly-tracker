@@ -1,30 +1,11 @@
-var bcrypt = require('bcrypt');
+var bcrypt = require("bcrypt");
 
-exports.cryptPassword = function(password) {
-   bcrypt.genSalt(10, function(err, salt) {
-    if (err) 
-      return err;
+exports.cryptPassword = async function (password) {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
 
-    bcrypt.hash(password, salt, function(err, hash) {
-      return hash;
-    });
-  });
-};
+}
 
-exports.comparePassword = function(plainPass, hashword, callback) {
-   bcrypt.compare(plainPass, hashword, function(err, isPasswordMatch) {   
-       return err == null ?
-           callback(null, isPasswordMatch) :
-           callback(err);
-   });
-};
 
-// async function lmao(){
-// await exports.cryptPassword('LMAO',async (err,hash)=>{
-//      console.log(hash)
-// })
-
-//  exports.comparePassword("LMAO","$2b$10$WhYHoOzIS5K.WjNOVDw76OJw982haqX2c8kouB7Ebv0RNh.CLjbty",(err,flag)=>{
-//     console.log(flag)
-// })}
-
+console.log(bcrypt.compareSync("asdfasd", "273598sdfsdkf"))

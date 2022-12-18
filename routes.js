@@ -3,48 +3,60 @@ const path = require("path");
 const user = require("./models/user");
 const router = express.Router();
 const User = require("./models/user");
-const crypt=require('./cryptography')
+const crypt = require("./cryptography");
+const bcrypt = require("bcrypt");
 
 let username = "NaN";
 
 router.post("/register", async (req, res) => {
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password,
-    totalHave: req.body.totalHave,
-    totalSpend: req.body.totalSpend,
-  });
-  try {
-    const newUser = await user.save();
-    username=req.body.username
-    res.status(201).json({ newUser });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
+  let user;
+  crypt.cryptPassword(req.body.password)
+    .then((hash) => {
+      user = new User({
+        username: req.body.username,
+        password: hash,
+        totalHave: req.body.totalHave,
+        totalSpend: req.body.totalSpend,
+      });
+      return user;
+    })
+    .then(async (user) => {
+      try {
+        console.log(user);
+        const newUser = await user.save();
+        username = req.body.username;
+        res.status(201).json({ newUser });
+      } catch (err) {
+        return res.status(500).json({ message: err.message });
+      }
+    });
 });
 
 router.post("/login", async (req, res) => {
   try {
     let user = User.find({ username: req.body.username });
-    let password;
+    let hashword;
     let totalHave = 0;
     let totalSpend = 0;
     let answer = false;
     for await (const doc of user) {
-      passwordUser = doc.password;
+      hashword = doc.password;
       totalHaveUser = doc.totalHave;
       totalSpendUser = doc.totalSpend;
       break;
     }
-    if (passwordUser == req.body.password) {
+    result = await bcrypt.compareSync(req.body.password, hashword)
+    if (result) {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       username = req.body.username;
     }
-    return res
-      .status(200)
-      .json({ answer: answer, totalSpend: totalSpend, totalHave: totalHave });
+    return res.status(200).json({
+      answer: answer,
+      totalSpend: totalSpend,
+      totalHave: totalHave,
+    });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -54,23 +66,20 @@ router.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));
 });
 
-
 router.put("/money", async (req, res) => {
-  console.log(username)
   await User.findOneAndUpdate(
-  { username: username },
-  req.body,
-  { new: true },
-  (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: err.message });
-    } else {
-      res.status(200).json({ result });
+    { username: username },
+    req.body,
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        res.status(200).json({ result });
+      }
     }
-  }
-);
+  );
 });
-
 
 router.get("/daysCount.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/daysCount.js"));
