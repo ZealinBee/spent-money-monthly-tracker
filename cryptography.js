@@ -7,5 +7,3 @@ exports.cryptPassword = async function (password) {
 
 }
 
-
-console.log(bcrypt.compareSync("asdfasd", "273598sdfsdkf"))
