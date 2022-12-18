@@ -30,19 +30,39 @@
       <p >Don't have an account yet? <span id="go-to-sign-up-link"> Sign up Here</span></p>
       <p ><span class="toggle-login">  Use website as an user </span>(data won't be deleted)</p>
     </section>
-
-    <section class="signup-section">
-      <form action="submit">
+    <section class="signup-section" ">
+      <form >
         <div class="login-signup-header-wrapper">
-          <h1>Sign up</h1>
+          <h1>Sign Up</h1>
         </div>
-        <input type="text" placeholder="User Name" id="sign-up-username-input" required>
-        <input type="password" placeholder="Password" id="sign-up-password-input" required>
+        <div class="user-name-input-wrapper user-name-input-wrapper-sign-up">
+          <label for="sign-up-username-input" class="user-name-label user-name-label-sign-up">Username</label>
+          <input type="text" id="sign-up-username-input" required>
+        </div>
+        <div class="password-input-wrapper password-input-wrapper-sign-up">
+          <label for="login-password-input" class="password-label password-label-sign-up">Password</label>
+          <input type="password"  id="sign-up-password-input" required>
+        </div>
+     
         <button type="submit" id="sign-up-button">Sign Up</button>
+        <p class="fill-empty-error-message">Fill in everything first!</p>
+        <div class="sign-up-error">
+          <h4>Password must have the following: </h4>
+          <div class="error-variables">
+            <p id="letter" class="invalid">1 Letter</p>
+            <p id="uppercase-letter" class="invalid">1 Capital Letter</p>
+            <p id="number" class="invalid">1 Number</p>
+            <p id="length" class="invalid">Minimum 8 Characters</p>
+            <p id="special-character" class="invalid">1 Special Character</p>
+            <p id="no-whites-space" class="invalid">No White Spaces</p>
+          </div>
+       
+        </div>
       </form>
-      <p >Already have an account? <span id="go-to-login-link"> Log in here</span></p>
-      <p ><span class="toggle-login">  Use website as an user </span>(data won't be deleted)</p>
+      <p>Already have an account? <span id="go-to-login-link"> Log in here</span></p>
+            <p ><span class="toggle-login">  Use website as an user </span>(data won't be deleted)</p>
     </section>
+
     <main id="program">        
       <div class="monthly-allowance-container">
         <h1>Total Money You have</h1>

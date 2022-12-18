@@ -1,10 +1,8 @@
-
-
 //Imports
 import numberOfDaysInAMonth from "./daysCount.js";
 
 //Program
-const program = document.querySelector('#program')
+const program = document.querySelector("#program");
 //Editable variables
 let totalSpentMoney = 0;
 let monthlyAllowance = 0;
@@ -47,9 +45,6 @@ const dailyAllowanceSpan = document.querySelector("#daily-allowance-span");
 const totalDaysUsedSpan = document.querySelector("#total-days-used-span");
 const warning = document.querySelector("#warning");
 const resetButton = document.querySelector(".reset-button");
-
-
-
 
 //Initialize calendar
 var calendarEl = document.getElementById("calendar");
@@ -124,23 +119,92 @@ goToLoginLink.addEventListener("click", function (e) {
 });
 toggleLogin.addEventListener("click", function (e) {
   loginSection.classList.toggle("hide");
-  program.classList.add('show')
+  program.classList.add("show");
   calendar.render();
-
 });
+
+
+// signUpPasswordInput.addEventListener('input', function() {
+//   let passwordInputValue = signUpPasswordInput.value;
+//   var re = /\D/;
+//   var re1 = /\s/;
+//   var re2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+//   var n = re.test(passwordInputValue);
+//   var n1=!re1.test(passwordInputValue)
+//   var n2=re2.test(passwordInputValue)
+// })
+
+const signUpError = document.querySelector('.sign-up-error')
+const letterError = document.querySelector('#letter')
+const capitalError = document.querySelector('#uppercase-letter')
+const lengthError = document.querySelector('#length')
+const numberError = document.querySelector('#number')
+const specialCharacterError = document.querySelector('#special-character')
+
+signUpPasswordInput.addEventListener('input' , function() {
+  signUpError.style.display = "block";
+  var lowerCaseLetters = /[a-z]/g;
+  if(signUpPasswordInput.value.match(lowerCaseLetters)) {
+    letterError.classList.remove('invalid')
+    letterError.classList.add('valid')
+  }else {
+    letterError.classList.remove('valid')
+    letterError.classList.add('invalid')
+  }
+  var upperCaseLetters = /[A-Z]/g;
+  if(signUpPasswordInput.value.match(upperCaseLetters)) {  
+    capitalError.classList.remove("invalid");
+    capitalError.classList.add("valid");
+  } else {
+    capitalError.classList.remove("valid");
+    capitalError.classList.add("invalid");
+  }
+  if(signUpPasswordInput <= 8) {  
+    lengthError.classList.remove("invalid");
+    lengthError.classList.add("valid");
+  } else {
+    lengthError.classList.remove("invalid");
+    lengthError.classList.add("valid");
+  }
+  var numbers = /[0-9]/g;
+  if(signUpPasswordInput.value.length <= 8) {  
+    numberError.classList.remove("invalid");
+    numberError.classList.add("valid");
+  } else {
+    numberError.classList.remove("invalid");
+    numberError.classList.add("valid");
+  }
+  var specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  if(signUpPasswordInput.value.match(specialCharacter)) {  
+    specialCharacterError.classList.remove("invalid");
+    specialCharacterError.classList.add("valid");
+  } else {
+    specialCharacterError.classList.remove("invalid");
+    specialCharacterError.classList.add("valid");
+  }
+})
+
+
+
 
 signUpButton.addEventListener("click", function (e) {
   e.preventDefault();
   let userNameInputValue = signUpUserNameInput.value;
   let passwordInputValue = signUpPasswordInput.value;
-  if(userNameInputValue.length == 0 || passwordInputValue == 0) {
-    fillEmptyErrorMessage.classList.add("show");
-    loginUserNameInput.classList.add("error-login");
-    loginPasswordInput.classList.add("error-login");
-  }else {
-    loginUserNameInput.classList.remove("error-login");
-    loginPasswordInput.classList.remove("error-login");
-    loginErrorMessage.classList.remove("show");
+  var re = /\D/;
+  var re1 = /\s/;
+  var re2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+  var n = re.test(passwordInputValue);
+  var n1=!re1.test(passwordInputValue)
+  var n2=re2.test(passwordInputValue)
+  if ((passwordInputValue.length<8)||!(n1&&n2&&n)){
+    signUpUserNameInput.classList.add("error-login");
+    signUpPasswordInput.classList.add("error-login");
+    console.log('hi')
+  } else {
+    signUpUserNameInput.classList.remove("error-login");
+    signUpPasswordInput.classList.remove("error-login");
+
     console.log(userNameInputValue);
     console.log(passwordInputValue);
     const xhr = new XMLHttpRequest();
@@ -154,13 +218,12 @@ signUpButton.addEventListener("click", function (e) {
         totalSpend: 0,
       })
     );
-    signUpSection.classList.remove('show')
-    program.classList.add('show')
-    calendar.render()
+    signUpSection.classList.remove("show");
+    program.classList.add("show");
+    calendar.render();
   }
-
- 
 });
+
 
 loginButton.addEventListener("click", loginUser);
 
@@ -196,71 +259,106 @@ async function loginUser(e) {
 
 function checkLogin(data) {
   let answer = data.answer;
-  let totalSpend = data.totalSpend
-  let totalHave = data.totalHave
-  console.log(data)
+  let totalSpend = data.totalSpend;
+  let totalHave = data.totalHave;
+  console.log(data);
   if (!answer) {
     loginUserNameInput.classList.add("error-login");
     loginPasswordInput.classList.add("error-login");
     loginErrorMessage.classList.add("show");
-  }else {
+  } else {
     loginUserNameInput.classList.remove("error-login");
     loginPasswordInput.classList.remove("error-login");
     loginErrorMessage.classList.remove("show");
-    program.classList.add('show')
-    loginSection.classList.add('hide')
-    monthlyAllowance = totalHave
-    totalMonthlyAllowanceSpan.textContent = monthlyAllowance
-    totalSpentMoney = totalSpend
-    totalSpentMoneySpan.textContent = totalSpentMoney
+    program.classList.add("show");
+    loginSection.classList.add("hide");
+    monthlyAllowance = totalHave;
+    totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
+    totalSpentMoney = totalSpend;
+    totalSpentMoneySpan.textContent = totalSpentMoney;
     dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
-  dailyAllowanceSpan.textContent = dailyAllowance;
-  totalDaysUsed = totalSpentMoney / dailyAllowance;
-  totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-  if (totalDaysUsed > numberOfDaysInAMonth) {
-    warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
-      totalDaysUsed - numberOfDaysInAMonth
-    ).toFixed(0)} day(s)`;
-  }
-  calendar.removeAllEvents();
-  currentDay = 0;
-  for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-    currentDay += 21;
-    if (currentDay < 10) {
-      currentDay = `0${currentDay}`;
+    dailyAllowanceSpan.textContent = dailyAllowance;
+    totalDaysUsed = totalSpentMoney / dailyAllowance;
+    totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
+    if (totalDaysUsed > numberOfDaysInAMonth) {
+      warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
+        totalDaysUsed - numberOfDaysInAMonth
+      ).toFixed(0)} day(s)`;
     }
-    calendar.addEvent({
-      title: "day used!",
-      start: `2022-12-${currentDay}`,
-      end: `2022-12-${currentDay}`,
-    });
-    currentDay = i + 1;
-  } 
-  calendar.render();
+    calendar.removeAllEvents();
+    currentDay = 0;
+    for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
+      currentDay += 21;
+      if (currentDay < 10) {
+        currentDay = `0${currentDay}`;
+      }
+      calendar.addEvent({
+        title: "day used!",
+        start: `2022-12-${currentDay}`,
+        end: `2022-12-${currentDay}`,
+      });
+      currentDay = i + 1;
+    }
+    calendar.render();
   }
-  if(monthlyAllowance > 0) {
-    monthlyAllowanceContainer.classList.add('hide')
+  if (monthlyAllowance > 0) {
+    monthlyAllowanceContainer.classList.add("hide");
   }
-
 }
 
 
+//Reset button
+
+resetButton.addEventListener("click", function () {
+  const xhr = new XMLHttpRequest();
+  xhr.open("PUT", "/money");
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(
+    JSON.stringify({
+      totalHave: 0,
+      totalSpend: 0,
+    })
+  );
+
+  totalMonthlyAllowanceSpan.textContent = 0;
+  totalSpentMoneySpan.textContent = 0;
+  dailyAllowanceSpan.textContent = 0;
+  totalDaysUsedSpan.textContent = 0;
+  monthlyAllowanceContainer.classList.remove('hide')
+});
 
 //Not functionality, just css
 
-const userNameInputWrapper = document.querySelector('.user-name-input-wrapper')
-const userNameLabel = document.querySelector('.user-name-label')
-const passwordInputWrapper = document.querySelector('.password-input-wrapper')
-const passwordLabel = document.querySelector('.password-label')
+const userNameInputWrapper = document.querySelector(".user-name-input-wrapper");
+const userNameInputWrapperSignUp = document.querySelector(".user-name-input-wrapper-sign-up");
+const userNameLabel = document.querySelector(".user-name-label");
+const userNameLabelSignUp = document.querySelector(".user-name-label-sign-up");
+const passwordInputWrapper = document.querySelector(".password-input-wrapper");
+const passwordInputWrapperSignUp = document.querySelector(".password-input-wrapper-sign-up");
+const passwordLabel = document.querySelector(".password-label");
+const passwordLabelSignUp = document.querySelector(".password-label-sign-up");
 
-userNameInputWrapper.addEventListener('click', function() {
-  userNameLabel.classList.add('move-up')
-  userNameLabel.classList.add('change-text-color')
+userNameInputWrapper.addEventListener("click", function () {
+  userNameLabel.classList.add("move-up");
+  userNameLabel.classList.add("change-text-color");
   loginUserNameInput.classList.add('change-border-color')
-})
 
-passwordInputWrapper.addEventListener('click', function() {
-  passwordLabel.classList.add('move-up')
-  passwordLabel.classList.add('change-text-color')
+});
+
+passwordInputWrapper.addEventListener("click", function () {
+  passwordLabel.classList.add("move-up");
+  passwordLabel.classList.add("change-text-color");
   loginPasswordInput.classList.add('change-border-color')
+
+});
+
+userNameInputWrapperSignUp.addEventListener('click', function() {
+  userNameLabelSignUp.classList.add("move-up");
+  userNameLabelSignUp.classList.add("change-text-color");
+  signUpUserNameInput.classList.add('change-border-color')
+})
+passwordInputWrapperSignUp.addEventListener('click', function() {
+  passwordLabelSignUp.classList.add("move-up");
+  passwordLabelSignUp.classList.add("change-text-color");
+  signUpPasswordInput.classList.add('change-border-color')
 })

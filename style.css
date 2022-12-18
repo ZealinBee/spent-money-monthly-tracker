@@ -135,12 +135,12 @@ section p {
 
 section p span{
   cursor:pointer;
-  color:rgb(0, 0, 236);
+  color:var(--accent-color);
   text-decoration: underline;
 }
 
 section p span:hover {
-  color:rgb(0, 0, 236, 0.5);
+  color:#749ddf62;
 }
 
 .login-signup-header-wrapper {
@@ -189,6 +189,10 @@ section p span:hover {
   margin-bottom:1rem;
 }
 
+.user-name-input-wrapper input:focus {
+  border-bottom:2px var(--accent-color) solid;
+}
+
 .user-name-input-wrapper label {
   margin-left:1rem;
   position: absolute;
@@ -206,16 +210,42 @@ section p span:hover {
   margin-top:1.5rem;
 }
 
+
+.password-input-wrapper input:focus {
+  border-bottom:2px var(--accent-color) solid;
+}
+
 .password-input-wrapper label {
   margin-left:1rem;
   position: absolute;
   bottom:30%;
   cursor:text;
   transition:all 0.3s ease-in-out;
-
 }
 
+.sign-up-error {
+  margin-left:1.25rem;
+  margin-top:1rem;
+  display:none;
+}
 
+.error-variables {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  font-size:0.9rem;
+}
+
+.sign-up-error p {
+  padding-left:0;
+}
+
+.invalid {
+  color:red;
+}
+
+.valid {
+  color:green;
+}
 
 
 
