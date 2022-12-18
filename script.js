@@ -3,13 +3,8 @@
 //Imports
 import numberOfDaysInAMonth from "./daysCount.js";
 
-//Lalallaasdfdasfasdf
-
-//New Code test test
-
 //Program
 const program = document.querySelector('#program')
-
 //Editable variables
 let totalSpentMoney = 0;
 let monthlyAllowance = 0;
@@ -53,12 +48,14 @@ const totalDaysUsedSpan = document.querySelector("#total-days-used-span");
 const warning = document.querySelector("#warning");
 const resetButton = document.querySelector(".reset-button");
 
+
+
+
 //Initialize calendar
 var calendarEl = document.getElementById("calendar");
 var calendar = new FullCalendar.Calendar(calendarEl, {
   initialView: "dayGridMonth",
 });
-calendar.render();
 
 //Functions
 const submitMonthlyMoneyHandler = () => {
@@ -127,7 +124,11 @@ goToLoginLink.addEventListener("click", function (e) {
 });
 toggleLogin.addEventListener("click", function (e) {
   loginSection.classList.toggle("hide");
+  program.classList.add('show')
+  calendar.render();
+
 });
+
 signUpButton.addEventListener("click", function (e) {
   e.preventDefault();
   let userNameInputValue = signUpUserNameInput.value;
@@ -145,6 +146,9 @@ signUpButton.addEventListener("click", function (e) {
       totalSpend: 0,
     })
   );
+  signUpSection.classList.remove('show')
+  program.classList.add('show')
+  calendar.render()
 });
 loginButton.addEventListener("click", loginUser);
 
