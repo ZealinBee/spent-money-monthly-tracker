@@ -5,7 +5,7 @@ import numberOfDaysInAMonth from "./daysCount.js";
 
 //Program
 const program = document.querySelector('#program')
-
+//VERIFIED PLSSSSSSSSSSSSSSSSSSS
 //New stuff
 
 //Editable variables
