@@ -3,7 +3,8 @@
 :root {
   --dark-color : #1B1C1E;
   --light-color : #FEFDFB;
-
+  --gray-color:#888888;
+  --accent-color:#759bd9	;
 }
 
 * {
@@ -81,10 +82,10 @@ section {
   position:absolute;
   background:var(--light-color);
   border-radius: 1rem;
-  padding:2rem 1rem;
   top: 50%;
   left:50%;
   transform: translate(-50%, -50%);
+  padding-bottom:2rem;
 }
 
 section h1 {
@@ -97,10 +98,12 @@ section form {
 }
 
 section button {
-  border:2px var(--dark-color) solid;
-  color:var(--dark-color);
+  background-color: var(--accent-color);
+  color:var(--light-color);
+  border:none;
   padding:0.5rem;
-  margin-top:1.5rem;
+  margin: 0 0.75rem;
+  margin-top:2.5rem;
   font-size:1rem;
   margin-bottom:0.5rem;
   cursor:pointer;
@@ -108,31 +111,58 @@ section button {
 
 section button:hover {
   background-color:var(--dark-color);
-  color:var(--light-color);  
+  color:var(--accent-color);  
 }
 
 section input{
-  padding:0.5rem;
-  margin-top:1.5rem;
+  padding:0.3rem 0;
+  margin: 0 1rem;
+  border-radius: 0;
   outline:none;
-  border:2px var(--dark-color) solid;
-  padding-left:1rem;
+  border:none;
+  border-bottom:2px var(--gray-color) solid;
+  transition:all 0.3s ease-in-out;
+  font-size:1rem;
+  
 }
+
 
 section p {
-  padding:0.5rem;
+  margin-top:0.5rem;
+  padding: 0 1rem;
+}
+
+
+section p span{
   cursor:pointer;
-  color:rgb(0, 0, 236);
+  color:var(--accent-color);
+  text-decoration: underline;
 }
 
-section p:hover {
-  color:rgb(0, 0, 236, 0.5);
+section p span:hover {
+  color:#749ddf62;
 }
 
-.error-login {
-  border:2px red solid;
-
+.login-signup-header-wrapper {
+  position:relative;
+  margin-bottom:1rem;
 }
+
+.login-signup-header-wrapper h1 {
+  margin-top:1rem;
+  margin-bottom:0.5rem;
+}
+
+.login-signup-header-wrapper::after{
+  content: '';
+  position: absolute;
+  width:100%;
+  height:1px;
+  background-color: #808080;
+  bottom:-10px;
+}
+
+
 
 .login-error-message {
   color:red;
@@ -149,6 +179,85 @@ section p:hover {
 .signup-section {
   display:none;
 }
+
+.user-name-input-wrapper {
+  display:flex;
+  flex-direction: column;
+  position: relative;
+  color:var(--gray-color);
+  margin-top:1rem;
+  margin-bottom:1rem;
+}
+
+.user-name-input-wrapper input:focus {
+  border-bottom:2px var(--accent-color) solid;
+}
+
+.user-name-input-wrapper label {
+  margin-left:1rem;
+  position: absolute;
+  bottom:30%;
+  cursor: text;
+  transition: all 0.2s ease-in-out;
+}
+
+
+.password-input-wrapper {
+  display:flex;
+  flex-direction: column;
+  position: relative;
+  color:var(--gray-color);
+  margin-top:1.5rem;
+}
+
+
+.password-input-wrapper input:focus {
+  border-bottom:2px var(--accent-color) solid;
+}
+
+.password-input-wrapper label {
+  margin-left:1rem;
+  position: absolute;
+  bottom:30%;
+  cursor:text;
+  transition:all 0.3s ease-in-out;
+}
+
+.sign-up-error {
+  margin-left:1.25rem;
+  margin-top:1rem;
+  display:none;
+}
+
+.error-variables {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  font-size:0.9rem;
+}
+
+.sign-up-error p {
+  padding-left:0;
+}
+
+.invalid {
+  color:red;
+}
+
+.valid {
+  color:green;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 .monthly-allowance-container {
   display: flex;
@@ -230,9 +339,8 @@ section p:hover {
   font-size:1.5rem;
 }
 
-#warning {
-  color:var(--light-color);
-}
+
+/* classlist add js */
 
 .hide {
   opacity:0;
@@ -241,4 +349,25 @@ section p:hover {
 
 .show {
   display:block;
+}
+
+#warning {
+  color:var(--light-color);
+}
+
+.move-up {
+  transform: translateY(-80%);
+}
+
+.change-border-color {
+  border-bottom:2px var(--accent-color) solid;
+
+}
+
+.change-text-color {
+  color:var(--accent-color);
+}
+
+.error-login {
+  border-bottom:2px red solid;
 }
