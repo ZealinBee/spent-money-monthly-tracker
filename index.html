@@ -10,27 +10,38 @@
   <body>
     <section class="login-section" ">
       <form >
-        <h1>Login</h1>
-        <input type="text" placeholder="User Name" id="login-username-input" required>
-        <input type="password" placeholder="Password" id="login-password-input" required>
+        <div class="login-signup-header-wrapper">
+          <h1>Login</h1>
+        </div>
+        <div class="user-name-input-wrapper">
+          <label for="login-username-input" class="user-name-label">Username</label>
+          <input type="text" id="login-username-input" required>
+        </div>
+        <div class="password-input-wrapper">
+          <label for="login-password-input" class="password-label">Password</label>
+          <input type="password"  id="login-password-input" required>
+        </div>
+     
         <button type="submit" id="login-button">Log In</button>
         <p class="fill-empty-error-message">Fill in everything first!</p>
         <p class="login-error-message">Your username or password is wrong</p>
 
       </form>
-      <p id="go-to-sign-up-link">Don't have an account yet? Sign up Here</p>
-      <p class="toggle-login">Use website as an user (data won't be deleted)</p>
+      <p >Don't have an account yet? <span id="go-to-sign-up-link"> Sign up Here</span></p>
+      <p ><span class="toggle-login">  Use website as an user </span>(data won't be deleted)</p>
     </section>
 
     <section class="signup-section">
       <form action="submit">
-        <h1>Sign Up</h1>
+        <div class="login-signup-header-wrapper">
+          <h1>Sign up</h1>
+        </div>
         <input type="text" placeholder="User Name" id="sign-up-username-input" required>
         <input type="password" placeholder="Password" id="sign-up-password-input" required>
         <button type="submit" id="sign-up-button">Sign Up</button>
       </form>
-      <p id="go-to-login-link">Already have an account? Log in here</p>
-      <p class="toggle-login">Use website as an user (data won't be deleted)</p>
+      <p >Already have an account? <span id="go-to-login-link"> Log in here</span></p>
+      <p ><span class="toggle-login">  Use website as an user </span>(data won't be deleted)</p>
     </section>
     <main id="program">        
       <div class="monthly-allowance-container">

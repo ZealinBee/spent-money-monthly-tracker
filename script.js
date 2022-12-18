@@ -133,22 +133,33 @@ signUpButton.addEventListener("click", function (e) {
   e.preventDefault();
   let userNameInputValue = signUpUserNameInput.value;
   let passwordInputValue = signUpPasswordInput.value;
-  console.log(userNameInputValue);
-  console.log(passwordInputValue);
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "/register");
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(
-    JSON.stringify({
-      username: userNameInputValue,
-      password: passwordInputValue,
-      totalHave: 0,
-      totalSpend: 0,
-    })
-  );
-  signUpSection.classList.remove('show')
-  program.classList.add('show')
-  calendar.render()
+  if(userNameInputValue.length == 0 || passwordInputValue == 0) {
+    fillEmptyErrorMessage.classList.add("show");
+    loginUserNameInput.classList.add("error-login");
+    loginPasswordInput.classList.add("error-login");
+  }else {
+    loginUserNameInput.classList.remove("error-login");
+    loginPasswordInput.classList.remove("error-login");
+    loginErrorMessage.classList.remove("show");
+    console.log(userNameInputValue);
+    console.log(passwordInputValue);
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/register");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(
+      JSON.stringify({
+        username: userNameInputValue,
+        password: passwordInputValue,
+        totalHave: 0,
+        totalSpend: 0,
+      })
+    );
+    signUpSection.classList.remove('show')
+    program.classList.add('show')
+    calendar.render()
+  }
+
+ 
 });
 
 loginButton.addEventListener("click", loginUser);
@@ -232,3 +243,24 @@ function checkLogin(data) {
   }
 
 }
+
+
+
+//Not functionality, just css
+
+const userNameInputWrapper = document.querySelector('.user-name-input-wrapper')
+const userNameLabel = document.querySelector('.user-name-label')
+const passwordInputWrapper = document.querySelector('.password-input-wrapper')
+const passwordLabel = document.querySelector('.password-label')
+
+userNameInputWrapper.addEventListener('click', function() {
+  userNameLabel.classList.add('move-up')
+  userNameLabel.classList.add('change-text-color')
+  loginUserNameInput.classList.add('change-border-color')
+})
+
+passwordInputWrapper.addEventListener('click', function() {
+  passwordLabel.classList.add('move-up')
+  passwordLabel.classList.add('change-text-color')
+  loginPasswordInput.classList.add('change-border-color')
+})
