@@ -140,7 +140,10 @@ const capitalError = document.querySelector('#uppercase-letter')
 const lengthError = document.querySelector('#length')
 const numberError = document.querySelector('#number')
 const specialCharacterError = document.querySelector('#special-character')
+<<<<<<< HEAD
 const whiteSpaceError = document.querySelector('#white-space')
+=======
+>>>>>>> bc15763098013a83533a748fa84de13a0b7addcf
 
 signUpPasswordInput.addEventListener('input' , function() {
   signUpError.style.display = "block";
@@ -160,6 +163,7 @@ signUpPasswordInput.addEventListener('input' , function() {
     capitalError.classList.remove("valid");
     capitalError.classList.add("invalid");
   }
+<<<<<<< HEAD
   if(signUpPasswordInput.value.length >= 8) {  
     lengthError.classList.remove("invalid");
     lengthError.classList.add("valid");
@@ -174,12 +178,29 @@ signUpPasswordInput.addEventListener('input' , function() {
   } else {
     numberError.classList.remove("valid");
     numberError.classList.add("invalid");
+=======
+  if(signUpPasswordInput <= 8) {  
+    lengthError.classList.remove("invalid");
+    lengthError.classList.add("valid");
+  } else {
+    lengthError.classList.remove("invalid");
+    lengthError.classList.add("valid");
+  }
+  var numbers = /[0-9]/g;
+  if(signUpPasswordInput.value.length <= 8) {  
+    numberError.classList.remove("invalid");
+    numberError.classList.add("valid");
+  } else {
+    numberError.classList.remove("invalid");
+    numberError.classList.add("valid");
+>>>>>>> bc15763098013a83533a748fa84de13a0b7addcf
   }
   var specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
   if(signUpPasswordInput.value.match(specialCharacter)) {  
     specialCharacterError.classList.remove("invalid");
     specialCharacterError.classList.add("valid");
   } else {
+<<<<<<< HEAD
     specialCharacterError.classList.remove("valid");
     specialCharacterError.classList.add("invalid");
   }
@@ -190,6 +211,10 @@ signUpPasswordInput.addEventListener('input' , function() {
   }else{
     whiteSpaceError.classList.add('valid')
     whiteSpaceError.classList.remove('invalid')
+=======
+    specialCharacterError.classList.remove("invalid");
+    specialCharacterError.classList.add("valid");
+>>>>>>> bc15763098013a83533a748fa84de13a0b7addcf
   }
 })
 
