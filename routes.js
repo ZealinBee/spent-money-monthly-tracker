@@ -4,7 +4,7 @@ const user = require("./models/user");
 const router = express.Router();
 const User = require("./models/user");
 const crypt = require("./cryptography");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 let username = "NaN";
 
@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
         console.log(user);
         const newUser = await user.save();
         username = req.body.username;
-        res.status(201).json({ newUser });
+        return res.status(201).json({ newUser });
       } catch (err) {
         return res.status(500).json({ message: err.message });
       }
