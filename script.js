@@ -140,6 +140,7 @@ const capitalError = document.querySelector('#uppercase-letter')
 const lengthError = document.querySelector('#length')
 const numberError = document.querySelector('#number')
 const specialCharacterError = document.querySelector('#special-character')
+const whiteSpaceError = document.querySelector('#white-space')
 
 signUpPasswordInput.addEventListener('input' , function() {
   signUpError.style.display = "block";
@@ -159,28 +160,36 @@ signUpPasswordInput.addEventListener('input' , function() {
     capitalError.classList.remove("valid");
     capitalError.classList.add("invalid");
   }
-  if(signUpPasswordInput <= 8) {  
+  if(signUpPasswordInput.value.length >= 8) {  
     lengthError.classList.remove("invalid");
     lengthError.classList.add("valid");
   } else {
-    lengthError.classList.remove("invalid");
-    lengthError.classList.add("valid");
+    lengthError.classList.remove("valid");
+    lengthError.classList.add("invalid");
   }
   var numbers = /[0-9]/g;
-  if(signUpPasswordInput.value.length <= 8) {  
+  if(signUpPasswordInput.value.match(numbers)) {  
     numberError.classList.remove("invalid");
     numberError.classList.add("valid");
   } else {
-    numberError.classList.remove("invalid");
-    numberError.classList.add("valid");
+    numberError.classList.remove("valid");
+    numberError.classList.add("invalid");
   }
   var specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
   if(signUpPasswordInput.value.match(specialCharacter)) {  
     specialCharacterError.classList.remove("invalid");
     specialCharacterError.classList.add("valid");
   } else {
-    specialCharacterError.classList.remove("invalid");
-    specialCharacterError.classList.add("valid");
+    specialCharacterError.classList.remove("valid");
+    specialCharacterError.classList.add("invalid");
+  }
+  var whiteSpace = /[ \t\n\r]/;
+  if(signUpPasswordInput.value.match(whiteSpace)){
+    whiteSpaceError.classList.add('invalid')
+    whiteSpaceError.classList.remove('valid')
+  }else{
+    whiteSpaceError.classList.add('valid')
+    whiteSpaceError.classList.remove('invalid')
   }
 })
 
