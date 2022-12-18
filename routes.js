@@ -7,22 +7,6 @@ const crypt=require('./cryptography')
 
 let username = "NaN";
 
-router.put("/money", async (req, res) => {
-    await User.findOneAndUpdate(
-    { username: username },
-    req.body,
-    { new: true },
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      } else {
-        res.status(200).json({ result });
-      }
-    }
-  );
-});
-
-
 router.post("/register", async (req, res) => {
   const user = new User({
     username: req.body.username,
@@ -69,6 +53,24 @@ router.post("/login", async (req, res) => {
 router.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));
 });
+
+
+router.put("/money", async (req, res) => {
+  console.log(username)
+  await User.findOneAndUpdate(
+  { username: username },
+  req.body,
+  { new: true },
+  (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      res.status(200).json({ result });
+    }
+  }
+);
+});
+
 
 router.get("/daysCount.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/daysCount.js"));
