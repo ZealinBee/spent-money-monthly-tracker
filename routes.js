@@ -6,7 +6,7 @@ const User = require("./models/user");
 const crypt = require("./cryptography");
 const bcrypt = require("bcryptjs");
 
-let username = "NaN";
+let username = "None";
 
 router.post("/register", async (req, res) => {
   let user;
