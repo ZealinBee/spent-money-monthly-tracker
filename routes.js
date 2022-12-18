@@ -1,9 +1,9 @@
-
 const express = require("express");
 const path = require("path");
 const user = require("./models/user");
 const router = express.Router();
 const User = require("./models/user");
+const crypt=require('./cryptography')
 
 let username = "NaN";
 
@@ -32,17 +32,12 @@ router.post("/register", async (req, res) => {
   });
   try {
     const newUser = await user.save();
+    username=req.body.username
     res.status(201).json({ newUser });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 });
-
-router.get("/register", async (req, res) => {
-    
-    return res.status(200).json({ answer:"lmao" });
-
-  });
 
 router.post("/login", async (req, res) => {
   try {
