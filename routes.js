@@ -13,11 +13,7 @@ router.post("/register", async (req, res) => {
   await User.find({ username: req.body.username })
     .then((users) => {
       if (users.length > 0) {
-        return false;
-      }
-    })
-    .then((isUnique) => {
-      if (!isUnique) {
+        console.log(users)
         return res.status(201).json({ message: false });
       }
       crypt.cryptPassword(req.body.password)
@@ -35,7 +31,7 @@ router.post("/register", async (req, res) => {
             console.log(user);
             const newUser = await user.save();
             username = req.body.username;
-            return res.status(201).json({ newUser ,message: false});
+            return res.status(201).json({ newUser ,message: true});
           } catch (err) {
             return res.status(500).json({ message: err.message });
           }
