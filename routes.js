@@ -20,8 +20,7 @@ router.post("/register", async (req, res) => {
       if (!isUnique) {
         return res.status(201).json({ message: false });
       }
-      crypt
-        .cryptPassword(req.body.password)
+      crypt.cryptPassword(req.body.password)
         .then((hash) => {
           user = new User({
             username: req.body.username,
@@ -36,7 +35,7 @@ router.post("/register", async (req, res) => {
             console.log(user);
             const newUser = await user.save();
             username = req.body.username;
-            return res.status(201).json({ newUser });
+            return res.status(201).json({ newUser ,message: false});
           } catch (err) {
             return res.status(500).json({ message: err.message });
           }
