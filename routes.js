@@ -1,27 +1,11 @@
-
 const express = require("express");
 const path = require("path");
 const user = require("./models/user");
 const router = express.Router();
 const User = require("./models/user");
+const crypt=require('./cryptography')
 
 let username = "NaN";
-
-router.put("/money", async (req, res) => {
-    await User.findOneAndUpdate(
-    { username: username },
-    req.body,
-    { new: true },
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      } else {
-        res.status(200).json({ result });
-      }
-    }
-  );
-});
-
 
 router.post("/register", async (req, res) => {
   const user = new User({
@@ -32,17 +16,12 @@ router.post("/register", async (req, res) => {
   });
   try {
     const newUser = await user.save();
+    username=req.body.username
     res.status(201).json({ newUser });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 });
-
-router.get("/register", async (req, res) => {
-    
-    return res.status(200).json({ answer:"lmao" });
-
-  });
 
 router.post("/login", async (req, res) => {
   try {
@@ -74,6 +53,24 @@ router.post("/login", async (req, res) => {
 router.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));
 });
+
+
+router.put("/money", async (req, res) => {
+  console.log(username)
+  await User.findOneAndUpdate(
+  { username: username },
+  req.body,
+  { new: true },
+  (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      res.status(200).json({ result });
+    }
+  }
+);
+});
+
 
 router.get("/daysCount.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/daysCount.js"));
