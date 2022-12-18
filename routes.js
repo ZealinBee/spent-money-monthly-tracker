@@ -10,33 +10,32 @@ let username = "None";
 
 router.post("/register", async (req, res) => {
   let user;
-  await User.find({ username: req.body.username })
-    .then((users) => {
-      if (users.length > 0) {
-        console.log(users)
-        return res.status(201).json({ message: false });
-      }
-      crypt.cryptPassword(req.body.password)
-        .then((hash) => {
-          user = new User({
-            username: req.body.username,
-            password: hash,
-            totalHave: req.body.totalHave,
-            totalSpend: req.body.totalSpend,
-          });
-          return user;
-        })
-        .then(async (user) => {
-          try {
-            console.log(user);
-            const newUser = await user.save();
-            username = req.body.username;
-            return res.status(201).json({ newUser ,message: true});
-          } catch (err) {
-            return res.status(500).json({ message: err.message });
-          }
+  await User.find({ username: req.body.username }).then((users) => {
+    if (users.length > 0) {
+      console.log(users);
+      return res.status(201).json({ message: false });
+    }
+    crypt.cryptPassword(req.body.password)
+      .then((hash) => {
+        user = new User({
+          username: req.body.username,
+          password: hash,
+          totalHave: req.body.totalHave,
+          totalSpend: req.body.totalSpend,
         });
-    });
+        return user;
+      })
+      .then(async (user) => {
+        try {
+          console.log(user);
+          const newUser = await user.save();
+          username = req.body.username;
+          return res.status(201).json({ newUser, message: true });
+        } catch (err) {
+          return res.status(500).json({ message: err.message });
+        }
+      });
+  });
 });
 
 router.post("/login", async (req, res) => {
