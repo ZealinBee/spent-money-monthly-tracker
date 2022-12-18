@@ -6,7 +6,7 @@ import numberOfDaysInAMonth from "./daysCount.js";
 //Program
 const program = document.querySelector('#program')
 //COME ON LET"S GO
-
+// NBIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 //Editable variables
 let totalSpentMoney = 0;
 let monthlyAllowance = 0;
