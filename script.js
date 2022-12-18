@@ -6,7 +6,7 @@ import numberOfDaysInAMonth from "./daysCount.js";
 //Program
 const program = document.querySelector('#program')
 //COME ON LET"S GO
-// NBIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+// why is verified so hard why can't i just not be linux nerd HMMMMMM?
 //Editable variables
 let totalSpentMoney = 0;
 let monthlyAllowance = 0;
