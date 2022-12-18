@@ -4,7 +4,7 @@ const user = require("./models/user");
 const router = express.Router();
 const User = require("./models/user");
 const crypt = require("./cryptography");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 let username = "NaN";
 
