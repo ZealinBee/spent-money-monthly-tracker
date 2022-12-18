@@ -150,6 +150,7 @@ signUpButton.addEventListener("click", function (e) {
   program.classList.add('show')
   calendar.render()
 });
+
 loginButton.addEventListener("click", loginUser);
 
 async function loginUser(e) {
