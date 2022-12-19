@@ -1,12 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./main.css" />
     <script src="./main.js"></script>
     <script type="module" src="./script.js"></script>
     <link rel="stylesheet" href="./style.css" />
-    
   </head>
   <body>
     <section class="login-section" ">
@@ -93,6 +95,9 @@
           <span id="total-monthly-allowance-span">0</span>
         </h1>
         <h2>Daily Allowance: <span id="daily-allowance-span">0</span></h2>
+        
+           <h1>Total You spent: <span id="total-spent-money-span">0</span></h1>
+        <h1>Total Days Used: <span id="total-days-used-span">0</span></h1>
         <input
           type="number"
           placeholder="I spent"
@@ -103,8 +108,7 @@
         <button id="submit-spent-money">Submit</button>
         <p class="too-much-money-spent-complain">Your monthly allowance is only <span class="monthly-allowance-span">0</span> and you are spending <span class="spent-money-span">0</span> . Are you sure you put the right input?</p>
 
-        <h1>Total You spent: <span id="total-spent-money-span"></span></h1>
-        <h1>Total Days Used: <span id="total-days-used-span"></span></h1>
+     
       </div>
       <h1 id="warning"></h1>
    

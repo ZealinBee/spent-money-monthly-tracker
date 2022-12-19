@@ -22,6 +22,11 @@ main {
   margin: 0 2rem;
 }
 
+h1 span,
+h2 span {
+  color:var(--accent-color);
+}
+
 .used {
   color: red;
 }
@@ -81,8 +86,8 @@ section {
   position: absolute;
   background: var(--light-color);
   border-radius: 1rem;
-  top: 50%;
   left: 50%;
+  top:50%;
   transform: translate(-50%, -50%);
   padding-bottom: 2rem;
   
@@ -385,6 +390,8 @@ section p span:hover {
 .money-input-wrapper input {
   padding: 0.5rem;
   font-size: 1rem;
+  border:none;
+  outline:2px var(--accent-color) solid;
 }
 
 .money-input-wrapper button {
@@ -401,13 +408,27 @@ section p span:hover {
   font-size: 1.5rem;
 }
 
-.calendar {
-  display: none;
-}
-
 /* Calendar Styling  */
 
+.calendar {
+  display: none;
+  margin-top:2rem;
+}
 
+
+.fc-event-title-container {
+  background-color: var(--accent-color);
+}
+
+.fc-toolbar-chunk h2{
+  color:var(--accent-color);
+
+}
+
+.fc-day-today {
+  color:var(--accent-color);
+  background: none!important;
+}
 
 /* classlist add js */
 
@@ -422,6 +443,8 @@ section p span:hover {
 
 #warning {
   color: var(--light-color);
+  font-size:1.5rem;
+  margin-top:0.5rem;
 }
 
 .move-up {
@@ -443,12 +466,33 @@ section p span:hover {
 /* Mobile */
 
 @media (max-width:600px) {
-  .total-money-you-can-use-text{
+
+  .money-input-wrapper h1 {
+    font-size:1.2rem;
+  }
+
+  .money-input-wrapper .total-money-you-can-use-text{
     margin-top:4rem;
-    font-size:0.9rem;
+  }
+  .money-input-wrapper h2{
+    font-size:1.2rem;
+  }
+
+  .money-input-wrapper button {
+    font-size:0.8rem;
+    border:none;
+  }
+
+  .money-input-wrapper input {
+    font-size:0.8rem;
   }
 
   section {
     width:75%;
   }
+
+  .fc-toolbar-chunk h2 {
+
+  }
+  
 }
