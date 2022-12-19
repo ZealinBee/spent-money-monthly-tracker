@@ -102,12 +102,12 @@ closeInfoWrapperButton.addEventListener('click', function() {
 //Submit spent money each time par
 const submitSpentMoneyHandler = async () => {
   if(spentMoneyInput.value > monthlyAllowance * 3) {
-    document.querySelector('.too-much-money-spent-complain').classList.remove('hide')
+    document.querySelector('.too-much-money-spent-complain').classList.add('show')
     document.querySelector('.monthly-allowance-span').textContent = monthlyAllowance
     document.querySelector('.spent-money-span').textContent = spentMoneyInput.value
   }
   else {
-    document.querySelector('.too-much-money-spent-complain').classList.add('hide')
+    document.querySelector('.too-much-money-spent-complain').classList.remove('show')
     totalSpentMoney +=  Number(spentMoneyInput.value);
     spentMoneyInput.value = "";
     totalSpentMoneySpan.textContent = totalSpentMoney;

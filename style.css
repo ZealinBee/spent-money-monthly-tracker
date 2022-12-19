@@ -85,6 +85,7 @@ section {
   left: 50%;
   transform: translate(-50%, -50%);
   padding-bottom: 2rem;
+  
 }
 
 section h1 {
@@ -369,6 +370,7 @@ section p span:hover {
 
 .too-much-money-spent-complain {
   color: white;
+  display:none;
 }
 
 .money-input-wrapper {
@@ -436,4 +438,17 @@ section p span:hover {
 
 .error-login {
   border-bottom: 2px red solid;
+}
+
+/* Mobile */
+
+@media (max-width:600px) {
+  .total-money-you-can-use-text{
+    margin-top:4rem;
+    font-size:0.9rem;
+  }
+
+  section {
+    width:75%;
+  }
 }
