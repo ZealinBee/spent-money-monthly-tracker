@@ -67,10 +67,9 @@
 
     <main id="program">        
       <div class="monthly-allowance-container">
-        <h1>Total Money You have</h1>
-        <input type="number" id="monthly-allowance-input" />
-        <h1>You Want to Save</h1>
-        <input type="number" id="monthly-save-input" />
+        <input type="number" id="monthly-allowance-input" min="1" placeholder="Total Monthly Allowance"/>
+        <p class="money-cant-be-0-warning">Please enter something higher than 0!</p>
+        <p class="money-cant-be-over-10-million-warning">That's a lot of money! I think you don't need to use our app in that case, also, here is my paypal: <a href="https://paypal.me/zealinbee">https://paypal.me/zealinbee </a></p>
         <button id="submit-monthly-money">Submit</button>
       </div>
       <div class="money-input-wrapper">
@@ -84,8 +83,11 @@
           placeholder="I spent"
           id="spent-money-input"
           aria-placeholder="How much you spent"
+  
         />
         <button id="submit-spent-money">Submit</button>
+        <p class="too-much-money-spent-complain hide">Your monthly allowance is only <span class="monthly-allowance-span">0</span> and you are spending <span class="spent-money-span">0</span> . Are you sure you put the right input?</p>
+
         <h1>Total You spent: <span id="total-spent-money-span"></span></h1>
         <h1>Total Days Used: <span id="total-days-used-span"></span></h1>
       </div>

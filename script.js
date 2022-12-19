@@ -3,12 +3,22 @@ import numberOfDaysInAMonth from "./daysCount.js";
 
 //Program
 const program = document.querySelector("#program");
+const moneyInputWrapper = document.querySelector(".money-input-wrapper");
+
 //Editable variables
 let totalSpentMoney = 0;
 let monthlyAllowance = 0;
 let dailyAllowance = 0;
 let totalDaysUsed = 0;
 let currentDay = 0;
+
+//Initialize calendar
+var calendarEl = document.getElementById("calendar");
+var calendar = new FullCalendar.Calendar(calendarEl, {
+  initialView: "dayGridMonth",
+});
+let calendarSpan = document.querySelector(".calendar");
+
 
 //Login sign up part
 const goToSignUpLink = document.querySelector("#go-to-sign-up-link");
@@ -43,71 +53,85 @@ const totalSpentMoneySpan = document.querySelector("#total-spent-money-span");
 const dailyAllowanceSpan = document.querySelector("#daily-allowance-span");
 const totalDaysUsedSpan = document.querySelector("#total-days-used-span");
 const warning = document.querySelector("#warning");
-const resetButton = document.querySelector(".reset-button");
 
-//Initialize calendar
-var calendarEl = document.getElementById("calendar");
-var calendar = new FullCalendar.Calendar(calendarEl, {
-  initialView: "dayGridMonth",
-});
-let calendarSpan = document.querySelector(".calendar");
 
-//Functions
+//Submit monthly allowance part
 const submitMonthlyMoneyHandler = () => {
-  monthlyAllowanceContainer.classList.toggle("hide");
-  moneyInputWrapper.classList.add("show");
-  calendarSpan.classList.add("show");
-  resetButton.classList.add("show");
-  calendar.render();
-  monthlyAllowance = monthlyAllowanceInput.value;
-  totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
-  dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
-  dailyAllowanceSpan.textContent = dailyAllowance;
-  const xhr = new XMLHttpRequest();
-  xhr.open("PUT", "/money");
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(
-    JSON.stringify({
-      totalHave: monthlyAllowance,
-    })
-  );
+  if(monthlyAllowanceInput.value == 0){
+    document.querySelector(".money-cant-be-0-warning").classList.add('show')
+    document.querySelector(".money-cant-be-over-10-million-warning").classList.remove('show')
+
+  } else if(monthlyAllowanceInput.value > 1000000) {
+    document.querySelector(".money-cant-be-0-warning").classList.remove('show')
+    document.querySelector(".money-cant-be-over-10-million-warning").classList.add('show')
+
+  }
+  else {
+    monthlyAllowanceContainer.classList.toggle("hide");
+    moneyInputWrapper.classList.add("show");
+    calendarSpan.classList.add("show");
+    resetButton.classList.add("show");
+    calendar.render();
+    monthlyAllowance = monthlyAllowanceInput.value;
+    totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
+    dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
+    dailyAllowanceSpan.textContent = dailyAllowance;
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", "/money");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(
+      JSON.stringify({
+        totalHave: monthlyAllowance,
+      })
+    );
+  }
+ 
 };
 
-const submitSpentMoneyHandler = () => {
-  parseInt(totalSpentMoney);
-  totalSpentMoney += Number(spentMoneyInput.value);
-  spentMoneyInput.value = "";
-  totalSpentMoneySpan.textContent = totalSpentMoney;
-  totalDaysUsed = totalSpentMoney / dailyAllowance;
-  totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-  if (totalDaysUsed > numberOfDaysInAMonth) {
-    warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
-      totalDaysUsed - numberOfDaysInAMonth
-    ).toFixed(0)} day(s)`;
+//Submit spent money each time par
+const submitSpentMoneyHandler = async () => {
+  if(spentMoneyInput.value > monthlyAllowance * 3) {
+    document.querySelector('.too-much-money-spent-complain').classList.remove('hide')
+    document.querySelector('.monthly-allowance-span').textContent = monthlyAllowance
+    document.querySelector('.spent-money-span').textContent = spentMoneyInput.value
   }
-  calendar.removeAllEvents();
-  currentDay = 0;
-  for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-    currentDay += 21;
-    if (currentDay < 10) {
-      currentDay = `0${currentDay}`;
+  else {
+    document.querySelector('.too-much-money-spent-complain').classList.add('hide')
+    totalSpentMoney +=  Number(spentMoneyInput.value);
+    spentMoneyInput.value = "";
+    totalSpentMoneySpan.textContent = totalSpentMoney;
+    totalDaysUsed = totalSpentMoney / dailyAllowance;
+    totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
+    if (totalDaysUsed > numberOfDaysInAMonth) {
+      warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
+        totalDaysUsed - numberOfDaysInAMonth
+      ).toFixed(0)} day(s)`;
     }
-    calendar.addEvent({
-      title: "day used!",
-      start: `2022-12-${currentDay}`,
-      end: `2022-12-${currentDay}`,
-    });
-    currentDay = i + 1;
+    calendar.removeAllEvents();
+    currentDay = 0;
+    for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
+      currentDay += 21;
+      if (currentDay < 10) {
+        currentDay = `0${currentDay}`;
+      }
+      calendar.addEvent({
+        title: "day used!",
+        start: `2022-12-${currentDay}`,
+        end: `2022-12-${currentDay}`,
+      });
+      currentDay = i + 1;
+    }
+  
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", "/money");
+    xhr.setRequestHeader("Content-Type", "application/json");
+     xhr.send(
+      JSON.stringify({
+        totalSpend: totalSpentMoney,
+      })
+    );
   }
-
-  const xhr = new XMLHttpRequest();
-  xhr.open("PUT", "/money");
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(
-    JSON.stringify({
-      totalSpend: totalSpentMoney,
-    })
-  );
+  
 };
 
 //Events
@@ -136,66 +160,6 @@ toggleLogin.addEventListener("click", function (e) {
 //   var n2=re2.test(passwordInputValue)
 // })
 
-const signUpError = document.querySelector(".sign-up-error");
-const letterError = document.querySelector("#letter");
-const capitalError = document.querySelector("#uppercase-letter");
-const lengthError = document.querySelector("#length");
-const numberError = document.querySelector("#number");
-const specialCharacterError = document.querySelector("#special-character");
-const whiteSpaceError = document.querySelector("#white-space");
-
-signUpPasswordInput.addEventListener("input", function () {
-  signUpError.style.display = "block";
-  var lowerCaseLetters = /[a-z]/g;
-  if (signUpPasswordInput.value.match(lowerCaseLetters)) {
-    letterError.classList.remove("invalid");
-    letterError.classList.add("valid");
-  } else {
-    letterError.classList.remove("valid");
-    letterError.classList.add("invalid");
-  }
-  var upperCaseLetters = /[A-Z]/g;
-  if (signUpPasswordInput.value.match(upperCaseLetters)) {
-    capitalError.classList.remove("invalid");
-    capitalError.classList.add("valid");
-  } else {
-    capitalError.classList.remove("valid");
-    capitalError.classList.add("invalid");
-  }
-  if (signUpPasswordInput.value.length >= 8) {
-    lengthError.classList.remove("invalid");
-    lengthError.classList.add("valid");
-  } else {
-    lengthError.classList.remove("valid");
-    lengthError.classList.add("invalid");
-  }
-  var numbers = /[0-9]/g;
-  if (signUpPasswordInput.value.match(numbers)) {
-    numberError.classList.remove("invalid");
-    numberError.classList.add("valid");
-  } else {
-    numberError.classList.remove("valid");
-    numberError.classList.add("invalid");
-  }
-  var specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-  if (signUpPasswordInput.value.match(specialCharacter)) {
-    specialCharacterError.classList.remove("invalid");
-    specialCharacterError.classList.add("valid");
-  } else {
-    specialCharacterError.classList.remove("valid");
-    specialCharacterError.classList.add("invalid");
-  }
-  var whiteSpace = /[ \t\n\r]/;
-  if (signUpPasswordInput.value.match(whiteSpace)) {
-    whiteSpaceError.classList.add("invalid");
-    whiteSpaceError.classList.remove("valid");
-  } else {
-    whiteSpaceError.classList.add("valid");
-    whiteSpaceError.classList.remove("invalid");
-  }
-});
-
-const userNameAlreadyTaken = document.querySelector(".user-name-already-taken");
 
 signUpButton.addEventListener("click", async function (e) {
   e.preventDefault();
@@ -230,7 +194,7 @@ signUpButton.addEventListener("click", async function (e) {
         let okayUsername = data.message;
         console.log(okayUsername);
         if (okayUsername === false) {
-          userNameAlreadyTaken.classList.add("show");
+          document.querySelector(".user-name-already-taken").classList.add("show");
           signUpUserNameInput.classList.add("error-login");
         } else if (okayUsername === true) {
           signUpUserNameInput.classList.remove("error-login");
@@ -252,6 +216,8 @@ signUpButton.addEventListener("click", async function (e) {
       });
   }
 });
+
+// Login Part
 
 loginButton.addEventListener("click", loginUser);
 
@@ -339,11 +305,13 @@ function checkLogin(data) {
 }
 
 //Reset button
+const resetButton = document.querySelector(".reset-button");
 
 resetButton.addEventListener("click", function () {
   moneyInputWrapper.classList.remove("show");
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
+  warning.textContent = "";
   const xhr = new XMLHttpRequest();
   xhr.open("PUT", "/money");
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -353,7 +321,6 @@ resetButton.addEventListener("click", function () {
       totalSpend: 0,
     })
   );
-
   totalMonthlyAllowanceSpan.textContent = 0;
   totalSpentMoneySpan.textContent = 0;
   dailyAllowanceSpan.textContent = 0;
@@ -361,10 +328,69 @@ resetButton.addEventListener("click", function () {
   monthlyAllowanceContainer.classList.remove("hide");
 });
 
-//Hide program at first
-const moneyInputWrapper = document.querySelector(".money-input-wrapper");
+// Sign up password validation
 
-//Not functionality, just css
+const signUpError = document.querySelector(".sign-up-error");
+const letterError = document.querySelector("#letter");
+const capitalError = document.querySelector("#uppercase-letter");
+const lengthError = document.querySelector("#length");
+const numberError = document.querySelector("#number");
+const specialCharacterError = document.querySelector("#special-character");
+const whiteSpaceError = document.querySelector("#white-space");
+
+signUpPasswordInput.addEventListener("input", function () {
+  signUpError.style.display = "block";
+  var lowerCaseLetters = /[a-z]/g;
+  if (signUpPasswordInput.value.match(lowerCaseLetters)) {
+    letterError.classList.remove("invalid");
+    letterError.classList.add("valid");
+  } else {
+    letterError.classList.remove("valid");
+    letterError.classList.add("invalid");
+  }
+  var upperCaseLetters = /[A-Z]/g;
+  if (signUpPasswordInput.value.match(upperCaseLetters)) {
+    capitalError.classList.remove("invalid");
+    capitalError.classList.add("valid");
+  } else {
+    capitalError.classList.remove("valid");
+    capitalError.classList.add("invalid");
+  }
+  if (signUpPasswordInput.value.length >= 8) {
+    lengthError.classList.remove("invalid");
+    lengthError.classList.add("valid");
+  } else {
+    lengthError.classList.remove("valid");
+    lengthError.classList.add("invalid");
+  }
+  var numbers = /[0-9]/g;
+  if (signUpPasswordInput.value.match(numbers)) {
+    numberError.classList.remove("invalid");
+    numberError.classList.add("valid");
+  } else {
+    numberError.classList.remove("valid");
+    numberError.classList.add("invalid");
+  }
+  var specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  if (signUpPasswordInput.value.match(specialCharacter)) {
+    specialCharacterError.classList.remove("invalid");
+    specialCharacterError.classList.add("valid");
+  } else {
+    specialCharacterError.classList.remove("valid");
+    specialCharacterError.classList.add("invalid");
+  }
+  var whiteSpace = /[ \t\n\r]/;
+  if (signUpPasswordInput.value.match(whiteSpace)) {
+    whiteSpaceError.classList.add("invalid");
+    whiteSpaceError.classList.remove("valid");
+  } else {
+    whiteSpaceError.classList.add("valid");
+    whiteSpaceError.classList.remove("invalid");
+  }
+});
+
+
+//CSS STUFF FOR LOGIN / SIGN UP
 
 const userNameInputWrapper = document.querySelector(".user-name-input-wrapper");
 const userNameInputWrapperSignUp = document.querySelector(

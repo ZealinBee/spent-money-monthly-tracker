@@ -254,17 +254,7 @@ section p span:hover {
   color:green;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+/* Setting up the monthly allowance */
 
 .monthly-allowance-container {
   display: flex;
@@ -295,15 +285,19 @@ section p span:hover {
   font-size:1.2rem;
   padding:0.3rem 0;
   padding-left:1rem;
-  border:2px var(--dark-color) solid;
+  border:none;
+  border-radius:3rem;
+  border:2px var(--gray-color) solid;
+  margin-bottom:1rem;
 }
 
 .monthly-allowance-container button{
   margin-top:1.2rem;
   font-size:1.2rem;
   padding:0.5rem 0;
-  color:var(--dark-color);
-  border:3px var(--dark-color) solid;
+  border:none;
+  color:var(--light-color);
+  background:var(--accent-color);
   transition: all 0.3s ease;
 }
 
@@ -316,8 +310,26 @@ section p span:hover {
   font-size:1.2rem;
 }
 
+.money-cant-be-0-warning{
+  color:red;
+  font-size:0.9rem;
+  margin-left:0.2rem;
+  display:none;
+}
+.money-cant-be-over-10-million-warning{
+  color:red;
+  font-size:0.9rem;
+  margin-left:0.2rem;
+  display:none;
+}
+
+
 .total-money-you-can-use-text {
   margin-top:2rem;
+}
+
+.too-much-money-spent-complain {
+  color:white;
 }
 
 .money-input-wrapper {
