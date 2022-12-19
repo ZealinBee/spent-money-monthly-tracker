@@ -1,11 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require("helmet");
 const routes = require("./routes")
 require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
+app.use(helmet());
 app.use('/', routes);
+
 
 
 //MongoDB connection
