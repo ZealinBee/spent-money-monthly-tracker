@@ -39,6 +39,7 @@ main {
   border:none;
   cursor: pointer;
   padding:0.5rem 1rem;
+  display:none;
 }
 
 input {
@@ -54,6 +55,7 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 button {
@@ -201,6 +203,11 @@ section p span:hover {
   transition: all 0.2s ease-in-out;
 }
 
+.user-name-already-taken{
+  display:none;
+  color:red;
+  margin-top:-1rem;
+}
 
 .password-input-wrapper {
   display:flex;
@@ -315,6 +322,7 @@ section p span:hover {
 
 .money-input-wrapper {
   margin-top:2rem;
+  display:none;
 }
 
 .money-input-wrapper > * {
@@ -339,6 +347,10 @@ section p span:hover {
   font-size:1.5rem;
 }
 
+.calendar {
+  display:none;
+}
+
 
 /* classlist add js */
 
@@ -348,7 +360,7 @@ section p span:hover {
 }
 
 .show {
-  display:block;
+  display: block!important;;
 }
 
 #warning {
@@ -371,3 +383,4 @@ section p span:hover {
 .error-login {
   border-bottom:2px red solid;
 }
+

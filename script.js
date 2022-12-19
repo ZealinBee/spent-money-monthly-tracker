@@ -30,7 +30,6 @@ const fillEmptyErrorMessage = document.querySelector(
 const monthlyAllowanceInput = document.querySelector(
   "#monthly-allowance-input"
 );
-const monthlySaveInput = document.querySelector("#monthly-save-input");
 const monthlyAllowanceContainer = document.querySelector(
   ".monthly-allowance-container"
 );
@@ -51,11 +50,16 @@ var calendarEl = document.getElementById("calendar");
 var calendar = new FullCalendar.Calendar(calendarEl, {
   initialView: "dayGridMonth",
 });
+let calendarSpan = document.querySelector(".calendar");
 
 //Functions
 const submitMonthlyMoneyHandler = () => {
   monthlyAllowanceContainer.classList.toggle("hide");
-  monthlyAllowance = monthlyAllowanceInput.value - monthlySaveInput.value;
+  moneyInputWrapper.classList.add("show");
+  calendarSpan.classList.add("show");
+  resetButton.classList.add("show");
+  calendar.render();
+  monthlyAllowance = monthlyAllowanceInput.value;
   totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
   dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
   dailyAllowanceSpan.textContent = dailyAllowance;
@@ -120,9 +124,7 @@ goToLoginLink.addEventListener("click", function (e) {
 toggleLogin.addEventListener("click", function (e) {
   loginSection.classList.toggle("hide");
   program.classList.add("show");
-  calendar.render();
 });
-
 
 // signUpPasswordInput.addEventListener('input', function() {
 //   let passwordInputValue = signUpPasswordInput.value;
@@ -134,34 +136,33 @@ toggleLogin.addEventListener("click", function (e) {
 //   var n2=re2.test(passwordInputValue)
 // })
 
-const signUpError = document.querySelector('.sign-up-error')
-const letterError = document.querySelector('#letter')
-const capitalError = document.querySelector('#uppercase-letter')
-const lengthError = document.querySelector('#length')
-const numberError = document.querySelector('#number')
-const specialCharacterError = document.querySelector('#special-character')
-const whiteSpaceError = document.querySelector('#white-space')
+const signUpError = document.querySelector(".sign-up-error");
+const letterError = document.querySelector("#letter");
+const capitalError = document.querySelector("#uppercase-letter");
+const lengthError = document.querySelector("#length");
+const numberError = document.querySelector("#number");
+const specialCharacterError = document.querySelector("#special-character");
+const whiteSpaceError = document.querySelector("#white-space");
 
-
-signUpPasswordInput.addEventListener('input' , function() {
+signUpPasswordInput.addEventListener("input", function () {
   signUpError.style.display = "block";
   var lowerCaseLetters = /[a-z]/g;
-  if(signUpPasswordInput.value.match(lowerCaseLetters)) {
-    letterError.classList.remove('invalid')
-    letterError.classList.add('valid')
-  }else {
-    letterError.classList.remove('valid')
-    letterError.classList.add('invalid')
+  if (signUpPasswordInput.value.match(lowerCaseLetters)) {
+    letterError.classList.remove("invalid");
+    letterError.classList.add("valid");
+  } else {
+    letterError.classList.remove("valid");
+    letterError.classList.add("invalid");
   }
   var upperCaseLetters = /[A-Z]/g;
-  if(signUpPasswordInput.value.match(upperCaseLetters)) {  
+  if (signUpPasswordInput.value.match(upperCaseLetters)) {
     capitalError.classList.remove("invalid");
     capitalError.classList.add("valid");
   } else {
     capitalError.classList.remove("valid");
     capitalError.classList.add("invalid");
   }
-  if(signUpPasswordInput.value.length >= 8) {  
+  if (signUpPasswordInput.value.length >= 8) {
     lengthError.classList.remove("invalid");
     lengthError.classList.add("valid");
   } else {
@@ -169,7 +170,7 @@ signUpPasswordInput.addEventListener('input' , function() {
     lengthError.classList.add("invalid");
   }
   var numbers = /[0-9]/g;
-  if(signUpPasswordInput.value.match(numbers)) {  
+  if (signUpPasswordInput.value.match(numbers)) {
     numberError.classList.remove("invalid");
     numberError.classList.add("valid");
   } else {
@@ -177,64 +178,80 @@ signUpPasswordInput.addEventListener('input' , function() {
     numberError.classList.add("invalid");
   }
   var specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-  if(signUpPasswordInput.value.match(specialCharacter)) {  
+  if (signUpPasswordInput.value.match(specialCharacter)) {
     specialCharacterError.classList.remove("invalid");
     specialCharacterError.classList.add("valid");
   } else {
-    
     specialCharacterError.classList.remove("valid");
     specialCharacterError.classList.add("invalid");
   }
   var whiteSpace = /[ \t\n\r]/;
-  if(signUpPasswordInput.value.match(whiteSpace)){
-    whiteSpaceError.classList.add('invalid')
-    whiteSpaceError.classList.remove('valid')
-  }else{
-    whiteSpaceError.classList.add('valid')
-    whiteSpaceError.classList.remove('invalid')
+  if (signUpPasswordInput.value.match(whiteSpace)) {
+    whiteSpaceError.classList.add("invalid");
+    whiteSpaceError.classList.remove("valid");
+  } else {
+    whiteSpaceError.classList.add("valid");
+    whiteSpaceError.classList.remove("invalid");
   }
-})
+});
 
+const userNameAlreadyTaken = document.querySelector(".user-name-already-taken");
 
-
-
-signUpButton.addEventListener("click", function (e) {
+signUpButton.addEventListener("click", async function (e) {
   e.preventDefault();
   let userNameInputValue = signUpUserNameInput.value;
   let passwordInputValue = signUpPasswordInput.value;
   var re = /\D/;
   var re1 = /\s/;
-  var re2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+  var re2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
   var n = re.test(passwordInputValue);
-  var n1=!re1.test(passwordInputValue)
-  var n2=re2.test(passwordInputValue)
-  if ((passwordInputValue.length<8)||!(n1&&n2&&n)){
+  var n1 = !re1.test(passwordInputValue);
+  var n2 = re2.test(passwordInputValue);
+  if (passwordInputValue.length < 8 || !(n1 && n2 && n)) {
     signUpUserNameInput.classList.add("error-login");
     signUpPasswordInput.classList.add("error-login");
-    console.log('hi')
   } else {
     signUpUserNameInput.classList.remove("error-login");
     signUpPasswordInput.classList.remove("error-login");
-
-    console.log(userNameInputValue);
-    console.log(passwordInputValue);
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/register");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(
-      JSON.stringify({
+    const response = await fetch("/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         username: userNameInputValue,
         password: passwordInputValue,
         totalHave: 0,
         totalSpend: 0,
-      })
-    );
-    signUpSection.classList.remove("show");
-    program.classList.add("show");
-    calendar.render();
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let okayUsername = data.message;
+        console.log(okayUsername);
+        if (okayUsername === false) {
+          userNameAlreadyTaken.classList.add("show");
+          signUpUserNameInput.classList.add("error-login");
+        } else if (okayUsername === true) {
+          signUpUserNameInput.classList.remove("error-login");
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "/register");
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.send(
+            JSON.stringify({
+              username: userNameInputValue,
+              password: passwordInputValue,
+              totalHave: 0,
+              totalSpend: 0,
+            })
+          );
+          signUpSection.classList.remove("show");
+          program.classList.add("show");
+          calendar.render();
+        }
+      });
   }
 });
-
 
 loginButton.addEventListener("click", loginUser);
 
@@ -282,7 +299,11 @@ function checkLogin(data) {
     loginPasswordInput.classList.remove("error-login");
     loginErrorMessage.classList.remove("show");
     program.classList.add("show");
+    moneyInputWrapper.classList.add("show");
+    calendarSpan.classList.add("show");
+    resetButton.classList.add("show");
     loginSection.classList.add("hide");
+    calendar.render()
     monthlyAllowance = totalHave;
     totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
     totalSpentMoney = totalSpend;
@@ -309,18 +330,20 @@ function checkLogin(data) {
         end: `2022-12-${currentDay}`,
       });
       currentDay = i + 1;
+      
     }
-    calendar.render();
   }
   if (monthlyAllowance > 0) {
     monthlyAllowanceContainer.classList.add("hide");
   }
 }
 
-
 //Reset button
 
 resetButton.addEventListener("click", function () {
+  moneyInputWrapper.classList.remove("show");
+  calendarSpan.classList.remove("show");
+  resetButton.classList.remove("show");
   const xhr = new XMLHttpRequest();
   xhr.open("PUT", "/money");
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -335,41 +358,46 @@ resetButton.addEventListener("click", function () {
   totalSpentMoneySpan.textContent = 0;
   dailyAllowanceSpan.textContent = 0;
   totalDaysUsedSpan.textContent = 0;
-  monthlyAllowanceContainer.classList.remove('hide')
+  monthlyAllowanceContainer.classList.remove("hide");
 });
+
+//Hide program at first
+const moneyInputWrapper = document.querySelector(".money-input-wrapper");
 
 //Not functionality, just css
 
 const userNameInputWrapper = document.querySelector(".user-name-input-wrapper");
-const userNameInputWrapperSignUp = document.querySelector(".user-name-input-wrapper-sign-up");
+const userNameInputWrapperSignUp = document.querySelector(
+  ".user-name-input-wrapper-sign-up"
+);
 const userNameLabel = document.querySelector(".user-name-label");
 const userNameLabelSignUp = document.querySelector(".user-name-label-sign-up");
 const passwordInputWrapper = document.querySelector(".password-input-wrapper");
-const passwordInputWrapperSignUp = document.querySelector(".password-input-wrapper-sign-up");
+const passwordInputWrapperSignUp = document.querySelector(
+  ".password-input-wrapper-sign-up"
+);
 const passwordLabel = document.querySelector(".password-label");
 const passwordLabelSignUp = document.querySelector(".password-label-sign-up");
 
 userNameInputWrapper.addEventListener("click", function () {
   userNameLabel.classList.add("move-up");
   userNameLabel.classList.add("change-text-color");
-  loginUserNameInput.classList.add('change-border-color')
-
+  loginUserNameInput.classList.add("change-border-color");
 });
 
 passwordInputWrapper.addEventListener("click", function () {
   passwordLabel.classList.add("move-up");
   passwordLabel.classList.add("change-text-color");
-  loginPasswordInput.classList.add('change-border-color')
-
+  loginPasswordInput.classList.add("change-border-color");
 });
 
-userNameInputWrapperSignUp.addEventListener('click', function() {
+userNameInputWrapperSignUp.addEventListener("click", function () {
   userNameLabelSignUp.classList.add("move-up");
   userNameLabelSignUp.classList.add("change-text-color");
-  signUpUserNameInput.classList.add('change-border-color')
-})
-passwordInputWrapperSignUp.addEventListener('click', function() {
+  signUpUserNameInput.classList.add("change-border-color");
+});
+passwordInputWrapperSignUp.addEventListener("click", function () {
   passwordLabelSignUp.classList.add("move-up");
   passwordLabelSignUp.classList.add("change-text-color");
-  signUpPasswordInput.classList.add('change-border-color')
-})
+  signUpPasswordInput.classList.add("change-border-color");
+});

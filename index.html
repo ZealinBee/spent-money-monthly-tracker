@@ -28,7 +28,7 @@
 
       </form>
       <p >Don't have an account yet? <span id="go-to-sign-up-link"> Sign up Here</span></p>
-      <p ><span class="toggle-login">  Use website as an user </span>(data won't be deleted)</p>
+      <p ><span class="toggle-login">  Use website as a guest </span>(data won't be deleted)</p>
     </section>
     <section class="signup-section" ">
       <form >
@@ -39,6 +39,8 @@
           <label for="sign-up-username-input" class="user-name-label user-name-label-sign-up">Username</label>
           <input type="text" id="sign-up-username-input" required>
         </div>
+        <p class="user-name-already-taken">Username already taken</p>
+
         <div class="password-input-wrapper password-input-wrapper-sign-up">
           <label for="login-password-input" class="password-label password-label-sign-up">Password</label>
           <input type="password"  id="sign-up-password-input" required>
@@ -89,7 +91,7 @@
       </div>
       <h1 id="warning"></h1>
    
-    <div id="calendar"></div>
+    <div id="calendar" class="calendar"></div>
     <button class="reset-button">Reset Everything</button>
   </main>
   </body>
