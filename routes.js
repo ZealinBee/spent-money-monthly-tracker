@@ -27,7 +27,9 @@ router.post("/register", async (req, res) => {
           username = req.body.username;
           return res.status(201).json({ newUser, message: true });
         } catch (err) {
-          return res.status(500).json({ message: false });
+          if (err.code==11000)
+            return res.status(500).json({ message: false });
+          return res.status(500).json({ message: err });
         }
       });
   })
