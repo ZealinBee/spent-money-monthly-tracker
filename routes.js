@@ -1,20 +1,16 @@
 const express = require("express");
 const path = require("path");
-const user = require("./models/user");
-const router = express.Router();
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const User = require("./models/user");
 const crypt = require("./cryptography");
-const bcrypt = require("bcryptjs");
+const auth=require("./service/authorization")
+const router = express.Router();
 
 let username = "None";
 
 router.post("/register", async (req, res) => {
   let user;
-  await User.find({ username: req.body.username }).then((users) => {
-    if (users.length > 0) {
-      console.log(users);
-      return res.status(201).json({ message: false });
-    }
     crypt.cryptPassword(req.body.password)
       .then((hash) => {
         user = new User({
@@ -27,16 +23,14 @@ router.post("/register", async (req, res) => {
       })
       .then(async (user) => {
         try {
-          console.log(user);
           const newUser = await user.save();
           username = req.body.username;
           return res.status(201).json({ newUser, message: true });
         } catch (err) {
-          return res.status(500).json({ message: err.message });
+          return res.status(500).json({ message: false });
         }
       });
-  });
-});
+  })
 
 router.post("/login", async (req, res) => {
   try {
@@ -45,23 +39,25 @@ router.post("/login", async (req, res) => {
     let totalHave = 0;
     let totalSpend = 0;
     let answer = false;
+    let token = '0'
     for await (const doc of user) {
       hashword = doc.password;
       totalHaveUser = doc.totalHave;
       totalSpendUser = doc.totalSpend;
       break;
     }
-    result = await bcrypt.compareSync(req.body.password, hashword);
-    if (result) {
+    if (bcrypt.compareSync(req.body.password, hashword)) {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       username = req.body.username;
+      token = jwt.sign({userId: username}, process.env.SECRET_KEY);
     }
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,
       totalHave: totalHave,
+      token:token
     });
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -73,19 +69,27 @@ router.get("/", async (req, res) => {
 });
 
 router.put("/money", async (req, res) => {
-  await User.findOneAndUpdate(
-    { username: username },
-    req.body,
-    { new: true },
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      } else {
-        res.status(200).json({ result });
+  auth.auth(req).then(async (result)=>{
+    if (!result)
+    return res.status(400).json({message:"Bad request"})
+    await User.findOneAndUpdate(
+      { username: username },
+      req.body,
+      { new: true },
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: err.message });
+        } else {
+          res.status(200).json({ result:username});
+        }
       }
-    }
-  );
+    );
+  })
 });
+
+
+
+
 
 router.get("/daysCount.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/daysCount.js"));

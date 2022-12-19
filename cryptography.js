@@ -6,4 +6,3 @@ exports.cryptPassword = async function (password) {
     return hash;
 
 }
-
