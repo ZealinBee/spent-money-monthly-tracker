@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap");
 
 :root {
-  --dark-color : #1B1C1E;
-  --light-color : #FEFDFB;
-  --gray-color:#888888;
-  --accent-color:#759bd9	;
+  --dark-color: #1b1c1e;
+  --light-color: #fefdfb;
+  --gray-color: #888888;
+  --accent-color: #759bd9;
 }
 
 * {
@@ -15,35 +15,33 @@
 }
 
 body {
-  background:var(--dark-color);
+  background: var(--dark-color);
 }
 
 main {
-  margin:0 2rem;
+  margin: 0 2rem;
 }
 
-
-
 .used {
-  color:red;
+  color: red;
 }
 
 .reset-button {
   position: absolute;
-  top:10px;
-  right:10px;
-  background:var(--light-color);
-  color:var(--dark-color);
+  top: 10px;
+  right: 10px;
+  background: var(--accent-color);
+  color: var(--light-color);
   border-radius: 1.2rem;
-  font-size:1.25rem;
-  border:none;
+  font-size: 1rem;
+  border: none;
   cursor: pointer;
-  padding:0.5rem 1rem;
-  display:none;
+  padding: 0.5rem 1rem;
+  display: none;
 }
 
 input {
-  outline:none;
+  outline: none;
   border-radius: 1.2rem;
 }
 
@@ -53,41 +51,40 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
 
 button {
-  background:transparent;
-  border:3px --light-color solid;
+  background: transparent;
+  border: 3px --light-color solid;
   border-radius: 1.2rem;
-  color:var(--light-color);;
+  color: var(--light-color);
 }
 
 .fc-scrollgrid {
-  color:var(--light-color);
+  color: var(--light-color);
 }
 
 .fc-toolbar-title {
-  color:var(--light-color);
+  color: var(--light-color);
 }
-
 
 /* Actually in order here */
 
 main {
-  display:none;
+  display: none;
 }
 
 section {
-  position:absolute;
-  background:var(--light-color);
+  position: absolute;
+  background: var(--light-color);
   border-radius: 1rem;
   top: 50%;
-  left:50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  padding-bottom:2rem;
+  padding-bottom: 2rem;
 }
 
 section h1 {
@@ -95,246 +92,288 @@ section h1 {
 }
 
 section form {
-  display:flex;
+  display: flex;
   flex-direction: column;
 }
 
 section button {
   background-color: var(--accent-color);
-  color:var(--light-color);
-  border:none;
-  padding:0.5rem;
+  color: var(--light-color);
+  border: none;
+  padding: 0.5rem;
   margin: 0 0.75rem;
-  margin-top:2.5rem;
-  font-size:1rem;
-  margin-bottom:0.5rem;
-  cursor:pointer;
+  margin-top: 2.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
 }
 
 section button:hover {
-  background-color:var(--dark-color);
-  color:var(--accent-color);  
+  background-color: var(--dark-color);
+  color: var(--accent-color);
 }
 
-section input{
-  padding:0.3rem 0;
+section input {
+  padding: 0.3rem 0;
   margin: 0 1rem;
   border-radius: 0;
-  outline:none;
-  border:none;
-  border-bottom:2px var(--gray-color) solid;
-  transition:all 0.3s ease-in-out;
-  font-size:1rem;
-  
+  outline: none;
+  border: none;
+  border-bottom: 2px var(--gray-color) solid;
+  transition: all 0.3s ease-in-out;
+  font-size: 1rem;
 }
 
-
 section p {
-  margin-top:0.5rem;
+  margin-top: 0.5rem;
   padding: 0 1rem;
 }
 
-
-section p span{
-  cursor:pointer;
-  color:var(--accent-color);
+section p span {
+  cursor: pointer;
+  color: var(--accent-color);
   text-decoration: underline;
 }
 
 section p span:hover {
-  color:#749ddf62;
+  color: #749ddf62;
 }
 
 .login-signup-header-wrapper {
-  position:relative;
-  margin-bottom:1rem;
+  position: relative;
+  margin-bottom: 1rem;
 }
 
 .login-signup-header-wrapper h1 {
-  margin-top:1rem;
-  margin-bottom:0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.login-signup-header-wrapper::after{
-  content: '';
+.login-signup-header-wrapper::after {
+  content: "";
   position: absolute;
-  width:100%;
-  height:1px;
+  width: 100%;
+  height: 1px;
   background-color: #808080;
-  bottom:-10px;
+  bottom: -10px;
 }
-
-
 
 .login-error-message {
-  color:red;
+  color: red;
   pointer-events: none;
-  display:none;
+  display: none;
 }
 
 .fill-empty-error-message {
-  color:red;
+  color: red;
   pointer-events: none;
-  display:none;
+  display: none;
 }
 
 .signup-section {
-  display:none;
+  display: none;
 }
 
 .user-name-input-wrapper {
-  display:flex;
+  display: flex;
   flex-direction: column;
   position: relative;
-  color:var(--gray-color);
-  margin-top:1rem;
-  margin-bottom:1rem;
+  color: var(--gray-color);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .user-name-input-wrapper input:focus {
-  border-bottom:2px var(--accent-color) solid;
+  border-bottom: 2px var(--accent-color) solid;
 }
 
 .user-name-input-wrapper label {
-  margin-left:1rem;
+  margin-left: 1rem;
   position: absolute;
-  bottom:30%;
+  bottom: 30%;
   cursor: text;
   transition: all 0.2s ease-in-out;
 }
 
-.user-name-already-taken{
-  display:none;
-  color:red;
-  margin-top:-1rem;
+.user-name-already-taken {
+  display: none;
+  color: red;
+  margin-top: -1rem;
 }
 
 .password-input-wrapper {
-  display:flex;
+  display: flex;
   flex-direction: column;
   position: relative;
-  color:var(--gray-color);
-  margin-top:1.5rem;
+  color: var(--gray-color);
+  margin-top: 1.5rem;
 }
 
-
 .password-input-wrapper input:focus {
-  border-bottom:2px var(--accent-color) solid;
+  border-bottom: 2px var(--accent-color) solid;
 }
 
 .password-input-wrapper label {
-  margin-left:1rem;
+  margin-left: 1rem;
   position: absolute;
-  bottom:30%;
-  cursor:text;
-  transition:all 0.3s ease-in-out;
+  bottom: 30%;
+  cursor: text;
+  transition: all 0.3s ease-in-out;
 }
 
 .sign-up-error {
-  margin-left:1.25rem;
-  margin-top:1rem;
-  display:none;
+  margin-left: 1.25rem;
+  margin-top: 1rem;
+  display: none;
 }
 
 .error-variables {
-  display:grid;
+  display: grid;
   grid-template-columns: 1fr 1fr;
-  font-size:0.9rem;
+  font-size: 0.9rem;
 }
 
 .sign-up-error p {
-  padding-left:0;
+  padding-left: 0;
 }
 
 .invalid {
-  color:red;
+  color: red;
 }
 
 .valid {
-  color:green;
+  color: green;
 }
 
 /* Setting up the monthly allowance */
 
 .monthly-allowance-container {
-  display: flex;
-  flex-direction: column;
-  position:absolute;
-  background:var(--light-color);
-  margin-top:5rem;
-  margin-bottom:1.5rem;
+  position: absolute;
+  background: var(--light-color);
+  margin-bottom: 1.5rem;
   left: 50%;
-  top:30%;
-  transform: translate(-50%,-50%);
-  padding:2rem;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
   border-radius: 1rem;
-  z-index:999;
-  font-size:0.8rem;
+  z-index: 999;
+  font-size: 0.8rem;
 }
 
-.monthly-allowance-container > * {
-  margin-bottom:1rem;
+.monthly-allowance-wrapper {
+  display: flex;
+  padding: 2rem;
+  flex-direction: column;
+  position: relative;
 }
 
-.monthly-allowance-container button{
+.monthly-allowance-container button {
   cursor: pointer;
 }
 
-
 .monthly-allowance-container input {
-  font-size:1.2rem;
-  padding:0.3rem 0;
-  padding-left:1rem;
-  border:none;
-  border-radius:3rem;
-  border:2px var(--gray-color) solid;
-  margin-bottom:1rem;
+  font-size: 1.2rem;
+  padding: 0.3rem 0;
+  border: none;
+  border-radius: 3rem;
+  border: 2px var(--gray-color) solid;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  margin-top: 1rem;
 }
 
-.monthly-allowance-container button{
-  margin-top:1.2rem;
-  font-size:1.2rem;
-  padding:0.5rem 0;
-  border:none;
-  color:var(--light-color);
-  background:var(--accent-color);
+.monthly-allowance-container input::placeholder {
+  font-size: 1rem;
+  text-align: center;
+}
+
+.monthly-allowance-container button {
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  padding: 0.5rem 0;
+  border: none;
+  color: var(--light-color);
+  background: var(--accent-color);
   transition: all 0.3s ease;
 }
 
 .monthly-allowance-container button:hover {
-  color:var(--light-color);
-  background:var(--dark-color);
+  color: var(--light-color);
+  background: var(--dark-color);
 }
 
 .monthly-allowance-container h1 {
-  font-size:1.2rem;
+  font-size: 1.2rem;
 }
 
-.money-cant-be-0-warning{
-  color:red;
-  font-size:0.9rem;
-  margin-left:0.2rem;
-  display:none;
+.info-icon-wrapper {
+  width: 100%;
+  position: absolute;
+  left: 10px;
+  top: 10px;
 }
-.money-cant-be-over-10-million-warning{
-  color:red;
+
+.info-icon-wrapper svg {
+  width: 25px;
+  cursor: pointer;
+}
+
+.info-icon-wrapper svg:hover {
+  fill:var(--accent-color);
+}
+
+
+.info-wrapper {
+  position: absolute;
+  background:white;
+  left:0;
+  top:-50px;
+  border-radius: 1rem;
   font-size:0.9rem;
-  margin-left:0.2rem;
+  padding:1rem;
   display:none;
 }
 
+.info-wrapper h3 {
+  margin-bottom:0.5rem;
+}
+
+.info-wrapper .ok-button {
+  cursor: pointer;
+  text-align: center;
+  color:var(--accent-color) ;
+  margin-top:0.5rem;
+  transition: all 0.3s ease-in-out;
+}
+.info-wrapper .ok-button:hover {
+  color:var(--dark-color) ;
+}
+
+.money-cant-be-0-warning {
+  color: red;
+  font-size: 0.9rem;
+  margin-left: 0.2rem;
+  display: none;
+}
+.money-cant-be-over-10-million-warning {
+  color: red;
+  font-size: 0.9rem;
+  margin-left: 0.2rem;
+  display: none;
+}
 
 .total-money-you-can-use-text {
-  margin-top:2rem;
+  margin-top: 2rem;
 }
 
 .too-much-money-spent-complain {
-  color:white;
+  color: white;
 }
 
 .money-input-wrapper {
-  margin-top:2rem;
-  display:none;
+  margin-top: 2rem;
+  display: none;
 }
 
 .money-input-wrapper > * {
@@ -342,41 +381,45 @@ section p span:hover {
 }
 
 .money-input-wrapper input {
-  padding:0.5rem;
-  font-size:1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
 }
 
 .money-input-wrapper button {
-  font-size:1rem;
-  padding:0.5rem 1rem;
-  margin-left:0.5rem;
-  cursor:pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  background-color: var(--accent-color);
 }
 
 .money-input-wrapper h1,
 .money-input-wrapper h2 {
-  color:var(--light-color);
-  font-size:1.5rem;
+  color: var(--light-color);
+  font-size: 1.5rem;
 }
 
 .calendar {
-  display:none;
+  display: none;
 }
+
+/* Calendar Styling  */
+
 
 
 /* classlist add js */
 
 .hide {
-  opacity:0;
+  opacity: 0;
   pointer-events: none;
 }
 
 .show {
-  display: block!important;;
+  display: block !important;
 }
 
 #warning {
-  color:var(--light-color);
+  color: var(--light-color);
 }
 
 .move-up {
@@ -384,15 +427,13 @@ section p span:hover {
 }
 
 .change-border-color {
-  border-bottom:2px var(--accent-color) solid;
-
+  border-bottom: 2px var(--accent-color) solid;
 }
 
 .change-text-color {
-  color:var(--accent-color);
+  color: var(--accent-color);
 }
 
 .error-login {
-  border-bottom:2px red solid;
+  border-bottom: 2px red solid;
 }
-

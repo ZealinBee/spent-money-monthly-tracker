@@ -88,6 +88,17 @@ const submitMonthlyMoneyHandler = () => {
  
 };
 
+//Info showing part
+const infoIcon = document.querySelector('#info-icon')
+const infoWrapper = document.querySelector('.info-wrapper')
+const closeInfoWrapperButton = document.querySelector('.ok-button')
+infoIcon.addEventListener('click', function() {
+  infoWrapper.classList.add('show')
+})
+closeInfoWrapperButton.addEventListener('click', function() {
+  infoWrapper.classList.remove('show')
+})
+
 //Submit spent money each time par
 const submitSpentMoneyHandler = async () => {
   if(spentMoneyInput.value > monthlyAllowance * 3) {
@@ -148,7 +159,13 @@ goToLoginLink.addEventListener("click", function (e) {
 toggleLogin.addEventListener("click", function (e) {
   loginSection.classList.toggle("hide");
   program.classList.add("show");
+
 });
+
+document.querySelector('.use-as-a-guest-sign-up').addEventListener('click', function() {
+  signUpSection.classList.toggle("hide");
+  program.classList.add("show");
+})
 
 // signUpPasswordInput.addEventListener('input', function() {
 //   let passwordInputValue = signUpPasswordInput.value;
@@ -405,24 +422,24 @@ const passwordInputWrapperSignUp = document.querySelector(
 const passwordLabel = document.querySelector(".password-label");
 const passwordLabelSignUp = document.querySelector(".password-label-sign-up");
 
-userNameInputWrapper.addEventListener("click", function () {
+loginUserNameInput.addEventListener("focus", function () {
   userNameLabel.classList.add("move-up");
   userNameLabel.classList.add("change-text-color");
   loginUserNameInput.classList.add("change-border-color");
 });
 
-passwordInputWrapper.addEventListener("click", function () {
+loginPasswordInput.addEventListener("focus", function () {
   passwordLabel.classList.add("move-up");
   passwordLabel.classList.add("change-text-color");
   loginPasswordInput.classList.add("change-border-color");
 });
 
-userNameInputWrapperSignUp.addEventListener("click", function () {
+signUpUserNameInput.addEventListener("focus", function () {
   userNameLabelSignUp.classList.add("move-up");
   userNameLabelSignUp.classList.add("change-text-color");
   signUpUserNameInput.classList.add("change-border-color");
 });
-passwordInputWrapperSignUp.addEventListener("click", function () {
+signUpPasswordInput.addEventListener("focus", function () {
   passwordLabelSignUp.classList.add("move-up");
   passwordLabelSignUp.classList.add("change-text-color");
   signUpPasswordInput.classList.add("change-border-color");
