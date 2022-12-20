@@ -13,6 +13,7 @@ app.use('/', routes);
 
 //MongoDB connection
 const mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true)
 const mongoURL = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.q7wn3ji.mongodb.net/${process.env.DB}?retryWrites=true&w=majority`;
 mongoose.connect(mongoURL, { useFindAndModify: false, useNewUrlParser: true , useUnifiedTopology: true});
 const db = mongoose.connection;

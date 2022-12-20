@@ -10,7 +10,7 @@ exports.auth = async function (req) {
     if (err) {
       result=false;}
     else{
-    result=true;}
+    result=decoded;}
   });
   return result;
 };

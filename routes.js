@@ -7,8 +7,6 @@ const crypt = require("./cryptography");
 const auth=require("./service/authorization")
 const router = express.Router();
 
-let username = "None";
-
 router.post("/register", async (req, res) => {
   let user;
     crypt.cryptPassword(req.body.password)
@@ -16,20 +14,20 @@ router.post("/register", async (req, res) => {
         user = new User({
           username: req.body.username,
           password: hash,
-          totalHave: req.body.totalHave,
-          totalSpend: req.body.totalSpend,
+          totalHave: 0,
+          totalSpend: 0,
         });
+        token = jwt.sign({userId: req.body.username, totalHave:0,totalSpend:0}, process.env.SECRET_KEY);
         return user;
       })
-      .then(async (user) => {
+      .then(async () => {
         try {
-          const newUser = await user.save();
-          username = req.body.username;
-          return res.status(201).json({ newUser, message: true });
+          await user.save();
+          return res.status(201).json({ message: true,token:token });
         } catch (err) {
           if (err.code==11000)
             return res.status(500).json({ message: false });
-          return res.status(500).json({ message: err });
+          return res.status(500).json({ message: err.message });
         }
       });
   })
@@ -37,7 +35,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     let user = User.find({ username: req.body.username });
-    let hashword;
+    let hashword='';
     let totalHave = 0;
     let totalSpend = 0;
     let answer = false;
@@ -46,14 +44,14 @@ router.post("/login", async (req, res) => {
       hashword = doc.password;
       totalHaveUser = doc.totalHave;
       totalSpendUser = doc.totalSpend;
+      username=req.body.username
       break;
     }
     if (bcrypt.compareSync(req.body.password, hashword)) {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
-      username = req.body.username;
-      token = jwt.sign({userId: username}, process.env.SECRET_KEY);
+      token = jwt.sign({userId: username, totalHave:totalHave,totalSpend:totalSpend}, process.env.SECRET_KEY);
     }
     return res.status(200).json({
       answer: answer,
@@ -75,14 +73,14 @@ router.put("/money", async (req, res) => {
     if (!result)
     return res.status(400).json({message:"Bad request"})
     await User.findOneAndUpdate(
-      { username: username },
+      { username: result.userId },
       req.body,
       { new: true },
       (err, result) => {
         if (err) {
           return res.status(500).json({ message: err.message });
         } else {
-          res.status(200).json({ result:username});
+          res.status(200).json({ result:result});
         }
       }
     );
@@ -116,6 +114,17 @@ router.get("/style.css", async (req, res) => {
 router.get("/script.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/script.js"));
 });
+
+router.delete("/delete", async (req, res) => {
+  await User.deleteMany({}, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    else {
+      res.status(200).json({result:"Done"});
+    }
+  });
+})
 
 // router.get("/cars", async (req, res) => {
 //   try {
