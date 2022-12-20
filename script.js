@@ -71,6 +71,7 @@ const submitMonthlyMoneyHandler = () => {
     moneyInputWrapper.classList.add("show");
     calendarSpan.classList.add("show");
     resetButton.classList.add("show");
+    swapThemeButton.classList.add('show-flex')
     calendar.render();
     monthlyAllowance = monthlyAllowanceInput.value;
     totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
@@ -126,7 +127,7 @@ const submitSpentMoneyHandler = async () => {
         currentDay = `0${currentDay}`;
       }
       calendar.addEvent({
-        title: "day used!",
+        title: "Day Used!",
         start: `2022-12-${currentDay}`,
         end: `2022-12-${currentDay}`,
       });
@@ -325,6 +326,8 @@ function checkLogin(data) {
 const resetButton = document.querySelector(".reset-button");
 
 resetButton.addEventListener("click", function () {
+  document.querySelector('body').classList.remove('dark')
+  swapThemeButton.classList.remove("show-flex")
   moneyInputWrapper.classList.remove("show");
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
@@ -444,3 +447,9 @@ signUpPasswordInput.addEventListener("focus", function () {
   passwordLabelSignUp.classList.add("change-text-color");
   signUpPasswordInput.classList.add("change-border-color");
 });
+
+const swapThemeButton = document.querySelector('.swap-theme-button')
+
+swapThemeButton.addEventListener('click', function() {
+  document.querySelector('body').classList.toggle('dark')
+})

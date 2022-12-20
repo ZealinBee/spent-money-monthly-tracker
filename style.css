@@ -1,11 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap");
 
-:root {
+body {
   --dark-color: #1b1c1e;
   --light-color: #fefdfb;
   --gray-color: #888888;
   --accent-color: #759bd9;
 }
+
+body.dark {
+  --dark-color:var(--light-color);
+  --light-color: var(--dark-color);
+}
+
 
 * {
   margin: 0;
@@ -16,10 +22,19 @@
 
 body {
   background: var(--dark-color);
+  transition: all 0.5s ease-in-out;
 }
 
 main {
   margin: 0 2rem;
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.07);
 }
 
 h1 span,
@@ -43,6 +58,27 @@ h2 span {
   cursor: pointer;
   padding: 0.5rem 1rem;
   display: none;
+}
+.swap-theme-button {
+  position: absolute;
+  top: 10px;
+  right: 190px;
+  background: var(--accent-color);
+  color: var(--light-color);
+  border-radius: 1.2rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  display:flex;
+  align-items:center;
+  display:none;
+}
+
+.swap-theme-button svg {
+  width:20px;
+  margin-right:0.5rem;
+  fill:var(--light-color);
 }
 
 input {
@@ -68,13 +104,6 @@ button {
   color: var(--light-color);
 }
 
-.fc-scrollgrid {
-  color: var(--light-color);
-}
-
-.fc-toolbar-title {
-  color: var(--light-color);
-}
 
 /* Actually in order here */
 
@@ -90,7 +119,6 @@ section {
   top:50%;
   transform: translate(-50%, -50%);
   padding-bottom: 2rem;
-  
 }
 
 section h1 {
@@ -117,6 +145,7 @@ section button {
 section button:hover {
   background-color: var(--dark-color);
   color: var(--accent-color);
+  transform: inherit;
 }
 
 section input {
@@ -251,6 +280,7 @@ section p span:hover {
   color: green;
 }
 
+
 /* Setting up the monthly allowance */
 
 .monthly-allowance-container {
@@ -332,7 +362,7 @@ section p span:hover {
 
 .info-wrapper {
   position: absolute;
-  background:white;
+  background:var(--light-color);
   left:0;
   top:-50px;
   border-radius: 1rem;
@@ -374,7 +404,7 @@ section p span:hover {
 }
 
 .too-much-money-spent-complain {
-  color: white;
+  color: var(--light-color);
   display:none;
 }
 
@@ -412,9 +442,28 @@ section p span:hover {
 
 .calendar {
   display: none;
-  margin-top:2rem;
+  margin-top:1rem;
+  margin-bottom:2rem;
 }
 
+.fc-header-toolbar {
+  font-size:1rem;
+}
+.fc-prev-button,
+.fc-prev-button span
+.fc-prev-button span::before{
+  background: var(--accent-color)!important;
+}
+.fc-next-button,
+.fc-next-button span,
+.fc-next-button span::before
+{
+  background: var(--accent-color)!important;
+}
+
+.fc-today-button {
+  background-color: var(--accent-color)!important;
+}
 
 .fc-event-title-container {
   background-color: var(--accent-color);
@@ -430,6 +479,16 @@ section p span:hover {
   background: none!important;
 }
 
+
+.fc-scrollgrid {
+  color: var(--light-color);
+}
+
+.fc-toolbar-title {
+  color: var(--light-color);
+}
+
+
 /* classlist add js */
 
 .hide {
@@ -439,6 +498,10 @@ section p span:hover {
 
 .show {
   display: block !important;
+}
+
+.show-flex{
+  display:flex;
 }
 
 #warning {
@@ -467,6 +530,11 @@ section p span:hover {
 
 @media (max-width:600px) {
 
+  .monthly-allowance-container {
+    margin:0 auto;
+    width:75%;
+  }
+
   .money-input-wrapper h1 {
     font-size:1.2rem;
   }
@@ -491,8 +559,17 @@ section p span:hover {
     width:75%;
   }
 
-  .fc-toolbar-chunk h2 {
-
+  .fc-toolbar-chunk  {
+    display:flex!important;
   }
+
+  .fc-toolbar-title {
+    font-size: 1.2rem!important;
+  }
+
+  .fc-today-button {
+    font-size:0.85rem!important;
+  }
+
   
 }
