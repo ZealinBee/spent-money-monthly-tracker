@@ -5,7 +5,6 @@ import numberOfDaysInAMonth from "./daysCount.js";
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
 
-
 // const jwt = res.headers.get('Authorization');
 // sessionStorage.setItem('jwt', jwt);
 
@@ -83,7 +82,7 @@ const submitMonthlyMoneyHandler = async () => {
     resetButton.classList.add("show");
     swapThemeButton.classList.add("show-flex");
     calendar.render();
-    monthlyAllowance = monthlyAllowanceInput.value;
+    monthlyAllowance = parseInt(monthlyAllowanceInput.value);
     totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
     dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
     dailyAllowanceSpan.textContent = dailyAllowance;
@@ -91,10 +90,10 @@ const submitMonthlyMoneyHandler = async () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify({ totalHave: monthlyAllowance }),
-    })
+    });
   }
 };
 
@@ -118,7 +117,7 @@ const submitSpentMoneyHandler = async () => {
     document.querySelector(".monthly-allowance-span").textContent =
       monthlyAllowance;
     document.querySelector(".spent-money-span").textContent =
-      spentMoneyInput.value;
+    parseInt(spentMoneyInput.value)  ;
   } else {
     document
       .querySelector(".too-much-money-spent-complain")
@@ -152,10 +151,10 @@ const submitSpentMoneyHandler = async () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
-      body: JSON.stringify({ totalHave: monthlyAllowance }),
-    })
+      body: JSON.stringify({ totalSpend: totalSpentMoney }),
+    });
   }
 };
 
@@ -228,11 +227,11 @@ signUpButton.addEventListener("click", async function (e) {
             .querySelector(".user-name-already-taken")
             .classList.add("show");
           signUpUserNameInput.classList.add("error-login");
-        }else {
+        } else {
           signUpUserNameInput.classList.remove("error-login");
           signUpSection.classList.remove("show");
           program.classList.add("show");
-          sessionStorage.setItem('token', token)
+          sessionStorage.setItem("token", token);
           calendar.render();
         }
       });
@@ -277,12 +276,14 @@ function checkLogin(data) {
   let answer = data.answer;
   let totalSpend = data.totalSpend;
   let totalHave = data.totalHave;
+  let token = data.token;
   console.log(data);
   if (!answer) {
     loginUserNameInput.classList.add("error-login");
     loginPasswordInput.classList.add("error-login");
     loginErrorMessage.classList.add("show");
   } else {
+    sessionStorage.setItem("token", token);
     loginUserNameInput.classList.remove("error-login");
     loginPasswordInput.classList.remove("error-login");
     loginErrorMessage.classList.remove("show");
@@ -328,22 +329,25 @@ function checkLogin(data) {
 //Reset button
 const resetButton = document.querySelector(".reset-button");
 
-resetButton.addEventListener("click", function () {
+resetButton.addEventListener("click", async function () {
   document.querySelector("body").classList.remove("dark");
   swapThemeButton.classList.remove("show-flex");
   moneyInputWrapper.classList.remove("show");
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
   warning.textContent = "";
-  const xhr = new XMLHttpRequest();
-  xhr.open("PUT", "/money");
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(
-    JSON.stringify({
-      totalHave: 0,
-      totalSpend: 0,
-    })
-  );
+
+  const ress = await fetch("/money", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+    body: JSON.stringify({
+      totalHave: monthlyAllowance,
+      totalSpent: totalSpentMoney,
+    }),
+  });
   totalMonthlyAllowanceSpan.textContent = 0;
   totalSpentMoneySpan.textContent = 0;
   dailyAllowanceSpan.textContent = 0;
@@ -454,4 +458,42 @@ const swapThemeButton = document.querySelector(".swap-theme-button");
 
 swapThemeButton.addEventListener("click", function () {
   document.querySelector("body").classList.toggle("dark");
+});
+
+// Password show hide
+const eyeToggles = document.querySelectorAll(".eye-icon");
+const eyeIconLogin = document.querySelector("#eye-icon-login");
+const eyeSlashIconLogin = document.querySelector("#eye-slash-icon-login");
+
+eyeToggles.forEach((eyeToggle) => {
+  eyeToggle.addEventListener("click", function () {
+    if (loginPasswordInput.type === "password") {
+      loginPasswordInput.setAttribute("type", "text");
+      eyeIconLogin.classList.add("hide");
+      eyeSlashIconLogin.classList.add("show");
+    } else {
+      loginPasswordInput.setAttribute("type", "password");
+      eyeIconLogin.classList.remove("hide");
+      eyeSlashIconLogin.classList.remove("show");
+    }
+
+  });
+});
+
+const eyeIconSignUp = document.querySelector("#eye-icon-sign-up");
+const eyeIconSlashSignUp = document.querySelector("#eye-slash-icon-sign-up");
+const eyeTogglesSignUp = document.querySelectorAll('.eye-icon-signup')
+eyeTogglesSignUp.forEach((eyeToggle) => {
+  eyeToggle.addEventListener("click", function () {
+    if (signUpPasswordInput.type === "password") {
+      signUpPasswordInput.setAttribute("type", "text");
+      eyeIconSignUp.classList.add("hide");
+      eyeIconSlashSignUp.classList.add("show");
+    } else {
+      signUpPasswordInput.setAttribute("type", "password");
+      eyeIconSignUp.classList.remove("hide");
+      eyeIconSlashSignUp.classList.remove("show");
+    }
+
+  });
 });
