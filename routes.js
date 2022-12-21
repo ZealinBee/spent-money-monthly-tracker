@@ -26,7 +26,6 @@ router.post("/forget-password", async (req, res) => {
     mailer.sendMail(email, `That's your link bitch.\n ${link}`);
     return res.status(200).json({ message: "fine" });
   } catch (err) {
-    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
@@ -77,7 +76,6 @@ router.post("/register", async (req, res) => {
         { email: req.body.email, totalHave: 0, totalSpend: 0 },
         process.env.SECRET_KEY
       );
-      console.log(user)
       return user;
     })
     .then(async () => {
@@ -85,10 +83,7 @@ router.post("/register", async (req, res) => {
         await user.save();
         return res.status(201).json({ message: true, token: token });
       } catch (err) {
-        if (err.code == 11000) {
-          console.log(err.message);
-          return res.status(500).json({ message: false });
-        }
+        if (err.code == 11000) return res.status(500).json({ message: false });
 
         return res.status(500).json({ message: err.message });
       }
@@ -147,6 +142,10 @@ router.put("/money", async (req, res) => {
       }
     );
   });
+});
+
+router.get("/password-reset/:userid/:token", async (req, res) => {
+  res.sendFile(path.join(__dirname + "/password-reset.html"));
 });
 
 router.get("/daysCount.js", async (req, res) => {
