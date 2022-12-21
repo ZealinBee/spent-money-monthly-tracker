@@ -91,7 +91,7 @@ const submitMonthlyMoneyHandler = async (e) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify({ totalHave: monthlyAllowance }),
     });
@@ -153,7 +153,7 @@ const submitSpentMoneyHandler = async (e) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify({ totalSpend: totalSpentMoney }),
     });
@@ -333,7 +333,7 @@ resetButton.addEventListener("click", async function () {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
     },
     body: JSON.stringify({
       totalHave: monthlyAllowance,

@@ -111,6 +111,10 @@ main {
   display: none;
 }
 
+.forgot-password {
+  
+}
+
 section {
   position: absolute;
   background: var(--light-color);
