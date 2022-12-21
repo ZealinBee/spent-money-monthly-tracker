@@ -216,17 +216,6 @@ signUpButton.addEventListener("click", async function (e) {
           signUpUserNameInput.classList.add("error-login");
         } else if (okayUsername === true) {
           signUpUserNameInput.classList.remove("error-login");
-          const xhr = new XMLHttpRequest();
-          xhr.open("POST", "/register");
-          xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.send(
-            JSON.stringify({
-              username: userNameInputValue,
-              password: passwordInputValue,
-              totalHave: 0,
-              totalSpend: 0,
-            })
-          );
           signUpSection.classList.remove("show");
           program.classList.add("show");
           calendar.render();
