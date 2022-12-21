@@ -144,6 +144,10 @@ router.put("/money", async (req, res) => {
   });
 });
 
+router.get("/password-reset/:userid/:token", async (req, res) => {
+  res.sendFile(path.join(__dirname + "/password-reset.html"));
+});
+
 router.get("/daysCount.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/daysCount.js"));
 });
