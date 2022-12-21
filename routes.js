@@ -83,7 +83,11 @@ router.post("/register", async (req, res) => {
         await user.save();
         return res.status(201).json({ message: true, token: token });
       } catch (err) {
-        if (err.code == 11000) return res.status(500).json({ message: false });
+        if (err.code == 11000) {
+          console.log(err.message);
+          return res.status(500).json({ message: false });
+        }
+
         return res.status(500).json({ message: err.message });
       }
     });

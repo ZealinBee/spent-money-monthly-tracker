@@ -64,7 +64,8 @@ const totalDaysUsedSpan = document.querySelector("#total-days-used-span");
 const warning = document.querySelector("#warning");
 
 //Submit monthly allowance part
-const submitMonthlyMoneyHandler = async () => {
+const submitMonthlyMoneyHandler = async (e) => {
+  e.preventDefault()
   if (monthlyAllowanceInput.value == 0) {
     document.querySelector(".money-cant-be-0-warning").classList.add("show");
     document
@@ -109,7 +110,8 @@ closeInfoWrapperButton.addEventListener("click", function () {
 });
 
 //Submit spent money each time par
-const submitSpentMoneyHandler = async () => {
+const submitSpentMoneyHandler = async (e) => {
+  e.preventDefault()
   if (spentMoneyInput.value > monthlyAllowance * 3) {
     document
       .querySelector(".too-much-money-spent-complain")
@@ -181,16 +183,6 @@ document
     program.classList.add("show");
   });
 
-// signUpPasswordInput.addEventListener('input', function() {
-//   let passwordInputValue = signUpPasswordInput.value;
-//   var re = /\D/;
-//   var re1 = /\s/;
-//   var re2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
-//   var n = re.test(passwordInputValue);
-//   var n1=!re1.test(passwordInputValue)
-//   var n2=re2.test(passwordInputValue)
-// })
-
 signUpButton.addEventListener("click", async function (e) {
   e.preventDefault();
   let userNameInputValue = signUpUserNameInput.value;
@@ -212,7 +204,7 @@ signUpButton.addEventListener("click", async function (e) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: userNameInputValue,
+        email: userNameInputValue,
         password: passwordInputValue,
         totalHave: 0,
         totalSpend: 0,
@@ -261,7 +253,7 @@ async function loginUser(e) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: userNameInputValue,
+        email: userNameInputValue,
         password: passwordInputValue,
         totalHave: 0,
         totalSpend: 0,
@@ -497,3 +489,18 @@ eyeTogglesSignUp.forEach((eyeToggle) => {
 
   });
 });
+
+
+// Forgot password
+
+const submitForgotPasswordEmail = document.querySelector('#submit-forgot-password-email')
+const forgotPasswordEmailInput = document.querySelector('#forgot-password-email-input')
+submitForgotPasswordEmail.addEventListener('click', async function() {
+  const res = await fetch("/forget-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: forgotPasswordEmailInput.value
+    }),
+  })
+})

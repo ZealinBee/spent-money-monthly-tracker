@@ -332,7 +332,6 @@ section p span:hover {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-
   border-radius: 1rem;
   z-index: 999;
   font-size: 0.8rem;
@@ -341,6 +340,7 @@ section p span:hover {
 .monthly-allowance-wrapper {
   display: flex;
   padding: 2rem;
+  padding-top:3rem;
   flex-direction: column;
   position: relative;
 }
@@ -406,9 +406,10 @@ section p span:hover {
   position: absolute;
   background:var(--light-color);
   left:0;
-  top:-50px;
+  top:0px;
+  height:100%;
   border-radius: 1rem;
-  font-size:0.9rem;
+  font-size:1rem;
   padding:1rem;
   display:none;
 }
@@ -421,11 +422,17 @@ section p span:hover {
   cursor: pointer;
   text-align: center;
   color:var(--accent-color) ;
-  margin-top:0.5rem;
+  margin-top:5rem;
+
+  font-size:1.3rem;
   transition: all 0.3s ease-in-out;
 }
 .info-wrapper .ok-button:hover {
   color:var(--dark-color) ;
+}
+
+#date-of-the-month-to-start-on {
+  width:100%;
 }
 
 .money-cant-be-0-warning {
