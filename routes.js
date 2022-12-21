@@ -26,6 +26,7 @@ router.post("/forget-password", async (req, res) => {
     mailer.sendMail(email, `That's your link bitch.\n ${link}`);
     return res.status(200).json({ message: "fine" });
   } catch (err) {
+    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
