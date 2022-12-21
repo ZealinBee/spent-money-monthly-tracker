@@ -5,8 +5,13 @@ const routes = require("./routes")
 require('dotenv').config();
 
 const app = express();
+
 app.use(bodyParser.json());
 app.use(helmet());
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', "script-src 'self' localhost:5000");
+  next();
+});
 app.use('/', routes);
 
 
