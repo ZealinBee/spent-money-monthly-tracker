@@ -504,3 +504,17 @@ submitForgotPasswordEmail.addEventListener('click', async function() {
     }),
   })
 })
+
+const changePasswordSubmit = document.querySelector('#change-password-button')
+
+changePasswordSubmit.addEventListener('click', async function() {
+  const url = getCurrentURL()
+  console.log(url)
+  // const res = await fetch("/", {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  //   body: JSON.stringify({
+  //     email: forgotPasswordEmailInput.value
+  //   }),
+  // })
+})
