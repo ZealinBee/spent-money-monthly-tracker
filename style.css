@@ -142,6 +142,10 @@ section button {
   cursor: pointer;
 }
 
+#login-button {
+  margin-top:1rem;
+}
+
 section button:hover {
   background-color: var(--dark-color);
   color: var(--accent-color);
@@ -173,6 +177,26 @@ section p span {
 section p span:hover {
   color: #749ddf62;
 }
+
+/* Password show hide */
+
+.eye-icon,
+.eye-icon-signup {
+  position:absolute;
+  width:25px;
+  right:20px;
+  cursor:pointer;
+}
+
+.eye-icon:hover {
+  fill:var(--accent-color);
+}
+
+#eye-slash-icon-login,
+#eye-slash-icon-sign-up {
+  display:none;
+}
+
 
 .login-signup-header-wrapper {
   position: relative;
@@ -254,6 +278,24 @@ section p span:hover {
   bottom: 30%;
   cursor: text;
   transition: all 0.3s ease-in-out;
+}
+
+.remember-me-forgot-password-wrapper{
+  display:flex;
+  justify-content: space-between;
+  margin-top:1rem;
+}
+
+.forgot-password a{
+  margin-right:1.5rem;
+  color:var(--accent-color);
+}
+
+#remember-me {
+  margin:0;
+  margin-left:1rem;
+  margin-right:0.5rem;
+  padding:0;
 }
 
 .sign-up-error {
