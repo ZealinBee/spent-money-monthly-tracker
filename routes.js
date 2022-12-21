@@ -76,6 +76,7 @@ router.post("/register", async (req, res) => {
         { email: req.body.email, totalHave: 0, totalSpend: 0 },
         process.env.SECRET_KEY
       );
+      console.log(user)
       return user;
     })
     .then(async () => {
