@@ -10,6 +10,7 @@ const auth = require("./service/authorization");
 const mailer = require("./mail.js");
 const router = express.Router();
 
+
 router.post("/forget-password", async (req, res) => {
   try {
     const email = req.body.email;
