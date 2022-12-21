@@ -26,7 +26,6 @@ router.post("/forget-password", async (req, res) => {
     mailer.sendMail(email, `That's your link bitch.\n ${link}`);
     return res.status(200).json({ message: "fine" });
   } catch (err) {
-    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
@@ -77,7 +76,6 @@ router.post("/register", async (req, res) => {
         { email: req.body.email, totalHave: 0, totalSpend: 0 },
         process.env.SECRET_KEY
       );
-      console.log(user)
       return user;
     })
     .then(async () => {
