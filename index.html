@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <div class="forgot-password">
+      <input type="email" id="forgot-password-email-input">
+      <button id="submit-forgot-password-email">Submit</button>
+    </d>
     <section class="login-section" ">
       <form >
         <div class="login-signup-header-wrapper">
@@ -32,7 +36,7 @@
             <label for="remember-me" >Remember me</label>
           </div>
           <div class="forgot-password">
-            <a href="#">Forgot password?</a>
+            <a href="">Forgot password?</a>
           </div>
         </div>
         <button type="submit" id="login-button">Log In</button>
@@ -86,19 +90,24 @@
         <div class="info-icon-wrapper">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="info-icon"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z" /></svg>   
         </div>
-           <input type="number" id="monthly-allowance-input" min="1" placeholder="Total Monthly Allowance"/>
+        <h3>What is your monthly allowance?</h3>
+           <input type="number" id="monthly-allowance-input" min="1" placeholder="1-10000000" />
         <p class="money-cant-be-0-warning">Please enter something higher than 0!</p>
         <p class="money-cant-be-over-10-million-warning">That's a lot of money! I think you don't need to use our app in that case, also, here is our paypals: <br> <a href="https://paypal.me/zealinbee">https://paypal.me/zealinbee 
          </a> <br><a href=" https://paypal.me/Tayjiro"> https://paypal.me/Tayjiro</a></p>
-        <button id="submit-monthly-money">Submit</button>
-              <div class="info-wrapper">
-                  <h3>Instruction for this app:</h3>
-                  <p>- Input your monthly allowance</p>
-                    <p>- The app calculates your daily allowance                  </p>
-                    <p>- Every time you spend something, come back to the app and input how much you have spent</p>
-                    <p>- The app will show you much many days of daily allowance you have spent</p>
-                  <p class="ok-button">OK</p>
-              </div>
+         <div class="day-of-the-month-to-start-on">
+          <h3>What day of the month do you want to start on?</h3>
+          <input type="number" min="1" max="31" placeholder="1-31" id="date-of-the-month-to-start-on" >
+         </div>
+        <button id="submit-monthly-money" type="submit">Submit</button>
+        <div class="info-wrapper">
+            <h3>Instruction for this app:</h3>
+            <p>- Input your monthly allowance</p>
+            <p>- The app calculates your daily allowance                  </p>
+            <p>- Every time you spend something, come back to the app and input how much you have spent</p>
+            <p>- The app will show you much many days of daily allowance you have spent</p>
+            <p class="ok-button">OK</p>
+        </div>
       </div>
       </div>
       <div class="money-input-wrapper">
@@ -117,7 +126,7 @@
           aria-placeholder="How much you spent"
   
         />
-        <button id="submit-spent-money">Submit</button>
+        <button id="submit-spent-money" type="submit">Submit</button>
         <p class="too-much-money-spent-complain">Your monthly allowance is only <span class="monthly-allowance-span">0</span> and you are spending <span class="spent-money-span">0</span> . Are you sure you put the right input?</p>
 
      
