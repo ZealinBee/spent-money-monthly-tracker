@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 exports.auth = async function (req) {
-  const token = await req.header("Authorization");
+  const token = await req.header("Authorization").replace('Bearer ', '');
   if (!token) {
     return false;
   }
@@ -13,4 +13,5 @@ exports.auth = async function (req) {
     result=decoded;}
   });
   return result;
+
 };

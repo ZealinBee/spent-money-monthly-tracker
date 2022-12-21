@@ -5,6 +5,17 @@ import numberOfDaysInAMonth from "./daysCount.js";
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
 
+
+// const jwt = res.headers.get('Authorization');
+// sessionStorage.setItem('jwt', jwt);
+
+// const apiResponse = await fetch('/register', {
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'Authorization': `Bearer ${jwt}`
+//   }
+// });
+
 //Editable variables
 let totalSpentMoney = 0;
 let monthlyAllowance = 0;
@@ -18,7 +29,6 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
   initialView: "dayGridMonth",
 });
 let calendarSpan = document.querySelector(".calendar");
-
 
 //Login sign up part
 const goToSignUpLink = document.querySelector("#go-to-sign-up-link");
@@ -54,62 +64,66 @@ const dailyAllowanceSpan = document.querySelector("#daily-allowance-span");
 const totalDaysUsedSpan = document.querySelector("#total-days-used-span");
 const warning = document.querySelector("#warning");
 
-
 //Submit monthly allowance part
-const submitMonthlyMoneyHandler = () => {
-  if(monthlyAllowanceInput.value == 0){
-    document.querySelector(".money-cant-be-0-warning").classList.add('show')
-    document.querySelector(".money-cant-be-over-10-million-warning").classList.remove('show')
-
-  } else if(monthlyAllowanceInput.value > 1000000) {
-    document.querySelector(".money-cant-be-0-warning").classList.remove('show')
-    document.querySelector(".money-cant-be-over-10-million-warning").classList.add('show')
-
-  }
-  else {
+const submitMonthlyMoneyHandler = async () => {
+  if (monthlyAllowanceInput.value == 0) {
+    document.querySelector(".money-cant-be-0-warning").classList.add("show");
+    document
+      .querySelector(".money-cant-be-over-10-million-warning")
+      .classList.remove("show");
+  } else if (monthlyAllowanceInput.value > 1000000) {
+    document.querySelector(".money-cant-be-0-warning").classList.remove("show");
+    document
+      .querySelector(".money-cant-be-over-10-million-warning")
+      .classList.add("show");
+  } else {
     monthlyAllowanceContainer.classList.toggle("hide");
     moneyInputWrapper.classList.add("show");
     calendarSpan.classList.add("show");
     resetButton.classList.add("show");
-    swapThemeButton.classList.add('show-flex')
+    swapThemeButton.classList.add("show-flex");
     calendar.render();
     monthlyAllowance = monthlyAllowanceInput.value;
     totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
     dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
     dailyAllowanceSpan.textContent = dailyAllowance;
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", "/money");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(
-      JSON.stringify({
-        totalHave: monthlyAllowance,
-      })
-    );
+    const ress = await fetch("/money", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ totalHave: monthlyAllowance }),
+    })
   }
- 
 };
 
 //Info showing part
-const infoIcon = document.querySelector('#info-icon')
-const infoWrapper = document.querySelector('.info-wrapper')
-const closeInfoWrapperButton = document.querySelector('.ok-button')
-infoIcon.addEventListener('click', function() {
-  infoWrapper.classList.add('show')
-})
-closeInfoWrapperButton.addEventListener('click', function() {
-  infoWrapper.classList.remove('show')
-})
+const infoIcon = document.querySelector("#info-icon");
+const infoWrapper = document.querySelector(".info-wrapper");
+const closeInfoWrapperButton = document.querySelector(".ok-button");
+infoIcon.addEventListener("click", function () {
+  infoWrapper.classList.add("show");
+});
+closeInfoWrapperButton.addEventListener("click", function () {
+  infoWrapper.classList.remove("show");
+});
 
 //Submit spent money each time par
 const submitSpentMoneyHandler = async () => {
-  if(spentMoneyInput.value > monthlyAllowance * 3) {
-    document.querySelector('.too-much-money-spent-complain').classList.add('show')
-    document.querySelector('.monthly-allowance-span').textContent = monthlyAllowance
-    document.querySelector('.spent-money-span').textContent = spentMoneyInput.value
-  }
-  else {
-    document.querySelector('.too-much-money-spent-complain').classList.remove('show')
-    totalSpentMoney +=  Number(spentMoneyInput.value);
+  if (spentMoneyInput.value > monthlyAllowance * 3) {
+    document
+      .querySelector(".too-much-money-spent-complain")
+      .classList.add("show");
+    document.querySelector(".monthly-allowance-span").textContent =
+      monthlyAllowance;
+    document.querySelector(".spent-money-span").textContent =
+      spentMoneyInput.value;
+  } else {
+    document
+      .querySelector(".too-much-money-spent-complain")
+      .classList.remove("show");
+    totalSpentMoney += Number(spentMoneyInput.value);
     spentMoneyInput.value = "";
     totalSpentMoneySpan.textContent = totalSpentMoney;
     totalDaysUsed = totalSpentMoney / dailyAllowance;
@@ -133,17 +147,16 @@ const submitSpentMoneyHandler = async () => {
       });
       currentDay = i + 1;
     }
-  
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", "/money");
-    xhr.setRequestHeader("Content-Type", "application/json");
-     xhr.send(
-      JSON.stringify({
-        totalSpend: totalSpentMoney,
-      })
-    );
+
+    const ress = await fetch("/money", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ totalHave: monthlyAllowance }),
+    })
   }
-  
 };
 
 //Events
@@ -160,13 +173,14 @@ goToLoginLink.addEventListener("click", function (e) {
 toggleLogin.addEventListener("click", function (e) {
   loginSection.classList.toggle("hide");
   program.classList.add("show");
-
 });
 
-document.querySelector('.use-as-a-guest-sign-up').addEventListener('click', function() {
-  signUpSection.classList.toggle("hide");
-  program.classList.add("show");
-})
+document
+  .querySelector(".use-as-a-guest-sign-up")
+  .addEventListener("click", function () {
+    signUpSection.classList.toggle("hide");
+    program.classList.add("show");
+  });
 
 // signUpPasswordInput.addEventListener('input', function() {
 //   let passwordInputValue = signUpPasswordInput.value;
@@ -177,7 +191,6 @@ document.querySelector('.use-as-a-guest-sign-up').addEventListener('click', func
 //   var n1=!re1.test(passwordInputValue)
 //   var n2=re2.test(passwordInputValue)
 // })
-
 
 signUpButton.addEventListener("click", async function (e) {
   e.preventDefault();
@@ -195,11 +208,10 @@ signUpButton.addEventListener("click", async function (e) {
   } else {
     signUpUserNameInput.classList.remove("error-login");
     signUpPasswordInput.classList.remove("error-login");
-    const response = await fetch("/register", {
+
+    const res = await fetch("/register", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: userNameInputValue,
         password: passwordInputValue,
@@ -207,17 +219,20 @@ signUpButton.addEventListener("click", async function (e) {
         totalSpend: 0,
       }),
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((data) => {
-        let okayUsername = data.message;
-        console.log(okayUsername);
-        if (okayUsername === false) {
-          document.querySelector(".user-name-already-taken").classList.add("show");
+        let message = data.message;
+        let token = data.token;
+        if (!message) {
+          document
+            .querySelector(".user-name-already-taken")
+            .classList.add("show");
           signUpUserNameInput.classList.add("error-login");
-        } else if (okayUsername === true) {
+        }else {
           signUpUserNameInput.classList.remove("error-login");
           signUpSection.classList.remove("show");
           program.classList.add("show");
+          sessionStorage.setItem('token', token)
           calendar.render();
         }
       });
@@ -276,7 +291,7 @@ function checkLogin(data) {
     calendarSpan.classList.add("show");
     resetButton.classList.add("show");
     loginSection.classList.add("hide");
-    calendar.render()
+    calendar.render();
     monthlyAllowance = totalHave;
     totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
     totalSpentMoney = totalSpend;
@@ -303,7 +318,6 @@ function checkLogin(data) {
         end: `2022-12-${currentDay}`,
       });
       currentDay = i + 1;
-      
     }
   }
   if (monthlyAllowance > 0) {
@@ -315,8 +329,8 @@ function checkLogin(data) {
 const resetButton = document.querySelector(".reset-button");
 
 resetButton.addEventListener("click", function () {
-  document.querySelector('body').classList.remove('dark')
-  swapThemeButton.classList.remove("show-flex")
+  document.querySelector("body").classList.remove("dark");
+  swapThemeButton.classList.remove("show-flex");
   moneyInputWrapper.classList.remove("show");
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
@@ -398,7 +412,6 @@ signUpPasswordInput.addEventListener("input", function () {
   }
 });
 
-
 //CSS STUFF FOR LOGIN / SIGN UP
 
 const userNameInputWrapper = document.querySelector(".user-name-input-wrapper");
@@ -437,8 +450,8 @@ signUpPasswordInput.addEventListener("focus", function () {
   signUpPasswordInput.classList.add("change-border-color");
 });
 
-const swapThemeButton = document.querySelector('.swap-theme-button')
+const swapThemeButton = document.querySelector(".swap-theme-button");
 
-swapThemeButton.addEventListener('click', function() {
-  document.querySelector('body').classList.toggle('dark')
-})
+swapThemeButton.addEventListener("click", function () {
+  document.querySelector("body").classList.toggle("dark");
+});
