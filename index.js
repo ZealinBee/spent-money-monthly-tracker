@@ -6,18 +6,24 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(helmet());
-app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "script-src 'self' localhost:5000");
+app.use(function (req, res, next) {
+  res.setHeader(
+    'Content-Security-Policy-Report-Only',
+    "script-src 'self' https://spent-money-monthly-tracker-production.up.railway.app/"
+  );
   next();
 });
+
+app.use(bodyParser.json());
+app.use(helmet());
+
 app.use('/', routes);
 
 
 
 //MongoDB connection
 const mongoose = require('mongoose');
+
 mongoose.set('useCreateIndex', true)
 const mongoURL = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.q7wn3ji.mongodb.net/${process.env.DB}?retryWrites=true&w=majority`;
 mongoose.connect(mongoURL, { useFindAndModify: false, useNewUrlParser: true , useUnifiedTopology: true});
