@@ -9,7 +9,7 @@ const app = express();
 app.use(function (req, res, next) {
   res.setHeader(
     'Content-Security-Policy-Report-Only',
-    "script-src 'self' https://spent-money-monthly-tracker-production.up.railway.app/"
+    `script-src 'self' ${process.env.BASE_URL}`
   );
   next();
 });
@@ -31,7 +31,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
-const port = process.env.PORT || 5000;;
+const port = process.env.PORT || 3000;;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);

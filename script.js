@@ -1,5 +1,5 @@
 //Imports
-import numberOfDaysInAMonth from "./daysCount.js";
+import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
 
 //Program
 const program = document.querySelector("#program");

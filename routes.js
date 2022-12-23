@@ -22,7 +22,7 @@ router.post("/forget-password", async (req, res) => {
         email: req.body.email,
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
-    const link = `${process.env.BASE_URL}password-reset/${user[0]._id}/${token[0].token}`;
+    const link = `${process.env.BASE_URL}/password-reset/${user[0]._id}/${token[0].token}`;
     mailer.sendMail(email, `That's your link bitch.\n ${link}`);
     return res.status(200).json({ message: "fine" });
   } catch (err) {
