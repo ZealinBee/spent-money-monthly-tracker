@@ -14,7 +14,7 @@ router.post("/forget-password", async (req, res) => {
   try {
     const email = req.body.email;
     const user = await User.find({ email: req.body.email });
-    if (!user[0]) return res.status(400).send({message:false});
+    if (!user[0]) return res.status(400).send({ message: false });
     let token = await Token.find({ email: req.body.email });
     if (!token[0])
       token = await new Token({
@@ -22,7 +22,7 @@ router.post("/forget-password", async (req, res) => {
         token: crypto.randomBytes(32).toString("hex"),
         expdate: new Date(new Date().getTime() + 30 * 60000),
       }).save();
-    else if (token[0].expdate < new Date())
+    else if (token[0].expdate < new Date()) {
       Token.findOneAndUpdate(
         { email: req.body.email },
         {
@@ -31,21 +31,19 @@ router.post("/forget-password", async (req, res) => {
         },
         { new: true },
         async (err, result) => {
-          if (err) {
-            return res.status(500).json({ message: err.message });
-          } else {
-            token = await Token.find({ email: req.body.email })
-            const link = `${process.env.BASE_URL}/password-reset/${user[0]._id}/${token[0].token}`;
-            mailer.sendMail(
-              email,
-              `That's your link bitch.\n ${link}\nThe link will expire in 30 minutes.`
-            );
-            return res.status(200).json({ message: "send" });
-          }
+          if (err) return res.status(500).json({ message: err.message });
         }
       );
+    }
+    token = await Token.find({ email: req.body.email });
+    const link = `${process.env.BASE_URL}/password-reset/${user[0]._id}/${token[0].token}`;
+    mailer.sendMail(
+      email,
+      `That's your link bitch.\n ${link}\nThe link will expire in 30 minutes.`
+    );
+    return res.status(200).json({ message: "send" });
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     return res.status(500).json({ message: err.message });
   }
 });
@@ -55,10 +53,11 @@ router.post("/password-reset/:userid/:token", async (req, res) => {
     const userId = req.params.userid;
     const token = req.params.token;
     const userInfo = await User.findById(`${userId}`);
-    const now=new Date()
+    const now = new Date();
     if (!userInfo) return res.status(400).send("invalid link");
     const tokenInfo = await Token.find({ token: token });
-    if ((!tokenInfo[0])||(tokenInfo[0].expdate<now)) return res.status(400).send("invalid link");
+    if (!tokenInfo[0] || tokenInfo[0].expdate < now)
+      return res.status(400).send("invalid link");
     const userEmail = userInfo.email;
     const tokenEmail = tokenInfo[0].email;
     if (userEmail === tokenEmail) {
