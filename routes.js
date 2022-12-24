@@ -10,7 +10,6 @@ const auth = require("./service/authorization");
 const mailer = require("./mail.js");
 const router = express.Router();
 
-
 router.post("/forget-password", async (req, res) => {
   try {
     const email = req.body.email;
@@ -21,10 +20,30 @@ router.post("/forget-password", async (req, res) => {
       token = await new Token({
         email: req.body.email,
         token: crypto.randomBytes(32).toString("hex"),
+        expdate: new Date(new Date().getTime() + 30 * 60000),
       }).save();
-    const link = `${process.env.BASE_URL}/password-reset/${user[0]._id}/${token[0].token}`;
-    mailer.sendMail(email, `That's your link bitch.\n ${link}`);
-    return res.status(200).json({ message: "fine" });
+    else if (token[0].expdate < now)
+      Token.findOneAndUpdate(
+        { email: req.body.email },
+        {
+          token: crypto.randomBytes(32).toString("hex"),
+          expdate: new Date(new Date().getTime() + 30 * 60000),
+        },
+        { new: true },
+        async (err, result) => {
+          if (err) {
+            return res.status(500).json({ message: err.message });
+          } else {
+            token = await Token.find({ email: req.body.email })
+            const link = `${process.env.BASE_URL}/password-reset/${user[0]._id}/${token[0].token}`;
+            mailer.sendMail(
+              email,
+              `That's your link bitch.\n ${link}\nThe link will expire in 30 minutes.`
+            );
+            return res.status(200).json({ message: "send" });
+          }
+        }
+      );
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -35,9 +54,10 @@ router.post("/password-reset/:userid/:token", async (req, res) => {
     const userId = req.params.userid;
     const token = req.params.token;
     const userInfo = await User.findById(`${userId}`);
+    const now=new Date()
     if (!userInfo) return res.status(400).send("invalid link");
     const tokenInfo = await Token.find({ token: token });
-    if (!tokenInfo[0]) return res.status(400).send("invalid link");
+    if ((!tokenInfo[0])||(tokenInfo[0].expdate<now)) return res.status(400).send("invalid link");
     const userEmail = userInfo.email;
     const tokenEmail = tokenInfo[0].email;
     if (userEmail === tokenEmail) {
@@ -50,7 +70,7 @@ router.post("/password-reset/:userid/:token", async (req, res) => {
             if (err) {
               return res.status(500).json({ message: err.message });
             } else {
-              res.status(200).json({ result: "fine" });
+              res.status(200).json({ result: "done" });
             }
           }
         );

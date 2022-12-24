@@ -6,8 +6,8 @@ exports.sendMail = async function (mail, text) {
       service: "gmail",
       secure: true,
       auth: {
-        user: "roman.zinkevich1903@gmail.com",
-        pass: "fvrioydsntdakyrh",
+        user: process.env.MAILUSER,
+        pass: process.env.MAILPASS,
       },
     });
     let mailOptions = {
