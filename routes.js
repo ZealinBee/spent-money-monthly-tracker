@@ -14,7 +14,7 @@ router.post("/forget-password", async (req, res) => {
   try {
     const email = req.body.email;
     const user = await User.find({ email: req.body.email });
-    if (!user[0]) return res.status(400).send("invalid email");
+    if (!user[0]) return res.status(400).send({message:false});
     let token = await Token.find({ email: req.body.email });
     if (!token[0])
       token = await new Token({

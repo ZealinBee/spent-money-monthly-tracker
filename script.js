@@ -503,6 +503,7 @@ submitForgotPasswordEmail.addEventListener('click', async function() {
       email: forgotPasswordEmailInput.value
     }),
   })
+  console.log(res)
 })
 
 const changePasswordSubmit = document.querySelector('#change-password-button')
