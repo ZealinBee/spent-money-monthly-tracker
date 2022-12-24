@@ -22,7 +22,7 @@ router.post("/forget-password", async (req, res) => {
         token: crypto.randomBytes(32).toString("hex"),
         expdate: new Date(new Date().getTime() + 30 * 60000),
       }).save();
-    else if (token[0].expdate < now)
+    else if (token[0].expdate < new Date())
       Token.findOneAndUpdate(
         { email: req.body.email },
         {
@@ -45,6 +45,7 @@ router.post("/forget-password", async (req, res) => {
         }
       );
   } catch (err) {
+    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
