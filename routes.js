@@ -6,9 +6,12 @@ const crypto = require("crypto");
 const User = require("./models/user");
 const Token = require("./models/token");
 const crypt = require("./cryptography");
-const auth = require("./service/authorization");
+const auth = require("./service/authentication");
 const mailer = require("./mail.js");
 const router = express.Router();
+
+
+
 
 router.post("/forget-password", async (req, res) => {
   try {
@@ -94,17 +97,28 @@ router.post("/register", async (req, res) => {
       });
       token = jwt.sign(
         { email: req.body.email, totalHave: 0, totalSpend: 0 },
-        process.env.SECRET_KEY
+        process.env.SECRET_KEY,{
+          expiresIn: '10m'
+      }
       );
+      refreshToken = jwt.sign({
+        email: req.body.email,
+        }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
       return user;
     })
     .then(async () => {
       try {
         await user.save();
+        //holding refresh token somewhere
+        //may change later
+        res.cookie('jwt', refreshToken, { httpOnly: true, 
+          sameSite: 'None', secure: true, 
+          maxAge: 24 * 60 * 60 * 1000 });
+        
         return res.status(201).json({ message: true, token: token });
       } catch (err) {
         if (err.code == 11000) return res.status(500).json({ message: false });
-
+        console.log(err.message)
         return res.status(500).json({ message: err.message });
       }
     });
@@ -128,9 +142,19 @@ router.post("/login", async (req, res) => {
       totalSpend = totalSpendUser;
       token = jwt.sign(
         { email: email, totalHave: totalHave, totalSpend: totalSpend },
-        process.env.SECRET_KEY
+        process.env.SECRET_KEY,{
+          expiresIn: '10m'
+      }
       );
     }
+    const refreshToken = jwt.sign({
+      email: req.body.email,
+      }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+    //holding refresh token somewhere
+    //may change later
+    res.cookie('jwt', refreshToken, { httpOnly: true, 
+    sameSite: 'None', secure: true, 
+    maxAge: 24 * 60 * 60 * 1000 });
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,

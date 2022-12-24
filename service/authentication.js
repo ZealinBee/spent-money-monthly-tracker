@@ -7,10 +7,10 @@ exports.auth = async function (req) {
   }
   let result;
   await jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-    if (err) {
-      result=false;}
-    else{
-    result=decoded;}
+    if (err) 
+      result=false;
+    else
+    result=decoded;
   });
   return result;
 
