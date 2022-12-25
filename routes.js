@@ -4,13 +4,18 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const User = require("./models/user");
-const Token = require("./models/token");
+const Token = require("./models/mailtoken");
+const refreshTokenModel = require("./models/refreshtoken");
 const crypt = require("./cryptography");
 const auth = require("./service/authentication");
 const mailer = require("./mail.js");
 const router = express.Router();
 
 
+router.post("/refresh",async (req,res)=>{
+  const tokens = await refreshTokenModel.find();
+  console.log(tokens)
+})
 
 
 router.post("/forget-password", async (req, res) => {
@@ -96,26 +101,26 @@ router.post("/register", async (req, res) => {
         totalSpend: 0,
       });
       token = jwt.sign(
-        { email: req.body.email, totalHave: 0, totalSpend: 0 },
+        { email: req.body.email},
         process.env.SECRET_KEY,{
-          expiresIn: '10m'
+          expiresIn: '1m'
       }
       );
       refreshToken = jwt.sign({
         email: req.body.email,
         }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+      refrtoken=new refreshTokenModel({
+        email:req.body.email,
+        currenttoken:refreshToken,
+        previous:[]
+      })
       return user;
     })
     .then(async () => {
       try {
         await user.save();
-        //holding refresh token somewhere
-        //may change later
-        res.cookie('jwt', refreshToken, { httpOnly: true, 
-          sameSite: 'None', secure: true, 
-          maxAge: 24 * 60 * 60 * 1000 });
-        
-        return res.status(201).json({ message: true, token: token });
+        await refrtoken.save()
+        return res.status(201).json({ message: true, token: token, refreshtoken:refreshToken });
       } catch (err) {
         if (err.code == 11000) return res.status(500).json({ message: false });
         console.log(err.message)
@@ -130,6 +135,7 @@ router.post("/login", async (req, res) => {
     if (!user[0]) return res.status(500).json({ message: "doesn't exist" });
     let answer = false;
     let token = "0";
+    let refreshtoken='0'
     let totalHave = 0;
     let totalSpend = 0;
     const hashword = user[0].password;
@@ -140,28 +146,41 @@ router.post("/login", async (req, res) => {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
-      token = jwt.sign(
-        { email: email, totalHave: totalHave, totalSpend: totalSpend },
+      const token = jwt.sign(
+        { email: email},
         process.env.SECRET_KEY,{
-          expiresIn: '10m'
+          expiresIn: '1m'
       }
       );
+      refreshToken = jwt.sign({
+        email: req.body.email,
+        }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+      refrtoken=await refreshTokenModel.find({ email: req.body.email });
+      if (!refrtoken[0])
+        refrtoken=new refreshTokenModel({
+          email:req.body.email,
+          currenttoken:refreshToken,
+          previous:[]
+        })
+      else {
+        let currenttoken=refrtoken[0].currenttoken
+        let previoustokens=refrtoken[0].previoustokens
+        previoustokens.push(currenttoken)
+        await refreshTokenModel.findOneAndUpdate({ email: req.body.email }, {currenttoken:refreshToken,previoustokens:previoustokens}, {new: true}, (err, result) => {
+          if (err) 
+            return res.status(400).json({ message: err.message });
+        })
+      }
     }
-    const refreshToken = jwt.sign({
-      email: req.body.email,
-      }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
-    //holding refresh token somewhere
-    //may change later
-    res.cookie('jwt', refreshToken, { httpOnly: true, 
-    sameSite: 'None', secure: true, 
-    maxAge: 24 * 60 * 60 * 1000 });
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,
       totalHave: totalHave,
       token: token,
+      refreshtoken:refreshToken
     });
   } catch (err) {
+    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
