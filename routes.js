@@ -16,8 +16,7 @@ router.post("/refresh",async (req,res)=>{
   try{
   token=req.header("Authorization")
   if (!token) return res.status(400).json({message: "Bad request1"})
-  tokenDB=await refreshTokenModel.find({ email: "32323" });
-  return res.status(400).json({message: tokenDB})
+  tokenDB=await refreshTokenModel.find({ token:token});
   if (!tokenDB[0]) return res.status(400).json({message: "Bad request2"})
   if (tokenDB[0].expired){
     await refreshTokenModel.deleteMany({email:tokenDB[0].email}, (err, result) => {
