@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap");
 
+/* General */
 body {
   --dark-color: #1b1c1e;
   --light-color: #fefdfb;
@@ -8,10 +9,9 @@ body {
 }
 
 body.dark {
-  --dark-color:var(--light-color);
+  --dark-color: var(--light-color);
   --light-color: var(--dark-color);
 }
-
 
 * {
   margin: 0;
@@ -27,6 +27,7 @@ body {
 
 main {
   margin: 0 2rem;
+  display: none;
 }
 
 button {
@@ -39,13 +40,10 @@ button:hover {
 
 h1 span,
 h2 span {
-  color:var(--accent-color);
+  color: var(--accent-color);
 }
 
-.used {
-  color: red;
-}
-
+/* Functionalities on the top */
 .reset-button {
   position: absolute;
   top: 10px;
@@ -58,27 +56,6 @@ h2 span {
   cursor: pointer;
   padding: 0.5rem 1rem;
   display: none;
-}
-.swap-theme-button {
-  position: absolute;
-  top: 10px;
-  right: 190px;
-  background: var(--accent-color);
-  color: var(--light-color);
-  border-radius: 1.2rem;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  display:flex;
-  align-items:center;
-  display:none;
-}
-
-.swap-theme-button svg {
-  width:20px;
-  margin-right:0.5rem;
-  fill:var(--light-color);
 }
 
 input {
@@ -104,25 +81,90 @@ button {
   color: var(--light-color);
 }
 
-
-/* Actually in order here */
-
-main {
+.swap-theme-button {
+  position: absolute;
+  top: 10px;
+  right: 190px;
+  background: var(--accent-color);
+  color: var(--light-color);
+  border-radius: 1.2rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
   display: none;
 }
 
-.forgot-password {
-  
+.swap-theme-button svg {
+  width: 20px;
+  margin-right: 0.5rem;
+  fill: var(--light-color);
 }
 
+/* Actually in order here */
+
+/* The login signup and forgot password part */
 section {
   position: absolute;
   background: var(--light-color);
   border-radius: 1rem;
   left: 50%;
-  top:50%;
+  top: 50%;
   transform: translate(-50%, -50%);
   padding-bottom: 2rem;
+}
+
+.forgot-password {
+  z-index: 9999;
+  display:none;
+}
+
+.forgot-password-input-wrapper {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.forgot-password-input-wrapper input:focus {
+  border-bottom: 2px var(--accent-color) solid;
+}
+
+.remember-me-forgot-password-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.forgot-password #forgot-password-email-input {
+}
+
+.forgot-password label {
+  margin-left: 1rem;
+  position: absolute;
+  bottom: 30%;
+  color: var(--gray-color);
+  cursor: text;
+  transition: all 0.2s ease-in-out;
+}
+
+.forgot-password button {
+  margin-top: 1rem;
+}
+
+.forgot-password-button-wrapper a {
+  margin-right: 1.5rem;
+  color: var(--accent-color);
+  cursor:pointer;
+  text-decoration: underline;
+}
+
+.return-to-login {
+  color: var(--accent-color);
+  cursor: pointer;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  text-decoration: underline;
 }
 
 section h1 {
@@ -146,14 +188,14 @@ section button {
   cursor: pointer;
 }
 
-#login-button {
-  margin-top:1rem;
-}
-
 section button:hover {
   background-color: var(--dark-color);
   color: var(--accent-color);
   transform: inherit;
+}
+
+#login-button {
+  margin-top: 1rem;
 }
 
 section input {
@@ -182,26 +224,6 @@ section p span:hover {
   color: #749ddf62;
 }
 
-/* Password show hide */
-
-.eye-icon,
-.eye-icon-signup {
-  position:absolute;
-  width:25px;
-  right:20px;
-  cursor:pointer;
-}
-
-.eye-icon:hover {
-  fill:var(--accent-color);
-}
-
-#eye-slash-icon-login,
-#eye-slash-icon-sign-up {
-  display:none;
-}
-
-
 .login-signup-header-wrapper {
   position: relative;
   margin-bottom: 1rem;
@@ -220,6 +242,24 @@ section p span:hover {
   background-color: #808080;
   bottom: -10px;
 }
+/* Password show hide */
+
+.eye-icon,
+.eye-icon-signup {
+  position: absolute;
+  width: 25px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.eye-icon:hover {
+  fill: var(--accent-color);
+}
+
+#eye-slash-icon-login,
+#eye-slash-icon-sign-up {
+  display: none;
+}
 
 .login-error-message {
   color: red;
@@ -231,6 +271,10 @@ section p span:hover {
   color: red;
   pointer-events: none;
   display: none;
+}
+
+.used {
+  color: red;
 }
 
 .signup-section {
@@ -284,22 +328,11 @@ section p span:hover {
   transition: all 0.3s ease-in-out;
 }
 
-.remember-me-forgot-password-wrapper{
-  display:flex;
-  justify-content: space-between;
-  margin-top:1rem;
-}
-
-.forgot-password a{
-  margin-right:1.5rem;
-  color:var(--accent-color);
-}
-
 #remember-me {
-  margin:0;
-  margin-left:1rem;
-  margin-right:0.5rem;
-  padding:0;
+  margin: 0;
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+  padding: 0;
 }
 
 .sign-up-error {
@@ -326,7 +359,6 @@ section p span:hover {
   color: green;
 }
 
-
 /* Setting up the monthly allowance */
 
 .monthly-allowance-container {
@@ -344,7 +376,7 @@ section p span:hover {
 .monthly-allowance-wrapper {
   display: flex;
   padding: 2rem;
-  padding-top:3rem;
+  padding-top: 3rem;
   flex-direction: column;
   position: relative;
 }
@@ -402,41 +434,40 @@ section p span:hover {
 }
 
 .info-icon-wrapper svg:hover {
-  fill:var(--accent-color);
+  fill: var(--accent-color);
 }
-
 
 .info-wrapper {
   position: absolute;
-  background:var(--light-color);
-  left:0;
-  top:0px;
-  height:100%;
+  background: var(--light-color);
+  left: 0;
+  top: 0px;
+  height: 100%;
   border-radius: 1rem;
-  font-size:1rem;
-  padding:1rem;
-  display:none;
+  font-size: 1rem;
+  padding: 1rem;
+  display: none;
 }
 
 .info-wrapper h3 {
-  margin-bottom:0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .info-wrapper .ok-button {
   cursor: pointer;
   text-align: center;
-  color:var(--accent-color) ;
-  margin-top:5rem;
+  color: var(--accent-color);
+  margin-top: 5rem;
 
-  font-size:1.3rem;
+  font-size: 1.3rem;
   transition: all 0.3s ease-in-out;
 }
 .info-wrapper .ok-button:hover {
-  color:var(--dark-color) ;
+  color: var(--dark-color);
 }
 
 #date-of-the-month-to-start-on {
-  width:100%;
+  width: 100%;
 }
 
 .money-cant-be-0-warning {
@@ -458,7 +489,7 @@ section p span:hover {
 
 .too-much-money-spent-complain {
   color: var(--light-color);
-  display:none;
+  display: none;
 }
 
 .money-input-wrapper {
@@ -473,8 +504,8 @@ section p span:hover {
 .money-input-wrapper input {
   padding: 0.5rem;
   font-size: 1rem;
-  border:none;
-  outline:2px var(--accent-color) solid;
+  border: none;
+  outline: 2px var(--accent-color) solid;
 }
 
 .money-input-wrapper button {
@@ -495,43 +526,39 @@ section p span:hover {
 
 .calendar {
   display: none;
-  margin-top:1rem;
-  margin-bottom:2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .fc-header-toolbar {
-  font-size:1rem;
+  font-size: 1rem;
 }
 .fc-prev-button,
-.fc-prev-button span
-.fc-prev-button span::before{
-  background: var(--accent-color)!important;
+.fc-prev-button span .fc-prev-button span::before {
+  background: var(--accent-color) !important;
 }
 .fc-next-button,
 .fc-next-button span,
-.fc-next-button span::before
-{
-  background: var(--accent-color)!important;
+.fc-next-button span::before {
+  background: var(--accent-color) !important;
 }
 
 .fc-today-button {
-  background-color: var(--accent-color)!important;
+  background-color: var(--accent-color) !important;
 }
 
 .fc-event-title-container {
   background-color: var(--accent-color);
 }
 
-.fc-toolbar-chunk h2{
-  color:var(--accent-color);
-
+.fc-toolbar-chunk h2 {
+  color: var(--accent-color);
 }
 
 .fc-day-today {
-  color:var(--accent-color);
-  background: none!important;
+  color: var(--accent-color);
+  background: none !important;
 }
-
 
 .fc-scrollgrid {
   color: var(--light-color);
@@ -540,7 +567,6 @@ section p span:hover {
 .fc-toolbar-title {
   color: var(--light-color);
 }
-
 
 /* classlist add js */
 
@@ -553,14 +579,14 @@ section p span:hover {
   display: block !important;
 }
 
-.show-flex{
-  display:flex;
+.show-flex {
+  display: flex;
 }
 
 #warning {
   color: var(--light-color);
-  font-size:1.5rem;
-  margin-top:0.5rem;
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .move-up {
@@ -581,48 +607,45 @@ section p span:hover {
 
 /* Mobile */
 
-@media (max-width:600px) {
-
+@media (max-width: 600px) {
   .monthly-allowance-container {
-    margin:0 auto;
-    width:75%;
+    margin: 0 auto;
+    width: 75%;
   }
 
   .money-input-wrapper h1 {
-    font-size:1.2rem;
+    font-size: 1.2rem;
   }
 
-  .money-input-wrapper .total-money-you-can-use-text{
-    margin-top:4rem;
+  .money-input-wrapper .total-money-you-can-use-text {
+    margin-top: 4rem;
   }
-  .money-input-wrapper h2{
-    font-size:1.2rem;
+  .money-input-wrapper h2 {
+    font-size: 1.2rem;
   }
 
   .money-input-wrapper button {
-    font-size:0.8rem;
-    border:none;
+    font-size: 0.8rem;
+    border: none;
   }
 
   .money-input-wrapper input {
-    font-size:0.8rem;
+    font-size: 0.8rem;
   }
 
   section {
-    width:75%;
+    width: 75%;
   }
 
-  .fc-toolbar-chunk  {
-    display:flex!important;
+  .fc-toolbar-chunk {
+    display: flex !important;
   }
 
   .fc-toolbar-title {
-    font-size: 1.2rem!important;
+    font-size: 1.2rem !important;
   }
 
   .fc-today-button {
-    font-size:0.85rem!important;
+    font-size: 0.85rem !important;
   }
-
-  
 }

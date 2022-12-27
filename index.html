@@ -11,11 +11,19 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div class="forgot-password">
-    
-      <input type="email" id="forgot-password-email-input">
-      <button id="submit-forgot-password-email">Submit</button>
-    </d>
+    <section class="forgot-password">
+      <form action="">
+        <div class="login-signup-header-wrapper">
+          <h1>Forgot Password</h1>
+        </div>
+        <div class="forgot-password-input-wrapper">
+          <label for="forgot-password-email-input" class="forgot-password-label">Email</label>
+          <input type="email" id="forgot-password-email-input">
+        </div>
+        <p id="return-to-login">Return to Log in</p>
+        <button id="submit-forgot-password-email">Submit</button>
+    </form>
+    </section>
     <section class="login-section" ">
       <form >
         <div class="login-signup-header-wrapper">
@@ -36,8 +44,8 @@
             <input id="remember-me" type="checkbox">
             <label for="remember-me" >Remember me</label>
           </div>
-          <div class="forgot-password">
-            <a href="">Forgot password?</a>
+          <div class="forgot-password-button-wrapper">
+            <a id="forgot-password-button">Forgot password?</a>
           </div>
         </div>
         <button type="submit" id="login-button">Log In</button>

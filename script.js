@@ -5,16 +5,6 @@ import numberOfDaysInAMonth from "./daysCount.js";
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
 
-// const jwt = res.headers.get('Authorization');
-// sessionStorage.setItem('jwt', jwt);
-
-// const apiResponse = await fetch('/register', {
-//   headers: {
-//     'Content-Type': 'application/json',
-//     'Authorization': `Bearer ${jwt}`
-//   }
-// });
-
 //Editable variables
 let totalSpentMoney = 0;
 let monthlyAllowance = 0;
@@ -119,7 +109,7 @@ const submitSpentMoneyHandler = async (e) => {
     document.querySelector(".monthly-allowance-span").textContent =
       monthlyAllowance;
     document.querySelector(".spent-money-span").textContent =
-    parseInt(spentMoneyInput.value)  ;
+      parseInt(spentMoneyInput.value);
   } else {
     document
       .querySelector(".too-much-money-spent-complain")
@@ -493,9 +483,25 @@ eyeTogglesSignUp.forEach((eyeToggle) => {
 
 // Forgot password
 
+const forgotPasswordButton = document.querySelector('#forgot-password-button')
+const forgotPasswordSection = document.querySelector('.forgot-password')
+const returnToLoginButton = document.querySelector('#return-to-login')
+
+forgotPasswordButton.addEventListener('click', function () {
+  loginSection.classList.add('hide')
+  forgotPasswordSection.classList.add('show-flex')
+})
+
+returnToLoginButton.addEventListener('click', function () {
+  loginSection.classList.remove('hide')
+  forgotPasswordSection.classList.remove('show-flex')
+
+})
+
+
 const submitForgotPasswordEmail = document.querySelector('#submit-forgot-password-email')
 const forgotPasswordEmailInput = document.querySelector('#forgot-password-email-input')
-submitForgotPasswordEmail.addEventListener('click', async function() {
+submitForgotPasswordEmail.addEventListener('click', async function () {
   const res = await fetch("/forget-password", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -507,7 +513,7 @@ submitForgotPasswordEmail.addEventListener('click', async function() {
 
 const changePasswordSubmit = document.querySelector('#change-password-button')
 
-changePasswordSubmit.addEventListener('click', async function() {
+changePasswordSubmit.addEventListener('click', async function () {
   const url = getCurrentURL()
   console.log(url)
   // const res = await fetch("/", {
