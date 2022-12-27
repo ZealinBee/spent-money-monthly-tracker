@@ -55,7 +55,7 @@ const warning = document.querySelector("#warning");
 
 //Submit monthly allowance part
 const submitMonthlyMoneyHandler = async (e) => {
-  e.preventDefault()
+  e.preventDefault();
 
   if (monthlyAllowanceInput.value == 0) {
     document.querySelector(".money-cant-be-0-warning").classList.add("show");
@@ -84,7 +84,7 @@ const submitMonthlyMoneyHandler = async (e) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify({ totalHave: monthlyAllowance }),
     });
@@ -104,15 +104,16 @@ closeInfoWrapperButton.addEventListener("click", function () {
 
 //Submit spent money each time par
 const submitSpentMoneyHandler = async (e) => {
-  e.preventDefault()
+  e.preventDefault();
   if (spentMoneyInput.value > monthlyAllowance * 3) {
     document
       .querySelector(".too-much-money-spent-complain")
       .classList.add("show");
     document.querySelector(".monthly-allowance-span").textContent =
       monthlyAllowance;
-    document.querySelector(".spent-money-span").textContent =
-      parseInt(spentMoneyInput.value);
+    document.querySelector(".spent-money-span").textContent = parseInt(
+      spentMoneyInput.value
+    );
   } else {
     document
       .querySelector(".too-much-money-spent-complain")
@@ -146,7 +147,7 @@ const submitSpentMoneyHandler = async (e) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify({ totalSpend: totalSpentMoney }),
     });
@@ -181,16 +182,27 @@ signUpButton.addEventListener("click", async function (e) {
   e.preventDefault();
   let userNameInputValue = signUpUserNameInput.value;
   let passwordInputValue = signUpPasswordInput.value;
+
   var re = /\D/;
   var re1 = /\s/;
   var re2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  var re3 = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   var n = re.test(passwordInputValue);
   var n1 = !re1.test(passwordInputValue);
   var n2 = re2.test(passwordInputValue);
-  if (passwordInputValue.length < 8 || !(n1 && n2 && n)) {
-    signUpUserNameInput.classList.add("error-login");
-    signUpPasswordInput.classList.add("error-login");
-  } else {
+  var n3 = re3.test(userNameInputValue)
+  if (passwordInputValue.length < 8 || !(n1 && n2 && n && n3) || userNameInputValue.length === 0) {
+    if(userNameInputValue.length === 0 || !n3) {
+      signUpUserNameInput.classList.add("error-login");
+      document.querySelector('.enter-proper-email').style.display = "block"
+      document
+      .querySelector(".user-name-already-taken")
+      .classList.remove("show");
+    }else {
+      signUpPasswordInput.classList.add("error-login");
+    }
+  } 
+  else {
     signUpUserNameInput.classList.remove("error-login");
     signUpPasswordInput.classList.remove("error-login");
 
@@ -213,6 +225,7 @@ signUpButton.addEventListener("click", async function (e) {
             .querySelector(".user-name-already-taken")
             .classList.add("show");
           signUpUserNameInput.classList.add("error-login");
+          document.querySelector('.enter-proper-email').style.display = 'none'
         } else {
           signUpUserNameInput.classList.remove("error-login");
           signUpSection.classList.remove("show");
@@ -274,18 +287,18 @@ function checkLogin(data) {
     loginUserNameInput.classList.remove("error-login");
     loginPasswordInput.classList.remove("error-login");
     loginErrorMessage.classList.remove("show");
-    if(monthlyAllowance === 0) {
+    if (monthlyAllowance === 0) {
       program.classList.add("show");
-      moneyInputWrapper.classList.add('hide')
+      moneyInputWrapper.classList.add("hide");
       calendarSpan.classList.add("hide");
       loginSection.classList.add("hide");
-    }else {
+    } else {
       program.classList.add("show");
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
       resetButton.classList.add("show");
       loginSection.classList.add("hide");
-      monthlyAllowanceContainer.classList.add("hide")
+      monthlyAllowanceContainer.classList.add("hide");
       // document.querySelector('.background-image').style.display = "none"
       calendar.render();
       monthlyAllowance = totalHave;
@@ -316,9 +329,7 @@ function checkLogin(data) {
         currentDay = i + 1;
       }
     }
-   
-    }
-   
+  }
 }
 
 //Reset button
@@ -336,7 +347,7 @@ resetButton.addEventListener("click", async function () {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
     body: JSON.stringify({
       totalHave: monthlyAllowance,
@@ -471,13 +482,12 @@ eyeToggles.forEach((eyeToggle) => {
       eyeIconLogin.classList.remove("hide");
       eyeSlashIconLogin.classList.remove("show");
     }
-
   });
 });
 
 const eyeIconSignUp = document.querySelector("#eye-icon-sign-up");
 const eyeIconSlashSignUp = document.querySelector("#eye-slash-icon-sign-up");
-const eyeTogglesSignUp = document.querySelectorAll('.eye-icon-signup')
+const eyeTogglesSignUp = document.querySelectorAll(".eye-icon-signup");
 eyeTogglesSignUp.forEach((eyeToggle) => {
   eyeToggle.addEventListener("click", function () {
     if (signUpPasswordInput.type === "password") {
@@ -489,40 +499,40 @@ eyeTogglesSignUp.forEach((eyeToggle) => {
       eyeIconSignUp.classList.remove("hide");
       eyeIconSlashSignUp.classList.remove("show");
     }
-
   });
 });
 
-
 // Forgot password
 
-const forgotPasswordButton = document.querySelector('#forgot-password-button')
-const forgotPasswordSection = document.querySelector('.forgot-password')
-const returnToLoginButton = document.querySelector('#return-to-login')
+const forgotPasswordButton = document.querySelector("#forgot-password-button");
+const forgotPasswordSection = document.querySelector(".forgot-password");
+const returnToLoginButton = document.querySelector("#return-to-login");
 
-forgotPasswordButton.addEventListener('click', function () {
-  loginSection.classList.add('hide')
-  forgotPasswordSection.classList.add('show-flex')
-})
+forgotPasswordButton.addEventListener("click", function () {
+  loginSection.classList.add("hide");
+  forgotPasswordSection.classList.add("show-flex");
+});
 
-returnToLoginButton.addEventListener('click', function () {
-  loginSection.classList.remove('hide')
-  forgotPasswordSection.classList.remove('show-flex')
+returnToLoginButton.addEventListener("click", function () {
+  loginSection.classList.remove("hide");
+  forgotPasswordSection.classList.remove("show-flex");
+});
 
-})
-
-
-const submitForgotPasswordEmail = document.querySelector('#submit-forgot-password-email')
-const forgotPasswordEmailInput = document.querySelector('#forgot-password-email-input')
-submitForgotPasswordEmail.addEventListener('click', async function () {
+const submitForgotPasswordEmail = document.querySelector(
+  "#submit-forgot-password-email"
+);
+const forgotPasswordEmailInput = document.querySelector(
+  "#forgot-password-email-input"
+);
+submitForgotPasswordEmail.addEventListener("click", async function () {
   const res = await fetch("/forget-password", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: forgotPasswordEmailInput.value
+      email: forgotPasswordEmailInput.value,
     }),
-  })
-})
+  });
+});
 
 // const changePasswordSubmit = document.querySelector('#change-password-button')
 
