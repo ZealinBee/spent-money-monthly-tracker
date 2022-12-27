@@ -4,28 +4,88 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const User = require("./models/user");
-const Token = require("./models/token");
+const Token = require("./models/mailtoken");
+const refreshTokenModel = require("./models/refreshtoken");
 const crypt = require("./cryptography");
-const auth = require("./service/authorization");
+const auth = require("./service/authentication");
 const mailer = require("./mail.js");
 const router = express.Router();
+
+
+router.post("/refresh",async (req,res)=>{
+  try{
+  token=req.header("Authorization")
+  if (!token) return res.status(400).json({message: "Bad request1"})
+  tokenDB=await refreshTokenModel.find({ token:token});
+  if (!tokenDB[0]) return res.status(400).json({message: "Bad request2"})
+  if (tokenDB[0].expired){
+    await refreshTokenModel.deleteMany({email:tokenDB[0].email}, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Bad request2.5" });
+      } 
+    });
+    return res.status(400).json({message: "Bad request3"})}
+  await refreshTokenModel.findOneAndUpdate({ token: token }, {expired:true}, {new: true}, (err, result) => {
+    if (err){
+      return res.status(500).json({ message: "Bad request4" });
+    }
+  });
+  token = jwt.sign(
+    { email: tokenDB[0].email},
+    process.env.SECRET_KEY,{
+      expiresIn: '1m'
+  }
+  );
+  refreshToken = jwt.sign({
+    email: tokenDB[0].email,
+    }, process.env.REFRESH_TOKEN_SECRET);
+  refrtoken=new refreshTokenModel({
+      email:req.body.email,
+      token:refreshToken,
+      expired:false
+    }).save()
+  return res.status(201).json({ message: true, token: token, refreshtoken:refreshToken });}
+  catch (err){
+    console.log(err.message)
+    return res.status(500).json({ message: err.message });
+  }
+})
 
 
 router.post("/forget-password", async (req, res) => {
   try {
     const email = req.body.email;
     const user = await User.find({ email: req.body.email });
-    if (!user[0]) return res.status(400).send("invalid email");
+    if (!user[0]) return res.status(400).send({ message: false });
     let token = await Token.find({ email: req.body.email });
     if (!token[0])
       token = await new Token({
         email: req.body.email,
         token: crypto.randomBytes(32).toString("hex"),
+        expdate: new Date(new Date().getTime() + 30 * 60000),
       }).save();
-    const link = `${process.env.BASE_URL}password-reset/${user[0]._id}/${token[0].token}`;
-    mailer.sendMail(email, `That's your link bitch.\n ${link}`);
-    return res.status(200).json({ message: "fine" });
+    else if (token[0].expdate < new Date()) {
+      Token.findOneAndUpdate(
+        { email: req.body.email },
+        {
+          token: crypto.randomBytes(32).toString("hex"),
+          expdate: new Date(new Date().getTime() + 30 * 60000),
+        },
+        { new: true },
+        async (err, result) => {
+          if (err) return res.status(500).json({ message: err.message });
+        }
+      );
+    }
+    token = await Token.find({ email: req.body.email });
+    const link = `${process.env.BASE_URL}/password-reset/${user[0]._id}/${token[0].token}`;
+    mailer.sendMail(
+      email,
+      `That's your link bitch.\n ${link}\nThe link will expire in 30 minutes.`
+    );
+    return res.status(200).json({ message: "send" });
   } catch (err) {
+    console.log(err.message);
     return res.status(500).json({ message: err.message });
   }
 });
@@ -35,9 +95,11 @@ router.post("/password-reset/:userid/:token", async (req, res) => {
     const userId = req.params.userid;
     const token = req.params.token;
     const userInfo = await User.findById(`${userId}`);
+    const now = new Date();
     if (!userInfo) return res.status(400).send("invalid link");
     const tokenInfo = await Token.find({ token: token });
-    if (!tokenInfo[0]) return res.status(400).send("invalid link");
+    if (!tokenInfo[0] || tokenInfo[0].expdate < now)
+      return res.status(400).send("invalid link");
     const userEmail = userInfo.email;
     const tokenEmail = tokenInfo[0].email;
     if (userEmail === tokenEmail) {
@@ -50,7 +112,7 @@ router.post("/password-reset/:userid/:token", async (req, res) => {
             if (err) {
               return res.status(500).json({ message: err.message });
             } else {
-              res.status(200).json({ result: "fine" });
+              res.status(200).json({ result: "done" });
             }
           }
         );
@@ -73,18 +135,28 @@ router.post("/register", async (req, res) => {
         totalSpend: 0,
       });
       token = jwt.sign(
-        { email: req.body.email, totalHave: 0, totalSpend: 0 },
-        process.env.SECRET_KEY
+        { email: req.body.email},
+        process.env.SECRET_KEY,{
+          expiresIn: '1m'
+      }
       );
+      refreshToken = jwt.sign({
+        email: req.body.email,
+        }, process.env.REFRESH_TOKEN_SECRET);
+      refrtoken=new refreshTokenModel({
+          email:req.body.email,
+          token:refreshToken,
+          expired:false
+        }).save()
       return user;
     })
     .then(async () => {
       try {
         await user.save();
-        return res.status(201).json({ message: true, token: token });
+        return res.status(201).json({ message: true, token: token, refreshtoken:refreshToken });
       } catch (err) {
         if (err.code == 11000) return res.status(500).json({ message: false });
-
+        console.log(err.message)
         return res.status(500).json({ message: err.message });
       }
     });
@@ -96,6 +168,7 @@ router.post("/login", async (req, res) => {
     if (!user[0]) return res.status(500).json({ message: "doesn't exist" });
     let answer = false;
     let token = "0";
+    let refreshtoken='0'
     let totalHave = 0;
     let totalSpend = 0;
     const hashword = user[0].password;
@@ -107,17 +180,33 @@ router.post("/login", async (req, res) => {
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       token = jwt.sign(
-        { email: email, totalHave: totalHave, totalSpend: totalSpend },
-        process.env.SECRET_KEY
+        { email: email},
+        process.env.SECRET_KEY,{
+          expiresIn: '1m'
+      }
       );
+      refrtoken=await refreshTokenModel.find({ email: req.body.email, expired:false });
+      refreshToken=refrtoken[0]?.token
+      if (!refrtoken[0]) {
+      refreshToken = jwt.sign({
+        email: req.body.email,
+        }, process.env.REFRESH_TOKEN_SECRET);
+      refrtoken=new refreshTokenModel({
+          email:req.body.email,
+          token:refreshToken,
+          expired:false
+        }).save()}
+
     }
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,
       totalHave: totalHave,
       token: token,
+      refreshtoken:refreshToken
     });
   } catch (err) {
+    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });

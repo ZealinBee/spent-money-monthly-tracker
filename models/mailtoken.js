@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 var TokenSchema = new Schema(
   {
     email: {type: String, required: true, maxlength: 200, unique:true,index:true},
-    token: {type: String, required: true, maxlength: 100}
+    token: {type: String, required: true, maxlength: 100},
+    expdate:{type: Date, required: true}
   }, { versionKey: false }
 );
 
