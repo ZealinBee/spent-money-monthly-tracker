@@ -6,7 +6,6 @@ require('dotenv').config();
 
 const app = express();
 
-
 app.use(function (req, res, next) {
   res.setHeader(
     'Content-Security-Policy-Report-Only',
