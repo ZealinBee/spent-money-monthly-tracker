@@ -6,11 +6,17 @@ body {
   --light-color: #fefdfb;
   --gray-color: #888888;
   --accent-color: #759bd9;
+  --dark-overlay: 0.8;
+  --light-overlay:0.1;
+  --dark-rgb: 0;
+  --light-rgb:200;
 }
 
 body.dark {
   --dark-color: var(--light-color);
+  --dark-overlay: var(--light-overlay);
   --light-color: var(--dark-color);
+  --dark-rgb:var(--light-rgb);
 }
 
 * {
@@ -20,9 +26,15 @@ body.dark {
   font-family: "Poppins", sans-serif;
 }
 
+img {
+  max-width: 100%;
+}
+
 body {
   background: var(--dark-color);
   transition: all 0.5s ease-in-out;
+  overflow-x: hidden;
+  height: 100%;
 }
 
 main {
@@ -42,6 +54,39 @@ h1 span,
 h2 span {
   color: var(--accent-color);
 }
+
+/* Background img */
+
+.background-image {
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  z-index: -1;
+  min-width:100vw;
+  min-height: 100vh;
+  height:100%;
+}
+
+.background-image img{
+  min-width:100vw;
+  height:250vh;
+  object-fit: cover;
+}
+
+.background-image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(var(--dark-rgb), var(--dark-rgb), var(--dark-rgb), var(--dark-overlay)); 
+  transition: all 0.5s ease-in-out;
+
+}
+
 
 /* Functionalities on the top */
 .reset-button {
@@ -513,6 +558,7 @@ section p span:hover {
   padding: 0.5rem 1rem;
   margin-left: 0.5rem;
   cursor: pointer;
+  border:2px var(--dark-color) solid;
   background-color: var(--accent-color);
 }
 
@@ -607,7 +653,7 @@ section p span:hover {
 
 /* Mobile */
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .monthly-allowance-container {
     margin: 0 auto;
     width: 75%;
@@ -648,4 +694,29 @@ section p span:hover {
   .fc-today-button {
     font-size: 0.85rem !important;
   }
+
+  .reset-button {
+    font-size:0.9rem;
+  }
+
+  .swap-theme-button {
+    font-size:0.9rem;
+    left:10px;
+    right: inherit;
+  }
+
+  #forgot-password-button,
+  #remember-me-label {
+    font-size:0.8rem;
+  }
+  #remember-me {
+    margin-right: 0.2rem;
+  }
+
+  
+.background-image img{
+  min-width:100vw;
+  height:100vh;
+  object-fit: cover;
+}
 }

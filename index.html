@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <div class="background-image">
+      <img src="./assets/background.jpg" alt="">
+    </div>
     <section class="forgot-password">
       <form action="">
         <div class="login-signup-header-wrapper">
@@ -42,7 +45,7 @@
         <div class="remember-me-forgot-password-wrapper">
           <div class="remember-me">
             <input id="remember-me" type="checkbox">
-            <label for="remember-me" >Remember me</label>
+            <label for="remember-me" id="remember-me-label">Remember me</label>
           </div>
           <div class="forgot-password-button-wrapper">
             <a id="forgot-password-button">Forgot password?</a>
@@ -54,7 +57,7 @@
 
       </form>
       <p >Don't have an account yet? <span id="go-to-sign-up-link"> Sign up Here</span></p>
-      <p ><span class="toggle-login">  Use website as a guest </span>(data won't be deleted)</p>
+      <p ><span class="toggle-login">  Use website as a guest </span>(data won't be saved)</p>
     </section>
     <section class="signup-section" >
       <form >
@@ -144,6 +147,7 @@
    
     <div id="calendar" class="calendar"></div>
     <button class="swap-theme-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M448 256c0-106-86-192-192-192V448c106 0 192-86 192-192zm64 0c0 141.4-114.6 256-256 256S0 397.4 0 256S114.6 0 256 0S512 114.6 512 256z"/></svg>Swap Theme</button>
+
     <button class="reset-button">Reset Everything</button>
   </main>
   </body>

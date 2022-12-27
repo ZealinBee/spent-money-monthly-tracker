@@ -56,6 +56,7 @@ const warning = document.querySelector("#warning");
 //Submit monthly allowance part
 const submitMonthlyMoneyHandler = async (e) => {
   e.preventDefault()
+
   if (monthlyAllowanceInput.value == 0) {
     document.querySelector(".money-cant-be-0-warning").classList.add("show");
     document
@@ -70,6 +71,8 @@ const submitMonthlyMoneyHandler = async (e) => {
     monthlyAllowanceContainer.classList.toggle("hide");
     moneyInputWrapper.classList.add("show");
     calendarSpan.classList.add("show");
+    moneyInputWrapper.classList.remove("hide");
+    calendarSpan.classList.remove("hide");
     resetButton.classList.add("show");
     swapThemeButton.classList.add("show-flex");
     calendar.render();
@@ -164,6 +167,7 @@ goToLoginLink.addEventListener("click", function (e) {
 toggleLogin.addEventListener("click", function (e) {
   loginSection.classList.toggle("hide");
   program.classList.add("show");
+  // document.querySelector('.background-image').style.display = "none"
 });
 
 document
@@ -215,6 +219,7 @@ signUpButton.addEventListener("click", async function (e) {
           program.classList.add("show");
           sessionStorage.setItem("token", token);
           calendar.render();
+          // document.querySelector('.background-image').style.display = "none"
         }
       });
   }
@@ -269,43 +274,51 @@ function checkLogin(data) {
     loginUserNameInput.classList.remove("error-login");
     loginPasswordInput.classList.remove("error-login");
     loginErrorMessage.classList.remove("show");
-    program.classList.add("show");
-    moneyInputWrapper.classList.add("show");
-    calendarSpan.classList.add("show");
-    resetButton.classList.add("show");
-    loginSection.classList.add("hide");
-    calendar.render();
-    monthlyAllowance = totalHave;
-    totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
-    totalSpentMoney = totalSpend;
-    totalSpentMoneySpan.textContent = totalSpentMoney;
-    dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
-    dailyAllowanceSpan.textContent = dailyAllowance;
-    totalDaysUsed = totalSpentMoney / dailyAllowance;
-    totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-    if (totalDaysUsed > numberOfDaysInAMonth) {
-      warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
-        totalDaysUsed - numberOfDaysInAMonth
-      ).toFixed(0)} day(s)`;
-    }
-    calendar.removeAllEvents();
-    currentDay = 0;
-    for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-      currentDay += 21;
-      if (currentDay < 10) {
-        currentDay = `0${currentDay}`;
+    if(monthlyAllowance === 0) {
+      program.classList.add("show");
+      moneyInputWrapper.classList.add('hide')
+      calendarSpan.classList.add("hide");
+      loginSection.classList.add("hide");
+    }else {
+      program.classList.add("show");
+      moneyInputWrapper.classList.add("show");
+      calendarSpan.classList.add("show");
+      resetButton.classList.add("show");
+      loginSection.classList.add("hide");
+      monthlyAllowanceContainer.classList.add("hide")
+      // document.querySelector('.background-image').style.display = "none"
+      calendar.render();
+      monthlyAllowance = totalHave;
+      totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
+      totalSpentMoney = totalSpend;
+      totalSpentMoneySpan.textContent = totalSpentMoney;
+      dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
+      dailyAllowanceSpan.textContent = dailyAllowance;
+      totalDaysUsed = totalSpentMoney / dailyAllowance;
+      totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
+      if (totalDaysUsed > numberOfDaysInAMonth) {
+        warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
+          totalDaysUsed - numberOfDaysInAMonth
+        ).toFixed(0)} day(s)`;
       }
-      calendar.addEvent({
-        title: "day used!",
-        start: `2022-12-${currentDay}`,
-        end: `2022-12-${currentDay}`,
-      });
-      currentDay = i + 1;
+      calendar.removeAllEvents();
+      currentDay = 0;
+      for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
+        currentDay += 21;
+        if (currentDay < 10) {
+          currentDay = `0${currentDay}`;
+        }
+        calendar.addEvent({
+          title: "day used!",
+          start: `2022-12-${currentDay}`,
+          end: `2022-12-${currentDay}`,
+        });
+        currentDay = i + 1;
+      }
     }
-  }
-  if (monthlyAllowance > 0) {
-    monthlyAllowanceContainer.classList.add("hide");
-  }
+   
+    }
+   
 }
 
 //Reset button
@@ -511,16 +524,16 @@ submitForgotPasswordEmail.addEventListener('click', async function () {
   })
 })
 
-const changePasswordSubmit = document.querySelector('#change-password-button')
+// const changePasswordSubmit = document.querySelector('#change-password-button')
 
-changePasswordSubmit.addEventListener('click', async function () {
-  const url = getCurrentURL()
-  console.log(url)
-  // const res = await fetch("/", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({
-  //     email: forgotPasswordEmailInput.value
-  //   }),
-  // })
-})
+// changePasswordSubmit.addEventListener('click', async function () {
+//   const url = getCurrentURL()
+//   console.log(url)
+//   // const res = await fetch("/", {
+//   //   method: "POST",
+//   //   headers: { "Content-Type": "application/json" },
+//   //   body: JSON.stringify({
+//   //     email: forgotPasswordEmailInput.value
+//   //   }),
+//   // })
+// })
