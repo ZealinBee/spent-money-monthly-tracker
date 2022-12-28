@@ -5,6 +5,8 @@ const routes = require("./routes")
 require('dotenv').config();
 
 const app = express();
+app.use(express.static('public'));
+
 
 app.use(function (req, res, next) {
   res.setHeader(
@@ -13,7 +15,7 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
+//Delete later
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

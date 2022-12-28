@@ -1,6 +1,11 @@
 //Imports
 import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
 
+// window.addEventListener("beforeunload", function (e) {
+//   e.preventDefault();
+//   e.returnValue = "Are you sure you want to leave?";
+// });
+
 //Program
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
@@ -88,7 +93,43 @@ const submitMonthlyMoneyHandler = async (e) => {
       },
       body: JSON.stringify({ totalHave: monthlyAllowance }),
     });
+    if (ress.statusText === "Bad Request") {
+      await updatingTokenHandler();
+
+      const ress = await fetch("/money", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ totalHave: monthlyAllowance }),
+      });
+    }
   }
+};
+
+const updatingTokenHandler = async () => {
+  const ress = await fetch("/refresh", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${sessionStorage.getItem("refreshToken")}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      let message = data.message;
+      if (message) {
+        let token = data.token;
+        let refreshToken = data.refreshtoken;
+
+        sessionStorage.clear();
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("refreshToken", refreshToken);
+      } else {
+        //Force the user to login again
+      }
+    });
 };
 
 //Info showing part
@@ -186,23 +227,26 @@ signUpButton.addEventListener("click", async function (e) {
   var re = /\D/;
   var re1 = /\s/;
   var re2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-  var re3 = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  var re3 = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   var n = re.test(passwordInputValue);
   var n1 = !re1.test(passwordInputValue);
   var n2 = re2.test(passwordInputValue);
-  var n3 = re3.test(userNameInputValue)
-  if (passwordInputValue.length < 8 || !(n1 && n2 && n && n3) || userNameInputValue.length === 0) {
-    if(userNameInputValue.length === 0 || !n3) {
+  var n3 = re3.test(userNameInputValue);
+  if (
+    passwordInputValue.length < 8 ||
+    !(n1 && n2 && n && n3) ||
+    userNameInputValue.length === 0
+  ) {
+    if (userNameInputValue.length === 0 || !n3) {
       signUpUserNameInput.classList.add("error-login");
-      document.querySelector('.enter-proper-email').style.display = "block"
+      document.querySelector(".enter-proper-email").style.display = "block";
       document
-      .querySelector(".user-name-already-taken")
-      .classList.remove("show");
-    }else {
+        .querySelector(".user-name-already-taken")
+        .classList.remove("show");
+    } else {
       signUpPasswordInput.classList.add("error-login");
     }
-  } 
-  else {
+  } else {
     signUpUserNameInput.classList.remove("error-login");
     signUpPasswordInput.classList.remove("error-login");
 
@@ -220,17 +264,19 @@ signUpButton.addEventListener("click", async function (e) {
       .then((data) => {
         let message = data.message;
         let token = data.token;
+        let refreshToken = data.refreshtoken;
         if (!message) {
           document
             .querySelector(".user-name-already-taken")
             .classList.add("show");
           signUpUserNameInput.classList.add("error-login");
-          document.querySelector('.enter-proper-email').style.display = 'none'
+          document.querySelector(".enter-proper-email").style.display = "none";
         } else {
           signUpUserNameInput.classList.remove("error-login");
           signUpSection.classList.remove("show");
           program.classList.add("show");
           sessionStorage.setItem("token", token);
+          sessionStorage.setItem("refreshToken", refreshToken);
           calendar.render();
           // document.querySelector('.background-image').style.display = "none"
         }
@@ -262,9 +308,7 @@ async function loginUser(e) {
       },
       body: JSON.stringify({
         email: userNameInputValue,
-        password: passwordInputValue,
-        totalHave: 0,
-        totalSpend: 0,
+        password: passwordInputValue
       }),
     })
       .then((response) => response.json())
@@ -277,17 +321,18 @@ function checkLogin(data) {
   let totalSpend = data.totalSpend;
   let totalHave = data.totalHave;
   let token = data.token;
-  console.log(data);
+  let refreshToken = data.refreshtoken;
   if (!answer) {
     loginUserNameInput.classList.add("error-login");
     loginPasswordInput.classList.add("error-login");
     loginErrorMessage.classList.add("show");
   } else {
     sessionStorage.setItem("token", token);
+    sessionStorage.setItem("refreshToken", refreshToken);
     loginUserNameInput.classList.remove("error-login");
     loginPasswordInput.classList.remove("error-login");
     loginErrorMessage.classList.remove("show");
-    if (monthlyAllowance === 0) {
+    if (totalHave === 0) {
       program.classList.add("show");
       moneyInputWrapper.classList.add("hide");
       calendarSpan.classList.add("hide");
@@ -297,6 +342,7 @@ function checkLogin(data) {
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
       resetButton.classList.add("show");
+      swapThemeButton.classList.add('show-flex')
       loginSection.classList.add("hide");
       monthlyAllowanceContainer.classList.add("hide");
       // document.querySelector('.background-image').style.display = "none"
@@ -460,6 +506,17 @@ signUpPasswordInput.addEventListener("focus", function () {
   signUpPasswordInput.classList.add("change-border-color");
 });
 
+const forgotPasswordEmailInput = document.querySelector(
+  "#forgot-password-email-input"
+);
+
+forgotPasswordEmailInput.addEventListener("focus", function () {
+  document.querySelector(".forgot-password-label").classList.add("move-up");
+  document
+    .querySelector(".forgot-password-label")
+    .classList.add("change-text-color");
+});
+
 const swapThemeButton = document.querySelector(".swap-theme-button");
 
 swapThemeButton.addEventListener("click", function () {
@@ -521,9 +578,7 @@ returnToLoginButton.addEventListener("click", function () {
 const submitForgotPasswordEmail = document.querySelector(
   "#submit-forgot-password-email"
 );
-const forgotPasswordEmailInput = document.querySelector(
-  "#forgot-password-email-input"
-);
+
 submitForgotPasswordEmail.addEventListener("click", async function () {
   const res = await fetch("/forget-password", {
     method: "POST",

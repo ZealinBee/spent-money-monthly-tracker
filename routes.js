@@ -11,46 +11,54 @@ const auth = require("./service/authentication");
 const mailer = require("./mail.js");
 const router = express.Router();
 
-
-router.post("/refresh",async (req,res)=>{
-  try{
-  token=req.header("Authorization")
-  if (!token) return res.status(400).json({message: "Bad request1"})
-  tokenDB=await refreshTokenModel.find({ token:token});
-  if (!tokenDB[0]) return res.status(400).json({message: "Bad request2"})
-  if (tokenDB[0].expired){
-    await refreshTokenModel.deleteMany({email:tokenDB[0].email}, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Bad request2.5" });
-      } 
-    });
-    return res.status(400).json({message: "Bad request3"})}
-  await refreshTokenModel.findOneAndUpdate({ token: token }, {expired:true}, {new: true}, (err, result) => {
-    if (err){
-      return res.status(500).json({ message: "Bad request4" });
+router.post("/refresh", async (req, res) => {
+  try {
+    token = req.header("Authorization");
+    if (!token) return res.status(400).json({ message: "Bad request1" });
+    tokenDB = await refreshTokenModel.find({ token: token });
+    if (!tokenDB[0]) return res.status(400).json({ message: "Bad request2" });
+    if (tokenDB[0].expired) {
+      await refreshTokenModel.deleteMany(
+        { email: tokenDB[0].email },
+        (err, result) => {
+          if (err) {
+            return res.status(500).json({ message: "Bad request2.5" });
+          }
+        }
+      );
+      return res.status(400).json({ message: "Bad request3" });
     }
-  });
-  token = jwt.sign(
-    { email: tokenDB[0].email},
-    process.env.SECRET_KEY,{
-      expiresIn: '1m'
-  }
-  );
-  refreshToken = jwt.sign({
-    email: tokenDB[0].email,
-    }, process.env.REFRESH_TOKEN_SECRET);
-  refrtoken=new refreshTokenModel({
-      email:req.body.email,
-      token:refreshToken,
-      expired:false
-    }).save()
-  return res.status(201).json({ message: true, token: token, refreshtoken:refreshToken });}
-  catch (err){
-    console.log(err.message)
+    await refreshTokenModel.findOneAndUpdate(
+      { token: token },
+      { expired: true },
+      { new: true },
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "Bad request4" });
+        }
+      }
+    );
+    token = jwt.sign({ email: tokenDB[0].email }, process.env.SECRET_KEY, {
+      expiresIn: "1m",
+    });
+    refreshToken = jwt.sign(
+      {
+        email: tokenDB[0].email,
+      },
+      process.env.REFRESH_TOKEN_SECRET
+    );
+    refrtoken = new refreshTokenModel({
+      email: tokenDB[0].email,
+      token: refreshToken,
+      expired: false,
+    }).save();
+    return res
+      .status(201)
+      .json({ message: true, token: token, refreshtoken: refreshToken });
+  } catch (err) {
     return res.status(500).json({ message: err.message });
   }
-})
-
+});
 
 router.post("/forget-password", async (req, res) => {
   try {
@@ -85,7 +93,6 @@ router.post("/forget-password", async (req, res) => {
     );
     return res.status(200).json({ message: "send" });
   } catch (err) {
-    console.log(err.message);
     return res.status(500).json({ message: err.message });
   }
 });
@@ -134,29 +141,30 @@ router.post("/register", async (req, res) => {
         totalHave: 0,
         totalSpend: 0,
       });
-      token = jwt.sign(
-        { email: req.body.email},
-        process.env.SECRET_KEY,{
-          expiresIn: '1m'
-      }
+      token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, {
+        expiresIn: "1m",
+      });
+      refreshToken = jwt.sign(
+        {
+          email: req.body.email,
+        },
+        process.env.REFRESH_TOKEN_SECRET
       );
-      refreshToken = jwt.sign({
+      refrtoken = new refreshTokenModel({
         email: req.body.email,
-        }, process.env.REFRESH_TOKEN_SECRET);
-      refrtoken=new refreshTokenModel({
-          email:req.body.email,
-          token:refreshToken,
-          expired:false
-        }).save()
+        token: refreshToken,
+        expired: false,
+      }).save();
       return user;
     })
     .then(async () => {
       try {
         await user.save();
-        return res.status(201).json({ message: true, token: token, refreshtoken:refreshToken });
+        return res
+          .status(201)
+          .json({ message: true, token: token, refreshtoken: refreshToken });
       } catch (err) {
         if (err.code == 11000) return res.status(500).json({ message: false });
-        console.log(err.message)
         return res.status(500).json({ message: err.message });
       }
     });
@@ -168,7 +176,7 @@ router.post("/login", async (req, res) => {
     if (!user[0]) return res.status(500).json({ message: "doesn't exist" });
     let answer = false;
     let token = "0";
-    let refreshtoken='0'
+    let refreshtoken = "0";
     let totalHave = 0;
     let totalSpend = 0;
     const hashword = user[0].password;
@@ -179,34 +187,36 @@ router.post("/login", async (req, res) => {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
-      token = jwt.sign(
-        { email: email},
-        process.env.SECRET_KEY,{
-          expiresIn: '1m'
-      }
-      );
-      refrtoken=await refreshTokenModel.find({ email: req.body.email, expired:false });
-      refreshToken=refrtoken[0]?.token
-      if (!refrtoken[0]) {
-      refreshToken = jwt.sign({
+      token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
+        expiresIn: "1m",
+      });
+      refrtoken = await refreshTokenModel.find({
         email: req.body.email,
-        }, process.env.REFRESH_TOKEN_SECRET);
-      refrtoken=new refreshTokenModel({
-          email:req.body.email,
-          token:refreshToken,
-          expired:false
-        }).save()}
-
+        expired: false,
+      });
+      refreshToken = refrtoken[0]?.token;
+      if (!refrtoken[0]) {
+        refreshToken = jwt.sign(
+          {
+            email: req.body.email,
+          },
+          process.env.REFRESH_TOKEN_SECRET
+        );
+        refrtoken = new refreshTokenModel({
+          email: req.body.email,
+          token: refreshToken,
+          expired: false,
+        }).save();
+      }
     }
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,
       totalHave: totalHave,
       token: token,
-      refreshtoken:refreshToken
+      refreshtoken: refreshToken,
     });
   } catch (err) {
-    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
@@ -217,7 +227,9 @@ router.get("/", async (req, res) => {
 
 router.put("/money", async (req, res) => {
   auth.auth(req).then(async (result) => {
-    if (!result) return res.status(400).json({ message: "Bad request" });
+    if (!result) {
+      return res.status(400).json({ message: result });
+    }
     await User.findOneAndUpdate(
       { email: result.email },
       req.body,
@@ -259,6 +271,10 @@ router.get("/style.css", async (req, res) => {
 
 router.get("/script.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/script.js"));
+});
+
+router.get("/public/assets/background.jpg", async (req, res) => {
+  res.sendFile(path.join(__dirname + "/public/assets/background.jpg"));
 });
 
 router.delete("/delete", async (req, res) => {

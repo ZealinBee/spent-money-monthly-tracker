@@ -165,9 +165,18 @@ section {
   display:none;
 }
 
+.forgot-password h1 {
+  padding:0.2rem 2rem;
+}
+
 .forgot-password-input-wrapper {
   position: relative;
   margin-top: 1rem;
+}
+
+.forgot-password-input-wrapper input {
+  width:85%;
+
 }
 
 .forgot-password-input-wrapper input:focus {
@@ -203,12 +212,16 @@ section {
   text-decoration: underline;
 }
 
-.return-to-login {
+#return-to-login {
   color: var(--accent-color);
   cursor: pointer;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   text-decoration: underline;
+}
+
+#return-to-login:hover {
+  color:var(--dark-color)
 }
 
 section h1 {
@@ -644,7 +657,7 @@ section p span:hover {
 }
 
 .change-text-color {
-  color: var(--accent-color);
+  color: var(--accent-color)!important;
 }
 
 .error-login {
