@@ -247,7 +247,10 @@ router.put("/money", async (req, res) => {
 
 
 router.delete("/deleterefresh", async (req, res) => {
-  await refreshTokenModel.deleteMany({email:req.body.email}, (err, result) => {
+  let refreshtoken=req.body.refreshToken
+  let tokenInfo=await refreshTokenModel.findOne({token:refreshtoken})
+  let email=tokenInfo.email
+  await refreshTokenModel.deleteMany({email:email}, (err, result) => {
     if (err) {
       return res.status(500).json({ message: err.message });
     } else {
