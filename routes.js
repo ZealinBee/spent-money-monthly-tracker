@@ -245,6 +245,17 @@ router.put("/money", async (req, res) => {
   });
 });
 
+
+router.delete("/deleterefresh", async (req, res) => {
+  await refreshTokenModel.deleteMany({email:req.body.email}, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      res.status(200).json({ result: "Done" });
+    }
+  });
+});
+
 router.get("/password-reset/:userid/:token", async (req, res) => {
   res.sendFile(path.join(__dirname + "/password-reset.html"));
 });
@@ -277,15 +288,6 @@ router.get("/public/assets/background.jpg", async (req, res) => {
   res.sendFile(path.join(__dirname + "/public/assets/background.jpg"));
 });
 
-router.delete("/delete", async (req, res) => {
-  await User.deleteMany({}, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: err.message });
-    } else {
-      res.status(200).json({ result: "Done" });
-    }
-  });
-});
 
 // router.get("/cars", async (req, res) => {
 //   try {
