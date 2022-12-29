@@ -3,7 +3,13 @@ import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
 
 // window.addEventListener("beforeunload", function (e) {
 //   e.preventDefault();
-//   e.returnValue = "Are you sure you want to leave?";
+//   fetch("/deleterefresh", {
+//     method: "DELETE",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ refreshToken: sessionStorage.getItem('refreshToken') })
+//   })
 // });
 
 //Program
@@ -143,7 +149,7 @@ closeInfoWrapperButton.addEventListener("click", function () {
   infoWrapper.classList.remove("show");
 });
 
-//Submit spent money each time par
+//Submit spent money 
 const submitSpentMoneyHandler = async (e) => {
   e.preventDefault();
   if (spentMoneyInput.value > monthlyAllowance * 3) {
@@ -172,7 +178,7 @@ const submitSpentMoneyHandler = async (e) => {
     calendar.removeAllEvents();
     currentDay = 0;
     for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-      currentDay += 21;
+      currentDay += 1;
       if (currentDay < 10) {
         currentDay = `0${currentDay}`;
       }
@@ -183,7 +189,7 @@ const submitSpentMoneyHandler = async (e) => {
       });
       currentDay = i + 1;
     }
-
+    console.log(totalSpentMoney)
     const ress = await fetch("/money", {
       method: "PUT",
       headers: {
@@ -317,6 +323,7 @@ async function loginUser(e) {
 }
 
 function checkLogin(data) {
+  console.log(data)
   let answer = data.answer;
   let totalSpend = data.totalSpend;
   let totalHave = data.totalHave;
@@ -345,7 +352,6 @@ function checkLogin(data) {
       swapThemeButton.classList.add('show-flex')
       loginSection.classList.add("hide");
       monthlyAllowanceContainer.classList.add("hide");
-      // document.querySelector('.background-image').style.display = "none"
       calendar.render();
       monthlyAllowance = totalHave;
       totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
@@ -363,7 +369,7 @@ function checkLogin(data) {
       calendar.removeAllEvents();
       currentDay = 0;
       for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-        currentDay += 21;
+        currentDay += 1;
         if (currentDay < 10) {
           currentDay = `0${currentDay}`;
         }
