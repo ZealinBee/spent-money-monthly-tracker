@@ -89,7 +89,7 @@ router.post("/forget-password", async (req, res) => {
     const link = `${process.env.BASE_URL}/password-reset/${user[0]._id}/${token[0].token}`;
     mailer.sendMail(
       email,
-      `That's your link bitch.\n ${link}\nThe link will expire in 30 minutes.`
+      `Hey, here is the link to reset your password(not working yet sorry we are still working on this):\n ${link}\nThe link will expire in 30 minutes.`
     );
     return res.status(200).json({ message: "send" });
   } catch (err) {
