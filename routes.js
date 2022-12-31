@@ -142,7 +142,7 @@ router.post("/register", async (req, res) => {
         totalSpend: 0,
       });
       token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, {
-        expiresIn: "1m",
+        expiresIn: "1s",
       });
       refreshToken = jwt.sign(
         {
@@ -188,7 +188,7 @@ router.post("/login", async (req, res) => {
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-        expiresIn: "1m",
+        expiresIn: "1s",
       });
       refrtoken = await refreshTokenModel.find({
         email: req.body.email,
@@ -247,7 +247,7 @@ router.put("/money", async (req, res) => {
 
 
 router.delete("/deleterefresh", async (req, res) => {
-  let refreshtoken=req.body.refreshToken
+  let refreshtoken=await req.header("Authorization")
   let tokenInfo=await refreshTokenModel.findOne({token:refreshtoken})
   let email=tokenInfo.email
   await refreshTokenModel.deleteMany({email:email}, (err, result) => {
