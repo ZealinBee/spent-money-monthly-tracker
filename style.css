@@ -7,16 +7,16 @@ body {
   --gray-color: #888888;
   --accent-color: #759bd9;
   --dark-overlay: 0.8;
-  --light-overlay:0.1;
+  --light-overlay: 0.1;
   --dark-rgb: 0;
-  --light-rgb:200;
+  --light-rgb: 200;
 }
 
 body.dark {
   --dark-color: var(--light-color);
   --dark-overlay: var(--light-overlay);
   --light-color: var(--dark-color);
-  --dark-rgb:var(--light-rgb);
+  --dark-rgb: var(--light-rgb);
 }
 
 * {
@@ -58,19 +58,19 @@ h2 span {
 /* Background img */
 
 .background-image {
-  position:absolute;
-  top:0;
-  right:0;
-  bottom:0;
-  left:0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: -1;
-  min-width:100vw;
-  height:250vh;
+  min-width: 100vw;
+  height: 250vh;
 }
 
-.background-image img{
-  min-width:100vw;
-  height:250vh;
+.background-image img {
+  min-width: 100vw;
+  height: 250vh;
   object-fit: cover;
 }
 
@@ -81,11 +81,14 @@ h2 span {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(var(--dark-rgb), var(--dark-rgb), var(--dark-rgb), var(--dark-overlay)); 
+  background: rgba(
+    var(--dark-rgb),
+    var(--dark-rgb),
+    var(--dark-rgb),
+    var(--dark-overlay)
+  );
   transition: all 0.3s ease-in-out;
-
 }
-
 
 /* Functionalities on the top */
 .reset-button {
@@ -162,11 +165,11 @@ section {
 
 .forgot-password {
   z-index: 9999;
-  display:none;
+  display: none;
 }
 
 .forgot-password h1 {
-  padding:0.2rem 2rem;
+  padding: 0.2rem 2rem;
 }
 
 .forgot-password-input-wrapper {
@@ -175,8 +178,7 @@ section {
 }
 
 .forgot-password-input-wrapper input {
-  width:85%;
-
+  width: 85%;
 }
 
 .forgot-password-input-wrapper input:focus {
@@ -208,7 +210,7 @@ section {
 .forgot-password-button-wrapper a {
   margin-right: 1.5rem;
   color: var(--accent-color);
-  cursor:pointer;
+  cursor: pointer;
   text-decoration: underline;
 }
 
@@ -221,7 +223,7 @@ section {
 }
 
 #return-to-login:hover {
-  color:var(--dark-color)
+  color: var(--dark-color);
 }
 
 section h1 {
@@ -571,7 +573,7 @@ section p span:hover {
   padding: 0.5rem 1rem;
   margin-left: 0.5rem;
   cursor: pointer;
-  border:2px var(--dark-color) solid;
+  border: 2px var(--dark-color) solid;
   background-color: var(--accent-color);
 }
 
@@ -657,7 +659,7 @@ section p span:hover {
 }
 
 .change-text-color {
-  color: var(--accent-color)!important;
+  color: var(--accent-color) !important;
 }
 
 .error-login {
@@ -709,27 +711,26 @@ section p span:hover {
   }
 
   .reset-button {
-    font-size:0.9rem;
+    font-size: 0.9rem;
   }
 
   .swap-theme-button {
-    font-size:0.9rem;
-    left:10px;
+    font-size: 0.9rem;
+    left: 10px;
     right: inherit;
   }
 
   #forgot-password-button,
   #remember-me-label {
-    font-size:0.8rem;
+    font-size: 0.8rem;
   }
   #remember-me {
     margin-right: 0.2rem;
   }
 
-  
-.background-image img{
-  min-width:100vw;
-  height:100vh;
-  object-fit: cover;
-}
+  .background-image img {
+    min-width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
 }

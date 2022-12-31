@@ -39,7 +39,7 @@ router.post("/refresh", async (req, res) => {
       }
     );
     token = jwt.sign({ email: tokenDB[0].email }, process.env.SECRET_KEY, {
-      expiresIn: "1m",
+      expiresIn: "10s",
     });
     refreshToken = jwt.sign(
       {
@@ -142,7 +142,7 @@ router.post("/register", async (req, res) => {
         totalSpend: 0,
       });
       token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, {
-        expiresIn: "1s",
+        expiresIn: "10s",
       });
       refreshToken = jwt.sign(
         {
@@ -188,7 +188,7 @@ router.post("/login", async (req, res) => {
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-        expiresIn: "1s",
+        expiresIn: "10s",
       });
       refrtoken = await refreshTokenModel.find({
         email: req.body.email,
@@ -289,6 +289,9 @@ router.get("/script.js", async (req, res) => {
 
 router.get("/public/assets/background.jpg", async (req, res) => {
   res.sendFile(path.join(__dirname + "/public/assets/background.jpg"));
+});
+router.get("/public/assets/icon.png", async (req, res) => {
+  res.sendFile(path.join(__dirname + "/public/assets/icon.png"));
 });
 
 

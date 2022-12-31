@@ -3,8 +3,15 @@ import numberOfDaysInAMonth from "https://spent-money-monthly-tracker-production
 
 // window.addEventListener("beforeunload", function (e) {
 //   e.preventDefault();
-//   e.returnValue = "Are you sure you want to leave?";
+//   fetch("/deleterefresh", {
+//     method: "DELETE",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ refreshToken: sessionStorage.getItem('refreshToken') })
+//   })
 // });
+
 
 //Program
 const program = document.querySelector("#program");
@@ -16,6 +23,8 @@ let monthlyAllowance = 0;
 let dailyAllowance = 0;
 let totalDaysUsed = 0;
 let currentDay = 0;
+
+
 
 //Initialize calendar
 var calendarEl = document.getElementById("calendar");
@@ -143,7 +152,7 @@ closeInfoWrapperButton.addEventListener("click", function () {
   infoWrapper.classList.remove("show");
 });
 
-//Submit spent money each time par
+//Submit spent money
 const submitSpentMoneyHandler = async (e) => {
   e.preventDefault();
   if (spentMoneyInput.value > monthlyAllowance * 3) {
@@ -172,7 +181,7 @@ const submitSpentMoneyHandler = async (e) => {
     calendar.removeAllEvents();
     currentDay = 0;
     for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-      currentDay += 21;
+      currentDay += 1;
       if (currentDay < 10) {
         currentDay = `0${currentDay}`;
       }
@@ -192,6 +201,17 @@ const submitSpentMoneyHandler = async (e) => {
       },
       body: JSON.stringify({ totalSpend: totalSpentMoney }),
     });
+    if (ress.statusText === "Bad Request") {
+      await updatingTokenHandler();
+      const ress = await fetch("/money", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ totalSpend: totalSpentMoney }),
+      });
+    }
   }
 };
 
@@ -308,7 +328,7 @@ async function loginUser(e) {
       },
       body: JSON.stringify({
         email: userNameInputValue,
-        password: passwordInputValue
+        password: passwordInputValue,
       }),
     })
       .then((response) => response.json())
@@ -338,14 +358,14 @@ function checkLogin(data) {
       calendarSpan.classList.add("hide");
       loginSection.classList.add("hide");
     } else {
+      
       program.classList.add("show");
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
       resetButton.classList.add("show");
-      swapThemeButton.classList.add('show-flex')
+      swapThemeButton.classList.add("show-flex");
       loginSection.classList.add("hide");
       monthlyAllowanceContainer.classList.add("hide");
-      // document.querySelector('.background-image').style.display = "none"
       calendar.render();
       monthlyAllowance = totalHave;
       totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
@@ -363,7 +383,7 @@ function checkLogin(data) {
       calendar.removeAllEvents();
       currentDay = 0;
       for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
-        currentDay += 21;
+        currentDay += 1;
         if (currentDay < 10) {
           currentDay = `0${currentDay}`;
         }
@@ -389,6 +409,12 @@ resetButton.addEventListener("click", async function () {
   resetButton.classList.remove("show");
   warning.textContent = "";
 
+  monthlyAllowance = 0;
+  totalSpentMoney = 0;
+  totalMonthlyAllowanceSpan.textContent = 0;
+  totalSpentMoneySpan.textContent = 0;
+  dailyAllowanceSpan.textContent = 0;
+  totalDaysUsedSpan.textContent = 0;
   const ress = await fetch("/money", {
     method: "PUT",
     headers: {
@@ -396,14 +422,26 @@ resetButton.addEventListener("click", async function () {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
     body: JSON.stringify({
-      totalHave: monthlyAllowance,
-      totalSpent: totalSpentMoney,
+      totalHave: 0,
+      totalSpend: 0,
     }),
   });
-  totalMonthlyAllowanceSpan.textContent = 0;
-  totalSpentMoneySpan.textContent = 0;
-  dailyAllowanceSpan.textContent = 0;
-  totalDaysUsedSpan.textContent = 0;
+
+  if (ress.statusText === "Bad Request") {
+    await updatingTokenHandler();
+
+    const ress = await fetch("/money", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        totalHave: 0,
+        totalSpend: 0,
+      }),
+    });
+  }
   monthlyAllowanceContainer.classList.remove("hide");
 });
 
@@ -593,7 +631,6 @@ submitForgotPasswordEmail.addEventListener("click", async function () {
 
 // changePasswordSubmit.addEventListener('click', async function () {
 //   const url = getCurrentURL()
-//   console.log(url)
 //   // const res = await fetch("/", {
 //   //   method: "POST",
 //   //   headers: { "Content-Type": "application/json" },
