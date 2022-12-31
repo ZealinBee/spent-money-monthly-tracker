@@ -149,7 +149,7 @@ closeInfoWrapperButton.addEventListener("click", function () {
   infoWrapper.classList.remove("show");
 });
 
-//Submit spent money 
+//Submit spent money
 const submitSpentMoneyHandler = async (e) => {
   e.preventDefault();
   if (spentMoneyInput.value > monthlyAllowance * 3) {
@@ -189,7 +189,7 @@ const submitSpentMoneyHandler = async (e) => {
       });
       currentDay = i + 1;
     }
-    console.log(totalSpentMoney)
+    console.log(totalSpentMoney);
     const ress = await fetch("/money", {
       method: "PUT",
       headers: {
@@ -198,6 +198,18 @@ const submitSpentMoneyHandler = async (e) => {
       },
       body: JSON.stringify({ totalSpend: totalSpentMoney }),
     });
+    if (ress.statusText === "Bad Request") {
+      await updatingTokenHandler();
+
+      const ress = await fetch("/money", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ totalSpend: totalSpentMoney }),
+      });
+    }
   }
 };
 
@@ -314,7 +326,7 @@ async function loginUser(e) {
       },
       body: JSON.stringify({
         email: userNameInputValue,
-        password: passwordInputValue
+        password: passwordInputValue,
       }),
     })
       .then((response) => response.json())
@@ -323,7 +335,6 @@ async function loginUser(e) {
 }
 
 function checkLogin(data) {
-  console.log(data)
   let answer = data.answer;
   let totalSpend = data.totalSpend;
   let totalHave = data.totalHave;
@@ -349,7 +360,7 @@ function checkLogin(data) {
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
       resetButton.classList.add("show");
-      swapThemeButton.classList.add('show-flex')
+      swapThemeButton.classList.add("show-flex");
       loginSection.classList.add("hide");
       monthlyAllowanceContainer.classList.add("hide");
       calendar.render();
@@ -394,7 +405,13 @@ resetButton.addEventListener("click", async function () {
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
   warning.textContent = "";
-
+  console.log(monthlyAllowance);
+  monthlyAllowance = 0;
+  totalSpentMoney = 0;
+  totalMonthlyAllowanceSpan.textContent = 0;
+  totalSpentMoneySpan.textContent = 0;
+  dailyAllowanceSpan.textContent = 0;
+  totalDaysUsedSpan.textContent = 0;
   const ress = await fetch("/money", {
     method: "PUT",
     headers: {
@@ -406,10 +423,21 @@ resetButton.addEventListener("click", async function () {
       totalSpent: totalSpentMoney,
     }),
   });
-  totalMonthlyAllowanceSpan.textContent = 0;
-  totalSpentMoneySpan.textContent = 0;
-  dailyAllowanceSpan.textContent = 0;
-  totalDaysUsedSpan.textContent = 0;
+  if (ress.statusText === "Bad Request") {
+    await updatingTokenHandler();
+
+    const ress = await fetch("/money", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        totalHave: monthlyAllowance,
+        totalSpent: totalSpentMoney,
+      }),
+    });
+  }
   monthlyAllowanceContainer.classList.remove("hide");
 });
 
