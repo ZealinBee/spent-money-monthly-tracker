@@ -12,6 +12,7 @@ import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
 //   })
 // });
 
+
 //Program
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
@@ -22,6 +23,8 @@ let monthlyAllowance = 0;
 let dailyAllowance = 0;
 let totalDaysUsed = 0;
 let currentDay = 0;
+
+
 
 //Initialize calendar
 var calendarEl = document.getElementById("calendar");
@@ -189,7 +192,7 @@ const submitSpentMoneyHandler = async (e) => {
       });
       currentDay = i + 1;
     }
-    console.log(totalSpentMoney);
+
     const ress = await fetch("/money", {
       method: "PUT",
       headers: {
@@ -200,7 +203,6 @@ const submitSpentMoneyHandler = async (e) => {
     });
     if (ress.statusText === "Bad Request") {
       await updatingTokenHandler();
-
       const ress = await fetch("/money", {
         method: "PUT",
         headers: {
@@ -356,6 +358,7 @@ function checkLogin(data) {
       calendarSpan.classList.add("hide");
       loginSection.classList.add("hide");
     } else {
+      
       program.classList.add("show");
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
@@ -405,7 +408,7 @@ resetButton.addEventListener("click", async function () {
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
   warning.textContent = "";
-  console.log(monthlyAllowance);
+
   monthlyAllowance = 0;
   totalSpentMoney = 0;
   totalMonthlyAllowanceSpan.textContent = 0;
@@ -419,10 +422,11 @@ resetButton.addEventListener("click", async function () {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
     body: JSON.stringify({
-      totalHave: monthlyAllowance,
-      totalSpent: totalSpentMoney,
+      totalHave: 0,
+      totalSpend: 0,
     }),
   });
+
   if (ress.statusText === "Bad Request") {
     await updatingTokenHandler();
 
@@ -433,8 +437,8 @@ resetButton.addEventListener("click", async function () {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify({
-        totalHave: monthlyAllowance,
-        totalSpent: totalSpentMoney,
+        totalHave: 0,
+        totalSpend: 0,
       }),
     });
   }
@@ -627,7 +631,6 @@ submitForgotPasswordEmail.addEventListener("click", async function () {
 
 // changePasswordSubmit.addEventListener('click', async function () {
 //   const url = getCurrentURL()
-//   console.log(url)
 //   // const res = await fetch("/", {
 //   //   method: "POST",
 //   //   headers: { "Content-Type": "application/json" },
