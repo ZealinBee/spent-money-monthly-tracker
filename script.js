@@ -102,7 +102,7 @@ const submitMonthlyMoneyHandler = async (e) => {
       },
       body: JSON.stringify({ totalHave: monthlyAllowance }),
     });
-    if (ress.statusText === "Bad Request") {
+    if (ress.status === 400) {
       await updatingTokenHandler();
 
       const ress = await fetch("/money", {
@@ -201,7 +201,7 @@ const submitSpentMoneyHandler = async (e) => {
       },
       body: JSON.stringify({ totalSpend: totalSpentMoney }),
     });
-    if (ress.statusText === "Bad Request") {
+    if (ress.status === 400) {
       await updatingTokenHandler();
       const ress = await fetch("/money", {
         method: "PUT",
@@ -427,7 +427,7 @@ resetButton.addEventListener("click", async function () {
     }),
   });
 
-  if (ress.statusText === "Bad Request") {
+  if (ress.status === 400) {
     await updatingTokenHandler();
 
     const ress = await fetch("/money", {
