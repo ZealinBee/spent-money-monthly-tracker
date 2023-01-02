@@ -16,6 +16,12 @@ import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
 //Program
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
+let thisMonth = new Date().getMonth() + 1;
+if(thisMonth < 10) {
+  thisMonth = `0${thisMonth}`
+}
+const thisYear = new Date().getFullYear();
+
 
 //Editable variables
 let totalSpentMoney = 0;
@@ -185,10 +191,11 @@ const submitSpentMoneyHandler = async (e) => {
       if (currentDay < 10) {
         currentDay = `0${currentDay}`;
       }
+      console.log(thisYear)
       calendar.addEvent({
         title: "Day Used!",
-        start: `2022-1-${currentDay}`,
-        end: `2022-1-${currentDay}`,
+        start: `${thisYear}-${thisMonth}-${currentDay}`,
+        end: `${thisYear}-${thisMonth}-${currentDay}`,
       });
       currentDay = i + 1;
     }
@@ -387,10 +394,11 @@ function checkLogin(data) {
         if (currentDay < 10) {
           currentDay = `0${currentDay}`;
         }
+
         calendar.addEvent({
-          title: "day used!",
-          start: `2022-1-${currentDay}`,
-          end: `2022-1-${currentDay}`,
+          title: "Day Used!",
+          start: `${thisYear}-${thisMonth}-${currentDay}`,
+          end: `${thisYear}-${thisMonth}-${currentDay}`,
         });
         currentDay = i + 1;
       }
