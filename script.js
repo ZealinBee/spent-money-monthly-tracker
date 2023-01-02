@@ -187,8 +187,8 @@ const submitSpentMoneyHandler = async (e) => {
       }
       calendar.addEvent({
         title: "Day Used!",
-        start: `2022-12-${currentDay}`,
-        end: `2022-12-${currentDay}`,
+        start: `2022-1-${currentDay}`,
+        end: `2022-1-${currentDay}`,
       });
       currentDay = i + 1;
     }
@@ -389,8 +389,8 @@ function checkLogin(data) {
         }
         calendar.addEvent({
           title: "day used!",
-          start: `2022-12-${currentDay}`,
-          end: `2022-12-${currentDay}`,
+          start: `2022-1-${currentDay}`,
+          end: `2022-1-${currentDay}`,
         });
         currentDay = i + 1;
       }
