@@ -11,15 +11,55 @@ const auth = require("./service/authentication");
 const mailer = require("./mail.js");
 const router = express.Router();
 
+
+const saverefreshtoken=async (refreshToken,email,line)=>{
+  let num=line
+  if (line===0){
+  num=1
+  tokens=await refreshTokenModel.findOne({email:email,line:num})
+  while (tokens){
+  if (num==10) return false
+  num++;
+  tokens=await refreshTokenModel.findOne({email:email,line:num})
+  }}
+  crypt.cryptToken(refreshToken).then((hash)=>{
+        refrtoken = new refreshTokenModel({
+          email: email,
+          token1: hash[0],
+          token2:hash[1],
+          token3:hash[2],
+          line:num,
+          expired: false,
+        }).save();
+      })
+  return true
+}
+
+
 router.post("/refresh", async (req, res) => {
   try {
     token = req.header("Authorization");
     if (!token) return res.status(400).json({ message: "Bad request1" });
-    tokenDB = await refreshTokenModel.find({ token: token });
-    if (!tokenDB[0]) return res.status(400).json({ message: "Bad request2" });
-    if (tokenDB[0].expired) {
+    auth.refrcheck(req).then(async (result) => {
+      if (!result) {
+        return res.status(400).json({ message: "Bad request1.5" });
+      }
+    const email=result.email
+    tokensDB = await refreshTokenModel.find({email:email});
+    isfound=false
+    tokenDB=0;
+    let num=0
+    tokensDB.forEach(tokenelem  => {
+      num++
+      if ((bcrypt.compareSync(token.slice(0,50),tokenelem.token1))&&(bcrypt.compareSync(token.slice(50,100),tokenelem.token2))&&(bcrypt.compareSync(token.slice(100,token.length),tokenelem.token3))){
+      isfound=true
+      tokenDB=tokenelem
+      }
+    });
+    if (!isfound) return res.status(400).json({ message: "Bad request2" });
+    if (tokenDB.expired) {
       await refreshTokenModel.deleteMany(
-        { email: tokenDB[0].email },
+        { email: email },
         (err, result) => {
           if (err) {
             return res.status(500).json({ message: "Bad request2.5" });
@@ -29,7 +69,7 @@ router.post("/refresh", async (req, res) => {
       return res.status(400).json({ message: "Bad request3" });
     }
     await refreshTokenModel.findOneAndUpdate(
-      { token: token },
+      { token1: tokenDB.token1,token2: tokenDB.token2,token3: tokenDB.token3 },
       { expired: true },
       { new: true },
       (err, result) => {
@@ -38,23 +78,19 @@ router.post("/refresh", async (req, res) => {
         }
       }
     );
-    token = jwt.sign({ email: tokenDB[0].email }, process.env.SECRET_KEY, {
+    token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
       expiresIn: "10s",
     });
     refreshToken = jwt.sign(
       {
-        email: tokenDB[0].email,
+        email: email,
       },
       process.env.REFRESH_TOKEN_SECRET
     );
-    refrtoken = new refreshTokenModel({
-      email: tokenDB[0].email,
-      token: refreshToken,
-      expired: false,
-    }).save();
+    saverefreshtoken(refreshToken,email,tokenDB.line)
     return res
       .status(201)
-      .json({ message: true, token: token, refreshtoken: refreshToken });
+      .json({ message: true, token: token, refreshtoken: refreshToken });})
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -150,11 +186,8 @@ router.post("/register", async (req, res) => {
         },
         process.env.REFRESH_TOKEN_SECRET
       );
-      refrtoken = new refreshTokenModel({
-        email: req.body.email,
-        token: refreshToken,
-        expired: false,
-      }).save();
+      result=saverefreshtoken(refreshToken,req.body.email,0)
+      if (!result) return res.status(500).json({ message: 'too many devices' });
       return user;
     })
     .then(async () => {
@@ -169,6 +202,8 @@ router.post("/register", async (req, res) => {
       }
     });
 });
+
+
 
 router.post("/login", async (req, res) => {
   try {
@@ -190,24 +225,14 @@ router.post("/login", async (req, res) => {
       token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
         expiresIn: "10s",
       });
-      refrtoken = await refreshTokenModel.find({
-        email: req.body.email,
-        expired: false,
-      });
-      refreshToken = refrtoken[0]?.token;
-      if (!refrtoken[0]) {
         refreshToken = jwt.sign(
           {
             email: req.body.email,
           },
           process.env.REFRESH_TOKEN_SECRET
         );
-        refrtoken = new refreshTokenModel({
-          email: req.body.email,
-          token: refreshToken,
-          expired: false,
-        }).save();
-      }
+        result=saverefreshtoken(refreshToken,req.body.email,0)
+        if (!result) return res.status(500).json({ message: "too many devices" });
     }
     return res.status(200).json({
       answer: answer,
