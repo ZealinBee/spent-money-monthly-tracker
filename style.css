@@ -501,8 +501,7 @@ section p span:hover {
   position: absolute;
   background: var(--light-color);
   left: 0;
-  top: 0px;
-  height: 100%;
+  top: -50px;
   border-radius: 1rem;
   font-size: 1rem;
   padding: 1rem;
