@@ -10,6 +10,8 @@ body {
   --light-overlay: 0.1;
   --dark-rgb: 0;
   --light-rgb: 200;
+  overflow: auto;
+
 }
 
 body.dark {
@@ -58,19 +60,19 @@ h2 span {
 /* Background img */
 
 .background-image {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: -1;
   min-width: 100vw;
-  height: 250vh;
+  height: 100vh;
 }
 
 .background-image img {
   min-width: 100vw;
-  height: 250vh;
+  height: 100vh;
   object-fit: cover;
 }
 
@@ -668,6 +670,7 @@ section p span:hover {
 /* Mobile */
 
 @media (max-width: 800px) {
+
   .monthly-allowance-container {
     margin: 0 auto;
     width: 75%;
