@@ -7,7 +7,7 @@ body {
   --gray-color: #888888;
   --accent-color: #759bd9;
   --dark-overlay: 0.8;
-  --light-overlay: 0.1;
+  --light-overlay: 0.3;
   --dark-rgb: 0;
   --light-rgb: 200;
   overflow: auto;
@@ -549,6 +549,11 @@ section p span:hover {
 }
 
 .too-much-money-spent-complain {
+  color: var(--light-color);
+  display: none;
+}
+
+.empty-money-spent-complain {
   color: var(--light-color);
   display: none;
 }

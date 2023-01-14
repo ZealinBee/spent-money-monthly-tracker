@@ -12,16 +12,14 @@ import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
 //   })
 // });
 
-
 //Program
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
 let thisMonth = new Date().getMonth() + 1;
-if(thisMonth < 10) {
-  thisMonth = `0${thisMonth}`
+if (thisMonth < 10) {
+  thisMonth = `0${thisMonth}`;
 }
 const thisYear = new Date().getFullYear();
-
 
 //Editable variables
 let totalSpentMoney = 0;
@@ -29,8 +27,6 @@ let monthlyAllowance = 0;
 let dailyAllowance = 0;
 let totalDaysUsed = 0;
 let currentDay = 0;
-
-
 
 //Initialize calendar
 var calendarEl = document.getElementById("calendar");
@@ -161,18 +157,37 @@ closeInfoWrapperButton.addEventListener("click", function () {
 //Submit spent money
 const submitSpentMoneyHandler = async (e) => {
   e.preventDefault();
-  if (spentMoneyInput.value > monthlyAllowance * 3) {
-    document
-      .querySelector(".too-much-money-spent-complain")
-      .classList.add("show");
-    document.querySelector(".monthly-allowance-span").textContent =
-      monthlyAllowance;
-    document.querySelector(".spent-money-span").textContent = parseInt(
-      spentMoneyInput.value
-    );
+  if (
+    spentMoneyInput.value > monthlyAllowance * 3 ||
+    spentMoneyInput.value == "" ||
+    spentMoneyInput.value == 0
+  ) {
+    if (spentMoneyInput.value == "" || spentMoneyInput.value == 0) {
+      document
+        .querySelector(".empty-money-spent-complain")
+        .classList.add("show");
+        document
+        .querySelector(".too-much-money-spent-complain")
+        .classList.remove("show");
+    } else {
+      document
+        .querySelector(".too-much-money-spent-complain")
+        .classList.add("show");
+        document
+        .querySelector(".empty-money-spent-complain")
+        .classList.remove("show");
+      document.querySelector(".monthly-allowance-span").textContent =
+        monthlyAllowance;
+      document.querySelector(".spent-money-span").textContent = parseInt(
+        spentMoneyInput.value
+      );
+    }
   } else {
     document
       .querySelector(".too-much-money-spent-complain")
+      .classList.remove("show");
+    document
+      .querySelector(".empty-money-spent-complain")
       .classList.remove("show");
     totalSpentMoney += Number(spentMoneyInput.value);
     spentMoneyInput.value = "";
@@ -191,7 +206,6 @@ const submitSpentMoneyHandler = async (e) => {
       if (currentDay < 10) {
         currentDay = `0${currentDay}`;
       }
-      console.log(thisYear)
       calendar.addEvent({
         title: "Day Used!",
         start: `${thisYear}-${thisMonth}-${currentDay}`,
@@ -365,7 +379,6 @@ function checkLogin(data) {
       calendarSpan.classList.add("hide");
       loginSection.classList.add("hide");
     } else {
-      
       program.classList.add("show");
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
