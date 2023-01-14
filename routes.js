@@ -79,7 +79,7 @@ router.post("/refresh", async (req, res) => {
       }
     );
     token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-      expiresIn: "10s",
+      expiresIn: "1m",
     });
     refreshToken = jwt.sign(
       {
@@ -178,7 +178,7 @@ router.post("/register", async (req, res) => {
         totalSpend: 0,
       });
       token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, {
-        expiresIn: "10s",
+        expiresIn: "1m",
       });
       refreshToken = jwt.sign(
         {
@@ -223,7 +223,7 @@ router.post("/login", async (req, res) => {
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-        expiresIn: "10s",
+        expiresIn: "1m",
       });
         refreshToken = jwt.sign(
           {
