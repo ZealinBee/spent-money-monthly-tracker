@@ -133,7 +133,7 @@ router.post("/forget-password", async (req, res) => {
   }
 });
 
-router.post("/password-reset/:userid/:token", async (req, res) => {
+router.put("/password-reset/:userid/:token", async (req, res) => {
   try {
     const userId = req.params.userid;
     const token = req.params.token;
