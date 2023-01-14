@@ -312,6 +312,10 @@ router.get("/script.js", async (req, res) => {
   res.sendFile(path.join(__dirname + "/script.js"));
 });
 
+router.get("/forgotpassword.css", async (req, res) => {
+  res.sendFile(path.join(__dirname + "/forgotpassword.css"));
+});
+
 router.get("/public/assets/background.jpg", async (req, res) => {
   res.sendFile(path.join(__dirname + "/public/assets/background.jpg"));
 });
