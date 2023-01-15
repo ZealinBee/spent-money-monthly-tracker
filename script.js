@@ -12,6 +12,58 @@ import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
 //   })
 // });
 
+//If Remember me is checked, the app will initialize like if the user is already logged in
+
+function checkLocalStorage() {
+  if (
+    localStorage.getItem("total-have") &&
+    localStorage.getItem("total-spend")
+  ) {
+    console.log(localStorage.getItem("total-have"));
+    loginSection.classList.add("hide");
+    monthlyAllowanceContainer.classList.add("hide");
+    program.classList.add("show");
+    moneyInputWrapper.classList.add("show");
+    calendarSpan.classList.add("show");
+    moneyInputWrapper.classList.remove("hide");
+    calendarSpan.classList.remove("hide");
+    resetButton.classList.add("show");
+    swapThemeButton.classList.add("show-flex");
+    calendar.render();
+    monthlyAllowance = parseInt(localStorage.getItem("total-have"));
+    totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
+    totalSpentMoney = parseInt(localStorage.getItem("total-spend"));
+    totalSpentMoneySpan.textContent = totalSpentMoney;
+    dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
+    dailyAllowanceSpan.textContent = dailyAllowance;
+    totalDaysUsed = totalSpentMoney / dailyAllowance;
+    totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
+    if (totalDaysUsed > numberOfDaysInAMonth) {
+      warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
+        totalDaysUsed - numberOfDaysInAMonth
+      ).toFixed(0)} day(s)`;
+    }
+    calendar.removeAllEvents();
+    currentDay = 0;
+    for (let i = 0; i < totalDaysUsed.toFixed(0); i++) {
+      currentDay += 1;
+      if (currentDay < 10) {
+        currentDay = `0${currentDay}`;
+      }
+
+      calendar.addEvent({
+        title: "Day Used!",
+        start: `${thisYear}-${thisMonth}-${currentDay}`,
+        end: `${thisYear}-${thisMonth}-${currentDay}`,
+      });
+      currentDay = i + 1;
+    }
+  } else {
+  }
+}
+
+window.onload = checkLocalStorage;
+
 //Program
 const program = document.querySelector("#program");
 const moneyInputWrapper = document.querySelector(".money-input-wrapper");
@@ -27,6 +79,7 @@ let monthlyAllowance = 0;
 let dailyAllowance = 0;
 let totalDaysUsed = 0;
 let currentDay = 0;
+let rememberMe = false;
 
 //Initialize calendar
 var calendarEl = document.getElementById("calendar");
@@ -166,14 +219,14 @@ const submitSpentMoneyHandler = async (e) => {
       document
         .querySelector(".empty-money-spent-complain")
         .classList.add("show");
-        document
+      document
         .querySelector(".too-much-money-spent-complain")
         .classList.remove("show");
     } else {
       document
         .querySelector(".too-much-money-spent-complain")
         .classList.add("show");
-        document
+      document
         .querySelector(".empty-money-spent-complain")
         .classList.remove("show");
       document.querySelector(".monthly-allowance-span").textContent =
@@ -363,6 +416,14 @@ function checkLogin(data) {
   let totalHave = data.totalHave;
   let token = data.token;
   let refreshToken = data.refreshtoken;
+  if (document.querySelector("#remember-me").checked) {
+    rememberMe = true;
+    console.log("hi");
+    localStorage.setItem("total-have", totalHave);
+    localStorage.setItem("total-spend", totalSpend);
+  } else {
+    rememberMe = false;
+  }
   if (!answer) {
     loginUserNameInput.classList.add("error-login");
     loginPasswordInput.classList.add("error-login");
@@ -646,6 +707,30 @@ submitForgotPasswordEmail.addEventListener("click", async function () {
       email: forgotPasswordEmailInput.value,
     }),
   });
+});
+
+// Remember me logic
+
+const allTheButtons = document.querySelectorAll("button");
+
+allTheButtons.forEach((button) => {
+  if (
+    localStorage.getItem("total-have") &&
+    localStorage.getItem("total-spend")
+  ) {
+    button.addEventListener("click", function () {
+      localStorage.setItem("total-have", monthlyAllowance);
+      localStorage.setItem("total-spend", totalSpentMoney);
+    });
+  }
+});
+
+const signOutButton = document.querySelector(".sign-out-button");
+
+signOutButton.addEventListener("click", function () {
+  localStorage.clear();
+  location.reload();
+  rememberMe = false;
 });
 
 // const changePasswordSubmit = document.querySelector('#change-password-button')
