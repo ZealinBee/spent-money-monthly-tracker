@@ -1,8 +1,11 @@
 const submitNewPasswordButton = document.querySelector("#submit-new-password");
 
+let currentUrl = window.location.href
+let newCurrentUrl = currentUrl.replace("http://localhost:3000", "")
+
 submitNewPasswordButton.addEventListener("click", async function (e) {
     e.preventDefault()
-    const res = await fetch('/password-reset/:userid/:token', {
+    const res = await fetch(newCurrentUrl, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"},
