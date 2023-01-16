@@ -19,6 +19,12 @@ function checkLocalStorage() {
     localStorage.getItem("total-have") &&
     localStorage.getItem("total-spend")
   ) {
+    sessionStorage.setItem("token", localStorage.getItem("token"));
+    sessionStorage.setItem(
+      "refreshToken",
+      localStorage.getItem("refreshToken")
+    );
+    signOutButton.classList.remove("hide");
     loginSection.classList.add("hide");
     monthlyAllowanceContainer.classList.add("hide");
     program.classList.add("show");
@@ -185,7 +191,7 @@ const updatingTokenHandler = async () => {
       if (message) {
         let token = data.token;
         let refreshToken = data.refreshtoken;
-        
+
         // await sessionStorage.clear();
         await sessionStorage.setItem("token", token);
         await sessionStorage.setItem("refreshToken", refreshToken);
@@ -213,9 +219,9 @@ const submitSpentMoneyHandler = async (e) => {
   if (
     spentMoneyInput.value > monthlyAllowance * 3 ||
     spentMoneyInput.value == "" ||
-    spentMoneyInput.value == 0
+    spentMoneyInput.value <= 0
   ) {
-    if (spentMoneyInput.value == "" || spentMoneyInput.value == 0) {
+    if (spentMoneyInput.value == "" || spentMoneyInput.value <= 0) {
       document
         .querySelector(".empty-money-spent-complain")
         .classList.add("show");
@@ -288,7 +294,6 @@ const submitSpentMoneyHandler = async (e) => {
         body: JSON.stringify({ totalSpend: totalSpentMoney }),
       });
     }
-
   }
 };
 
@@ -423,6 +428,9 @@ function checkLogin(data) {
     rememberMe = true;
     localStorage.setItem("total-have", totalHave);
     localStorage.setItem("total-spend", totalSpend);
+    console.log(token)
+    localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
   } else {
     rememberMe = false;
   }
@@ -442,7 +450,13 @@ function checkLogin(data) {
       calendarSpan.classList.add("hide");
       loginSection.classList.add("hide");
     } else {
-      
+      if (
+        localStorage.getItem("total-have") &&
+        localStorage.getItem("total-spend")
+      ) {
+        document.querySelector(".sign-out-button").classList.remove("hide");
+      }
+
       program.classList.add("show");
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
@@ -527,6 +541,7 @@ resetButton.addEventListener("click", async function () {
     });
   }
   monthlyAllowanceContainer.classList.remove("hide");
+  calendar.removeAllEvents();
 });
 
 // Sign up password validation
@@ -723,6 +738,11 @@ allTheButtons.forEach((button) => {
     button.addEventListener("click", function () {
       localStorage.setItem("total-have", monthlyAllowance);
       localStorage.setItem("total-spend", totalSpentMoney);
+      localStorage.setItem("token", sessionStorage.getItem("token"));
+      localStorage.setItem(
+        "refreshToken",
+        sessionStorage.getItem("refreshToken")
+      );
     });
   }
 });
