@@ -297,13 +297,12 @@ router.delete("/deleterefresh", async (req, res) => {
 router.get("/password-reset/:userid/:token", async (req, res) => {
   try{
   emailtoken=await Token.findOne({token:req.params.token})
-  if (!emailtoken) return res.status(400).json({message:"Invalid link"});
   userInfo = await User.findById(`${req.params.userid}`);
-  if (!userInfo) return res.status(400).json({message:"Invalid link"});
+  if (!userInfo|| !emailtoken) return res.sendFile(path.join(__dirname + "/404.html"));
   res.sendFile(path.join(__dirname + "/password-reset.html"));
   }
   catch(err){
-    return res.status(400).json({message:"Invalid link"});
+    res.sendFile(path.join(__dirname + "/404.html"));
   }
 });
 
