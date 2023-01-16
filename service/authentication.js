@@ -14,8 +14,7 @@ exports.auth = async function (req) {
 };
 
 exports.refrcheck = async function (req) {
-  const token = await req.header("Authorization")
-
+  const token = await req.header("Authorization");
   if (!token) return false;
   let result;
   await jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {

@@ -19,7 +19,6 @@ function checkLocalStorage() {
     localStorage.getItem("total-have") &&
     localStorage.getItem("total-spend")
   ) {
-    console.log(localStorage.getItem("total-have"));
     loginSection.classList.add("hide");
     monthlyAllowanceContainer.classList.add("hide");
     program.classList.add("show");
@@ -181,15 +180,15 @@ const updatingTokenHandler = async () => {
     },
   })
     .then((res) => res.json())
-    .then((data) => {
+    .then(async (data) => {
       let message = data.message;
       if (message) {
         let token = data.token;
         let refreshToken = data.refreshtoken;
-
-        sessionStorage.clear();
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("refreshToken", refreshToken);
+        
+        // await sessionStorage.clear();
+        await sessionStorage.setItem("token", token);
+        await sessionStorage.setItem("refreshToken", refreshToken);
       } else {
         //Force the user to login again
       }
@@ -210,8 +209,7 @@ closeInfoWrapperButton.addEventListener("click", function () {
 //Submit spent money
 const submitSpentMoneyHandler = async (e) => {
   e.preventDefault();
-  console.log("hi")
-  console.log(sessionStorage.getItem('token'))
+
   if (
     spentMoneyInput.value > monthlyAllowance * 3 ||
     spentMoneyInput.value == "" ||
@@ -277,8 +275,10 @@ const submitSpentMoneyHandler = async (e) => {
       },
       body: JSON.stringify({ totalSpend: totalSpentMoney }),
     });
+
     if (ress.status === 400) {
       await updatingTokenHandler();
+
       const ress = await fetch("/money", {
         method: "PUT",
         headers: {
@@ -288,6 +288,7 @@ const submitSpentMoneyHandler = async (e) => {
         body: JSON.stringify({ totalSpend: totalSpentMoney }),
       });
     }
+
   }
 };
 
@@ -420,7 +421,6 @@ function checkLogin(data) {
   let refreshToken = data.refreshtoken;
   if (document.querySelector("#remember-me").checked) {
     rememberMe = true;
-    console.log("hi");
     localStorage.setItem("total-have", totalHave);
     localStorage.setItem("total-spend", totalSpend);
   } else {
@@ -442,6 +442,7 @@ function checkLogin(data) {
       calendarSpan.classList.add("hide");
       loginSection.classList.add("hide");
     } else {
+      
       program.classList.add("show");
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
@@ -492,7 +493,6 @@ resetButton.addEventListener("click", async function () {
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
   warning.textContent = "";
-
   monthlyAllowance = 0;
   totalSpentMoney = 0;
   totalMonthlyAllowanceSpan.textContent = 0;
