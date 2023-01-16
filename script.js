@@ -210,6 +210,8 @@ closeInfoWrapperButton.addEventListener("click", function () {
 //Submit spent money
 const submitSpentMoneyHandler = async (e) => {
   e.preventDefault();
+  console.log("hi")
+  console.log(sessionStorage.getItem('token'))
   if (
     spentMoneyInput.value > monthlyAllowance * 3 ||
     spentMoneyInput.value == "" ||
