@@ -11,7 +11,6 @@ body {
   --dark-rgb: 0;
   --light-rgb: 200;
   overflow: auto;
-
 }
 
 body.dark {
@@ -168,6 +167,12 @@ section {
 .forgot-password {
   z-index: 9999;
   display: none;
+  min-width: 200px;
+  max-width: 40%;
+}
+
+.forgot-password form {
+  width: 100%;
 }
 
 .forgot-password h1 {
@@ -390,11 +395,18 @@ section p span:hover {
   transition: all 0.3s ease-in-out;
 }
 
+.remember-me {
+  display:flex;
+  align-items: center;
+}
+
+
 #remember-me {
   margin: 0;
   margin-left: 1rem;
   margin-right: 0.5rem;
-  padding: 0;
+  width: 18px;
+  height:18px;
 }
 
 .sign-up-error {
@@ -689,14 +701,13 @@ section p span:hover {
 /* Mobile */
 
 @media (max-width: 800px) {
-
   .monthly-allowance-container {
     margin: 0 auto;
     width: 75%;
   }
 
   .money-input-wrapper {
-    margin-top:2rem;
+    margin-top: 2rem;
   }
 
   .money-input-wrapper h1 {
@@ -749,6 +760,10 @@ section p span:hover {
   #remember-me-label {
     font-size: 0.8rem;
   }
+  .forgot-password h1 {
+    font-size: 1.2rem;
+  }
+
   #remember-me {
     margin-right: 0.2rem;
   }
@@ -760,8 +775,55 @@ section p span:hover {
   }
 
   .sign-out-button {
-    bottom:1rem;
-    top:inherit;
+    bottom: 1rem;
+    top: inherit;
   }
 }
 
+.spinner {
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  z-index: 9999999999999999999999999999;
+  background-repeat: no-repeat;
+  background-image: url("./public/assets/background.jpg");
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner::before {
+  z-index: 9999999999999999999999999999;
+  position: absolute;
+  content: "";
+  background: rgba(
+    var(--dark-rgb),
+    var(--dark-rgb),
+    var(--dark-rgb),
+    var(--dark-overlay)
+  );
+  height: 100vh;
+  background-size: 100vw;
+  width: 100%;
+}
+
+.actual-spinner {
+  z-index: 19999999999999999999999999999;
+  width: 125px;
+  height: 125px;
+  border: var(--light-color) 15px solid;
+  border-top-color: var(--accent-color);
+  border-radius: 100%;
+  margin: auto;
+  animation: loading 1.75s ease-out infinite;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}

@@ -19,8 +19,11 @@
         class="background-image-img"
       />
     </div>
+      <div class="spinner ">
+        <div class="actual-spinner"></div>
+      </div>
     <section class="forgot-password">
-      <form action="">
+      <form >
         <div class="login-signup-header-wrapper">
           <h1>Forgot Password</h1>
         </div>
@@ -30,6 +33,8 @@
           >
           <input type="email" id="forgot-password-email-input" />
         </div>
+        <p class="reset-password-success hide">Success! Please check your email for password reset</p>
+        <p class="reset-password-fail hide">Please enter a proper email!</p>
         <p id="return-to-login">Return to Log in</p>
         <button id="submit-forgot-password-email">Submit</button>
       </form>
@@ -211,7 +216,7 @@
               id="date-of-the-month-to-start-on"
             />
           </div> -->
-          <button id="submit-monthly-money" type="submit">Submit</button>
+          <button id="submit-monthly-money" class="submit-monthly-money" type="submit">Submit</button>
           <div class="info-wrapper">
             <h3>Instruction for this app:</h3>
             <p>- Input your monthly allowance</p>
@@ -243,7 +248,7 @@
           id="spent-money-input"
           aria-placeholder="How much you spent"
         />
-        <button id="submit-spent-money" type="submit">Submit</button>
+        <button id="submit-spent-money" type="submit" class="submit-spent-money">Submit</button>
         <p class="too-much-money-spent-complain">
           Your monthly allowance is only
           <span class="monthly-allowance-span">0</span> and you are spending

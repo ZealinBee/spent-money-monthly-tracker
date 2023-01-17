@@ -68,6 +68,10 @@ function checkLocalStorage() {
 }
 
 window.onload = checkLocalStorage;
+window.addEventListener('load', function() {
+  document.querySelector(".spinner").classList.add('hide')
+})
+
 
 //Program
 const program = document.querySelector("#program");
@@ -428,7 +432,6 @@ function checkLogin(data) {
     rememberMe = true;
     localStorage.setItem("total-have", totalHave);
     localStorage.setItem("total-spend", totalSpend);
-    console.log(token)
     localStorage.setItem("token", token);
     localStorage.setItem("refreshToken", refreshToken);
   } else {
@@ -716,40 +719,61 @@ const submitForgotPasswordEmail = document.querySelector(
   "#submit-forgot-password-email"
 );
 
-submitForgotPasswordEmail.addEventListener("click", async function () {
-  const res = await fetch("/forget-password", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: forgotPasswordEmailInput.value,
-    }),
-  });
+submitForgotPasswordEmail.addEventListener("click", async function (e) {
+  e.preventDefault()
+  var properEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  var properEmailTest = properEmail.test(this.value);
+
+  if(properEmailTest) {
+    document.querySelector('.reset-password-success').classList.remove('hide')
+    const res = await fetch("/forget-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: forgotPasswordEmailInput.value,
+      }),
+    });
+  }
+
+
 });
 
 // Remember me logic
 
 const allTheButtons = document.querySelectorAll("button");
 
+
+
 allTheButtons.forEach((button) => {
-  if (
-    localStorage.getItem("total-have") &&
-    localStorage.getItem("total-spend")
-  ) {
-    button.addEventListener("click", function () {
-      localStorage.setItem("total-have", monthlyAllowance);
-      localStorage.setItem("total-spend", totalSpentMoney);
-      localStorage.setItem("token", sessionStorage.getItem("token"));
-      localStorage.setItem(
-        "refreshToken",
-        sessionStorage.getItem("refreshToken")
-      );
-    });
-  }
+  button.addEventListener("click", function () {
+    console.log(button.className);
+    if (
+      button.classList.contains("submit-spent-money") ||
+      button.classList.contains("reset-button")
+    ) {
+      console.log('second checkpoint')
+      if (
+        localStorage.getItem("total-have") !== null &&
+        localStorage.getItem("total-spend") !== null
+      ) {
+        localStorage.setItem("total-have", monthlyAllowance);
+        localStorage.setItem("total-spend", totalSpentMoney);
+        localStorage.setItem("token", sessionStorage.getItem("token"));
+        localStorage.setItem(
+          "refreshToken",
+          sessionStorage.getItem("refreshToken")
+        );
+      } else {
+      }
+    } else {
+    }
+  });
 });
 
 const signOutButton = document.querySelector(".sign-out-button");
 
-signOutButton.addEventListener("click", function () {
+signOutButton.addEventListener("click", async function () {
   localStorage.clear();
   location.reload();
   rememberMe = false;
