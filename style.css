@@ -7,7 +7,7 @@ body {
   --gray-color: #888888;
   --accent-color: #759bd9;
   --dark-overlay: 0.8;
-  --light-overlay: 0.3;
+  --light-overlay: 0.4;
   --dark-rgb: 0;
   --light-rgb: 200;
   overflow: auto;
@@ -396,17 +396,16 @@ section p span:hover {
 }
 
 .remember-me {
-  display:flex;
+  display: flex;
   align-items: center;
 }
-
 
 #remember-me {
   margin: 0;
   margin-left: 1rem;
   margin-right: 0.5rem;
   width: 18px;
-  height:18px;
+  height: 18px;
 }
 
 .sign-up-error {
@@ -609,6 +608,11 @@ section p span:hover {
   margin-bottom: 2rem;
 }
 
+.fc-event-title-container {
+  /* display:flex;
+  justify-content: center; */
+}
+
 .fc-header-toolbar {
   font-size: 1rem;
 }
@@ -698,16 +702,43 @@ section p span:hover {
   z-index: 100;
 }
 
-
 .reset-password-success,
 .reset-password-fail {
+  display: none;
+}
+
+.reset-password-fail {
+  color: red;
+}
+
+.reset-everything-confirmation {
+  background-color: rgb(244, 244, 244);
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  border-radius: 1rem;
+  padding: 0.85rem 1.5rem;
+  z-index: 999;
+  transform: translate(-50%, -50%);
   display:none;
 }
 
-.reset-password-fail {
-  color:red;
+.confirmation-buttons {
+  display:flex;
+  justify-content: center;
+  margin-top:1rem;
 }
 
+.reset-everything-confirmation button {
+  background: var(--accent-color);
+  color: var(--light-color);
+  border-radius: 1.2rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 1rem;
+  margin:0 1rem;
+}
 
 /* Mobile */
 

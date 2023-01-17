@@ -9,6 +9,7 @@
     <script type="module" src="./script.js"></script>
     <link rel="stylesheet" href="./style.css" />
     <link rel="icon" href="/public/assets/icon.png" />
+
     <title>Monthly Allowance Calculator</title>
   </head>
   <body>
@@ -19,11 +20,18 @@
         class="background-image-img"
       />
     </div>
-      <div class="spinner ">
-        <div class="actual-spinner"></div>
+    <div class="spinner">
+      <div class="actual-spinner"></div>
+    </div>
+    <div class="reset-everything-confirmation">
+      <h4>Are you sure you want to reset everything?</h4>
+      <div class="confirmation-buttons">
+        <button class="reset-confirm">Yes!</button>
+        <button class="dont-reset">No</button>
       </div>
+    </div>
     <section class="forgot-password">
-      <form >
+      <form>
         <div class="login-signup-header-wrapper">
           <h1>Forgot Password</h1>
         </div>
@@ -33,7 +41,9 @@
           >
           <input type="email" id="forgot-password-email-input" />
         </div>
-        <p class="reset-password-success">Success! Please check your email for password reset</p>
+        <p class="reset-password-success">
+          Success! Please check your email for password reset
+        </p>
         <p class="reset-password-fail">Please enter a proper email!</p>
         <p id="return-to-login">Return to Log in</p>
         <button id="submit-forgot-password-email">Submit</button>
@@ -216,7 +226,13 @@
               id="date-of-the-month-to-start-on"
             />
           </div> -->
-          <button id="submit-monthly-money" class="submit-monthly-money" type="submit">Submit</button>
+          <button
+            id="submit-monthly-money"
+            class="submit-monthly-money"
+            type="submit"
+          >
+            Submit
+          </button>
           <div class="info-wrapper">
             <h3>Instruction for this app:</h3>
             <p>- Input your monthly allowance</p>
@@ -248,14 +264,22 @@
           id="spent-money-input"
           aria-placeholder="How much you spent"
         />
-        <button id="submit-spent-money" type="submit" class="submit-spent-money">Submit</button>
+        <button
+          id="submit-spent-money"
+          type="submit"
+          class="submit-spent-money"
+        >
+          Submit
+        </button>
         <p class="too-much-money-spent-complain">
           Your monthly allowance is only
           <span class="monthly-allowance-span">0</span> and you are spending
           <span class="spent-money-span">0</span> . Are you sure you put the
           right input?
         </p>
-        <p class="empty-money-spent-complain">Please enter something higher than 0!</p>
+        <p class="empty-money-spent-complain">
+          Please enter something higher than 0!
+        </p>
       </form>
       <h1 id="warning"></h1>
 
@@ -272,6 +296,5 @@
       <button class="reset-button">Reset Everything</button>
     </main>
     <button class="sign-out-button hide">Sign Out</button>
-
   </body>
 </html>

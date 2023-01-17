@@ -43,7 +43,7 @@ function checkLocalStorage() {
     dailyAllowanceSpan.textContent = dailyAllowance;
     totalDaysUsed = totalSpentMoney / dailyAllowance;
     totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-    if (totalDaysUsed > numberOfDaysInAMonth) {
+    if (totalDaysUsed > numberOfDaysInAMonth + 1) {
       warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
         totalDaysUsed - numberOfDaysInAMonth
       ).toFixed(0)} day(s)`;
@@ -257,7 +257,7 @@ const submitSpentMoneyHandler = async (e) => {
     totalSpentMoneySpan.textContent = totalSpentMoney;
     totalDaysUsed = totalSpentMoney / dailyAllowance;
     totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-    if (totalDaysUsed > numberOfDaysInAMonth) {
+    if (totalDaysUsed > numberOfDaysInAMonth + 1) {
       warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
         totalDaysUsed - numberOfDaysInAMonth
       ).toFixed(0)} day(s)`;
@@ -476,7 +476,7 @@ function checkLogin(data) {
       dailyAllowanceSpan.textContent = dailyAllowance;
       totalDaysUsed = totalSpentMoney / dailyAllowance;
       totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-      if (totalDaysUsed > numberOfDaysInAMonth) {
+      if (totalDaysUsed > numberOfDaysInAMonth + 1) {
         warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
           totalDaysUsed - numberOfDaysInAMonth
         ).toFixed(0)} day(s)`;
@@ -502,8 +502,21 @@ function checkLogin(data) {
 
 //Reset button
 const resetButton = document.querySelector(".reset-button");
+const resetConfirmationWrapper = document.querySelector('.reset-everything-confirmation')
+const confirmationReset = document.querySelector(".reset-confirm")
+const resetCancel = document.querySelector(".dont-reset")
 
-resetButton.addEventListener("click", async function () {
+resetButton.addEventListener('click', function() {
+  resetConfirmationWrapper.classList.add('show')
+})
+
+resetCancel.addEventListener('click', function() {
+  resetConfirmationWrapper.classList.remove('show')
+})
+
+confirmationReset.addEventListener("click", async function () {
+  resetConfirmationWrapper.classList.remove('show')
+  document.querySelector('.spinner').classList.add('show')
   document.querySelector("body").classList.remove("dark");
   swapThemeButton.classList.remove("show-flex");
   moneyInputWrapper.classList.remove("show");
@@ -545,6 +558,8 @@ resetButton.addEventListener("click", async function () {
   }
   monthlyAllowanceContainer.classList.remove("hide");
   calendar.removeAllEvents();
+  document.querySelector('.spinner').classList.remove('show')
+
 });
 
 // Sign up password validation
@@ -752,12 +767,10 @@ const allTheButtons = document.querySelectorAll("button");
 
 allTheButtons.forEach((button) => {
   button.addEventListener("click", function () {
-    console.log(button.className);
     if (
       button.classList.contains("submit-spent-money") ||
       button.classList.contains("reset-button")
     ) {
-      console.log('second checkpoint')
       if (
         localStorage.getItem("total-have") !== null &&
         localStorage.getItem("total-spend") !== null
