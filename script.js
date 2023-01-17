@@ -68,10 +68,9 @@ function checkLocalStorage() {
 }
 
 window.onload = checkLocalStorage;
-window.addEventListener('load', function() {
-  document.querySelector(".spinner").classList.add('hide')
-})
-
+window.addEventListener("load", function () {
+  document.querySelector(".spinner").classList.add("hide");
+});
 
 //Program
 const program = document.querySelector("#program");
@@ -135,7 +134,7 @@ const warning = document.querySelector("#warning");
 const submitMonthlyMoneyHandler = async (e) => {
   e.preventDefault();
 
-  if (monthlyAllowanceInput.value == 0) {
+  if (monthlyAllowanceInput.value <= 0) {
     document.querySelector(".money-cant-be-0-warning").classList.add("show");
     document
       .querySelector(".money-cant-be-over-10-million-warning")
@@ -502,21 +501,23 @@ function checkLogin(data) {
 
 //Reset button
 const resetButton = document.querySelector(".reset-button");
-const resetConfirmationWrapper = document.querySelector('.reset-everything-confirmation')
-const confirmationReset = document.querySelector(".reset-confirm")
-const resetCancel = document.querySelector(".dont-reset")
+const resetConfirmationWrapper = document.querySelector(
+  ".reset-everything-confirmation"
+);
+const confirmationReset = document.querySelector(".reset-confirm");
+const resetCancel = document.querySelector(".dont-reset");
 
-resetButton.addEventListener('click', function() {
-  resetConfirmationWrapper.classList.add('show')
-})
+resetButton.addEventListener("click", function () {
+  resetConfirmationWrapper.classList.add("show");
+});
 
-resetCancel.addEventListener('click', function() {
-  resetConfirmationWrapper.classList.remove('show')
-})
+resetCancel.addEventListener("click", function () {
+  resetConfirmationWrapper.classList.remove("show");
+});
 
 confirmationReset.addEventListener("click", async function () {
-  resetConfirmationWrapper.classList.remove('show')
-  document.querySelector('.spinner').classList.add('show')
+  resetConfirmationWrapper.classList.remove("show");
+  document.querySelector(".spinner").classList.add("show");
   document.querySelector("body").classList.remove("dark");
   swapThemeButton.classList.remove("show-flex");
   moneyInputWrapper.classList.remove("show");
@@ -558,8 +559,7 @@ confirmationReset.addEventListener("click", async function () {
   }
   monthlyAllowanceContainer.classList.remove("hide");
   calendar.removeAllEvents();
-  document.querySelector('.spinner').classList.remove('show')
-
+  document.querySelector(".spinner").classList.remove("show");
 });
 
 // Sign up password validation
@@ -735,15 +735,15 @@ const submitForgotPasswordEmail = document.querySelector(
 );
 
 submitForgotPasswordEmail.addEventListener("click", async function (e) {
-  e.preventDefault()
+  e.preventDefault();
   var properEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   var properEmailTest = properEmail.test(forgotPasswordEmailInput.value);
 
-  if(properEmailTest) {
-    document.querySelector('.reset-password-fail').classList.remove('show')
+  if (properEmailTest) {
+    document.querySelector(".reset-password-fail").classList.remove("show");
 
-    document.querySelector('.reset-password-success').classList.add('show')
+    document.querySelector(".reset-password-success").classList.add("show");
     const res = await fetch("/forget-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -751,19 +751,14 @@ submitForgotPasswordEmail.addEventListener("click", async function (e) {
         email: forgotPasswordEmailInput.value,
       }),
     });
-  }else {
-    document.querySelector('.reset-password-fail').classList.add('show')
-
+  } else {
+    document.querySelector(".reset-password-fail").classList.add("show");
   }
-
-
 });
 
 // Remember me logic
 
 const allTheButtons = document.querySelectorAll("button");
-
-
 
 allTheButtons.forEach((button) => {
   button.addEventListener("click", function () {
