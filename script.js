@@ -723,10 +723,12 @@ submitForgotPasswordEmail.addEventListener("click", async function (e) {
   e.preventDefault()
   var properEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  var properEmailTest = properEmail.test(this.value);
+  var properEmailTest = properEmail.test(forgotPasswordEmailInput.value);
 
   if(properEmailTest) {
-    document.querySelector('.reset-password-success').classList.remove('hide')
+    document.querySelector('.reset-password-fail').classList.remove('show')
+
+    document.querySelector('.reset-password-success').classList.add('show')
     const res = await fetch("/forget-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -734,6 +736,9 @@ submitForgotPasswordEmail.addEventListener("click", async function (e) {
         email: forgotPasswordEmailInput.value,
       }),
     });
+  }else {
+    document.querySelector('.reset-password-fail').classList.add('show')
+
   }
 
 

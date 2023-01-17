@@ -698,6 +698,17 @@ section p span:hover {
   z-index: 100;
 }
 
+
+.reset-password-success,
+.reset-password-fail {
+  display:none;
+}
+
+.reset-password-fail {
+  color:red;
+}
+
+
 /* Mobile */
 
 @media (max-width: 800px) {
