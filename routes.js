@@ -47,8 +47,8 @@ const saverefreshtoken= async (refreshToken,email,line,remembered)=>{
   return num
 }
 
-const deleteRefreshToken=async(email,line)=>{
-  await refreshTokenModel.deleteMany({email:email,line:line,remembered:false}, (err, result) => {
+const deleteRefreshToken=async(email,line,remembered)=>{
+  await refreshTokenModel.deleteMany({email:email,line:line,remembered:remembered}, (err, result) => {
     if (err) {
       console.log(false)
     } else {
@@ -225,7 +225,7 @@ router.post("/register", async (req, res) => {
       try {
         await user.save();
         setTimeout(() => {
-          deleteRefreshToken(req.body.email,result)
+          deleteRefreshToken(req.body.email,result,false)
         }, 1000*60*60*6)
         return res
           .status(201)
@@ -255,7 +255,7 @@ router.post("/logout",async (req,res)=>{
     });
     if (!isfound) return res.status(500).json({ message: false })
     const line=tokenDB.line
-    deleteRefreshToken(email,line)
+    deleteRefreshToken(email,line,true)
     return res.status(200).json({ message: true })
     })
   } catch(err){
@@ -295,7 +295,7 @@ router.post("/login", async (req, res) => {
         if (!result) return res.status(500).json({ message: "too many devices" });
     }
     setTimeout(() => {
-      deleteRefreshToken(req.body.email,result)
+      deleteRefreshToken(req.body.email,result,false)
     }, 1000*60*60*6)//6 hours
     return res.status(200).json({
       answer: answer,

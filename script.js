@@ -198,12 +198,12 @@ const updatingTokenHandler = async () => {
         // await sessionStorage.clear();
         await sessionStorage.setItem("token", token);
         await sessionStorage.setItem("refreshToken", refreshToken);
-      } else if(message == "Bad request"){
+      } else if (message == "Bad request") {
         //Force the user to login again
         localStorage.clear();
         rememberMe = false;
         location.reload();
-        alert("Sorry, something wrong happened, please login again")
+        alert("Sorry, something wrong happened, please login again");
       }
     });
 };
@@ -794,13 +794,17 @@ allTheButtons.forEach((button) => {
 const signOutButton = document.querySelector(".sign-out-button");
 
 signOutButton.addEventListener("click", async function () {
+  const res = await fetch("/logout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${sessionStorage.getItem("refreshToken")}`,
+    },
+  });
   localStorage.clear();
-  location.reload();
+  await location.reload();
   rememberMe = false;
 });
-
-
-
 
 // const changePasswordSubmit = document.querySelector('#change-password-button')
 
