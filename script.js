@@ -88,6 +88,7 @@ let dailyAllowance = 0;
 let totalDaysUsed = 0;
 let currentDay = 0;
 let rememberMe = false;
+let useAsGuest = false;
 
 //Initialize calendar
 var calendarEl = document.getElementById("calendar");
@@ -157,17 +158,7 @@ const submitMonthlyMoneyHandler = async (e) => {
     totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
     dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
     dailyAllowanceSpan.textContent = dailyAllowance;
-    const ress = await fetch("/money", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ totalHave: monthlyAllowance }),
-    });
-    if (ress.status === 400) {
-      await updatingTokenHandler();
-
+    if (useAsGuest === false) {
       const ress = await fetch("/money", {
         method: "PUT",
         headers: {
@@ -176,6 +167,18 @@ const submitMonthlyMoneyHandler = async (e) => {
         },
         body: JSON.stringify({ totalHave: monthlyAllowance }),
       });
+      if (ress.status === 400) {
+        await updatingTokenHandler();
+
+        const ress = await fetch("/money", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ totalHave: monthlyAllowance }),
+        });
+      }
     }
   }
 };
@@ -326,6 +329,7 @@ document
   .addEventListener("click", function () {
     signUpSection.classList.toggle("hide");
     program.classList.add("show");
+    useAsGuest = true;
   });
 
 signUpButton.addEventListener("click", async function (e) {
@@ -429,8 +433,8 @@ async function loginUser(e) {
 }
 
 function checkLogin(data) {
-  if(data.message === 'too many devices') {
-    alert("Too many devices logged in!")
+  if (data.message === "too many devices") {
+    alert("Too many devices logged in!");
   }
   let answer = data.answer;
   let totalSpend = data.totalSpend;
@@ -540,21 +544,7 @@ confirmationReset.addEventListener("click", async function () {
   totalSpentMoneySpan.textContent = 0;
   dailyAllowanceSpan.textContent = 0;
   totalDaysUsedSpan.textContent = 0;
-  const ress = await fetch("/money", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-    },
-    body: JSON.stringify({
-      totalHave: 0,
-      totalSpend: 0,
-    }),
-  });
-
-  if (ress.status === 400) {
-    await updatingTokenHandler();
-
+  if (useAsGuest == false) {
     const ress = await fetch("/money", {
       method: "PUT",
       headers: {
@@ -566,7 +556,24 @@ confirmationReset.addEventListener("click", async function () {
         totalSpend: 0,
       }),
     });
+
+    if (ress.status === 400) {
+      await updatingTokenHandler();
+
+      const ress = await fetch("/money", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          totalHave: 0,
+          totalSpend: 0,
+        }),
+      });
+    }
   }
+
   monthlyAllowanceContainer.classList.remove("hide");
   calendar.removeAllEvents();
   document.querySelector(".spinner").classList.remove("show");
