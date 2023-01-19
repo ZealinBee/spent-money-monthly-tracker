@@ -12,29 +12,49 @@ const mailer = require("./mail.js");
 const router = express.Router();
 
 
-const saverefreshtoken=async (refreshToken,email,line)=>{
+const saverefreshtoken=async (refreshToken,email,line,remembered)=>{
   let num=line
+  let allbusy=true
   if (line===0){
   num=1
   tokens=await refreshTokenModel.findOne({email:email,line:num})
   while (tokens){
-  if (num==10) return false
+  if (num==10){
+    for (let i=1;i<=10;i++){
+      token=await refreshTokenModel.findOne({email:email,line:i})
+      if (!token.remembered) {allbusy=false;break;}
+    }
+    if (!allbusy)
+    refreshTokenModel.deleteMany({email:email,line:i})
+    else return false
+    num=0
+  }
   num++;
   tokens=await refreshTokenModel.findOne({email:email,line:num})
   }}
   crypt.cryptToken(refreshToken).then((hash)=>{
         refrtoken = new refreshTokenModel({
-          email: email,
-          token1: hash[0],
+          email:email,
+          token1:hash[0],
           token2:hash[1],
           token3:hash[2],
           line:num,
+          remembered:remembered,
           expired: false,
         }).save();
       })
-  return true
+  return num
 }
 
+const deleteRefreshToken=async(email,line)=>{
+  await refreshTokenModel.deleteMany({email:email,line:line,remembered:false}, (err, result) => {
+    if (err) {
+      console.log(false)
+    } else {
+      console.log(true)
+    }
+  });
+}
 
 router.post("/refresh", async (req, res) => {
   try {
@@ -57,6 +77,7 @@ router.post("/refresh", async (req, res) => {
       }
     });
     if (!isfound) return res.status(400).json({ message: "Bad request2" });
+    remembered=tokenDB.remembered
     if (tokenDB.expired) {
       await refreshTokenModel.deleteMany(
         { email: email },
@@ -87,7 +108,7 @@ router.post("/refresh", async (req, res) => {
       },
       process.env.REFRESH_TOKEN_SECRET
     );
-    saverefreshtoken(refreshToken,email,tokenDB.line)
+    saverefreshtoken(refreshToken,email,tokenDB.line,remembered)
     return res
       .status(201)
       .json({ message: true, token: token, refreshtoken: refreshToken });})
@@ -180,7 +201,7 @@ router.post("/register", async (req, res) => {
   let user;
   crypt
     .cryptPassword(req.body.password)
-    .then((hash) => {
+    .then(async (hash) => {
       user = new User({
         email: req.body.email,
         password: hash,
@@ -196,13 +217,16 @@ router.post("/register", async (req, res) => {
         },
         process.env.REFRESH_TOKEN_SECRET
       );
-      result=saverefreshtoken(refreshToken,req.body.email,0)
+      result=await saverefreshtoken(refreshToken,req.body.email,0,false)
       if (!result) return res.status(500).json({ message: 'too many devices' });
       return user;
     })
     .then(async () => {
       try {
         await user.save();
+        setTimeout(() => {
+          deleteRefreshToken(req.body.email,result)
+        }, 1000*60*30)
         return res
           .status(201)
           .json({ message: true, token: token, refreshtoken: refreshToken });
@@ -241,9 +265,12 @@ router.post("/login", async (req, res) => {
           },
           process.env.REFRESH_TOKEN_SECRET
         );
-        result=saverefreshtoken(refreshToken,req.body.email,0)
+        result=await saverefreshtoken(refreshToken,req.body.email,0,req.body.remembered)
         if (!result) return res.status(500).json({ message: "too many devices" });
     }
+    setTimeout(() => {
+      deleteRefreshToken(req.body.email,result)
+    }, 10000*60*30)
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,
