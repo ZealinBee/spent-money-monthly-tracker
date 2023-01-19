@@ -19,7 +19,12 @@ function checkLocalStorage() {
     localStorage.getItem("total-have") &&
     localStorage.getItem("total-spend")
   ) {
-    console.log(localStorage.getItem("total-have"));
+    sessionStorage.setItem("token", localStorage.getItem("token"));
+    sessionStorage.setItem(
+      "refreshToken",
+      localStorage.getItem("refreshToken")
+    );
+    signOutButton.classList.remove("hide");
     loginSection.classList.add("hide");
     monthlyAllowanceContainer.classList.add("hide");
     program.classList.add("show");
@@ -38,7 +43,7 @@ function checkLocalStorage() {
     dailyAllowanceSpan.textContent = dailyAllowance;
     totalDaysUsed = totalSpentMoney / dailyAllowance;
     totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-    if (totalDaysUsed > numberOfDaysInAMonth) {
+    if (totalDaysUsed > numberOfDaysInAMonth + 1) {
       warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
         totalDaysUsed - numberOfDaysInAMonth
       ).toFixed(0)} day(s)`;
@@ -63,6 +68,9 @@ function checkLocalStorage() {
 }
 
 window.onload = checkLocalStorage;
+window.addEventListener("load", function () {
+  document.querySelector(".spinner").classList.add("hide");
+});
 
 //Program
 const program = document.querySelector("#program");
@@ -126,7 +134,7 @@ const warning = document.querySelector("#warning");
 const submitMonthlyMoneyHandler = async (e) => {
   e.preventDefault();
 
-  if (monthlyAllowanceInput.value == 0) {
+  if (monthlyAllowanceInput.value <= 0) {
     document.querySelector(".money-cant-be-0-warning").classList.add("show");
     document
       .querySelector(".money-cant-be-over-10-million-warning")
@@ -181,15 +189,15 @@ const updatingTokenHandler = async () => {
     },
   })
     .then((res) => res.json())
-    .then((data) => {
+    .then(async (data) => {
       let message = data.message;
       if (message) {
         let token = data.token;
         let refreshToken = data.refreshtoken;
 
-        sessionStorage.clear();
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("refreshToken", refreshToken);
+        // await sessionStorage.clear();
+        await sessionStorage.setItem("token", token);
+        await sessionStorage.setItem("refreshToken", refreshToken);
       } else {
         //Force the user to login again
       }
@@ -210,14 +218,13 @@ closeInfoWrapperButton.addEventListener("click", function () {
 //Submit spent money
 const submitSpentMoneyHandler = async (e) => {
   e.preventDefault();
-  console.log("hi")
-  console.log(sessionStorage.getItem('token'))
+
   if (
     spentMoneyInput.value > monthlyAllowance * 3 ||
     spentMoneyInput.value == "" ||
-    spentMoneyInput.value == 0
+    spentMoneyInput.value <= 0
   ) {
-    if (spentMoneyInput.value == "" || spentMoneyInput.value == 0) {
+    if (spentMoneyInput.value == "" || spentMoneyInput.value <= 0) {
       document
         .querySelector(".empty-money-spent-complain")
         .classList.add("show");
@@ -249,7 +256,7 @@ const submitSpentMoneyHandler = async (e) => {
     totalSpentMoneySpan.textContent = totalSpentMoney;
     totalDaysUsed = totalSpentMoney / dailyAllowance;
     totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-    if (totalDaysUsed > numberOfDaysInAMonth) {
+    if (totalDaysUsed > numberOfDaysInAMonth + 1) {
       warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
         totalDaysUsed - numberOfDaysInAMonth
       ).toFixed(0)} day(s)`;
@@ -277,8 +284,10 @@ const submitSpentMoneyHandler = async (e) => {
       },
       body: JSON.stringify({ totalSpend: totalSpentMoney }),
     });
+
     if (ress.status === 400) {
       await updatingTokenHandler();
+
       const ress = await fetch("/money", {
         method: "PUT",
         headers: {
@@ -420,9 +429,10 @@ function checkLogin(data) {
   let refreshToken = data.refreshtoken;
   if (document.querySelector("#remember-me").checked) {
     rememberMe = true;
-    console.log("hi");
     localStorage.setItem("total-have", totalHave);
     localStorage.setItem("total-spend", totalSpend);
+    localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
   } else {
     rememberMe = false;
   }
@@ -442,6 +452,13 @@ function checkLogin(data) {
       calendarSpan.classList.add("hide");
       loginSection.classList.add("hide");
     } else {
+      if (
+        localStorage.getItem("total-have") &&
+        localStorage.getItem("total-spend")
+      ) {
+        document.querySelector(".sign-out-button").classList.remove("hide");
+      }
+
       program.classList.add("show");
       moneyInputWrapper.classList.add("show");
       calendarSpan.classList.add("show");
@@ -458,7 +475,7 @@ function checkLogin(data) {
       dailyAllowanceSpan.textContent = dailyAllowance;
       totalDaysUsed = totalSpentMoney / dailyAllowance;
       totalDaysUsedSpan.textContent = totalDaysUsed.toFixed(0);
-      if (totalDaysUsed > numberOfDaysInAMonth) {
+      if (totalDaysUsed > numberOfDaysInAMonth + 1) {
         warning.textContent = `Bruh, you have exceeded the monthly allowance by ${(
           totalDaysUsed - numberOfDaysInAMonth
         ).toFixed(0)} day(s)`;
@@ -484,15 +501,29 @@ function checkLogin(data) {
 
 //Reset button
 const resetButton = document.querySelector(".reset-button");
+const resetConfirmationWrapper = document.querySelector(
+  ".reset-everything-confirmation"
+);
+const confirmationReset = document.querySelector(".reset-confirm");
+const resetCancel = document.querySelector(".dont-reset");
 
-resetButton.addEventListener("click", async function () {
+resetButton.addEventListener("click", function () {
+  resetConfirmationWrapper.classList.add("show");
+});
+
+resetCancel.addEventListener("click", function () {
+  resetConfirmationWrapper.classList.remove("show");
+});
+
+confirmationReset.addEventListener("click", async function () {
+  resetConfirmationWrapper.classList.remove("show");
+  document.querySelector(".spinner").classList.add("show");
   document.querySelector("body").classList.remove("dark");
   swapThemeButton.classList.remove("show-flex");
   moneyInputWrapper.classList.remove("show");
   calendarSpan.classList.remove("show");
   resetButton.classList.remove("show");
   warning.textContent = "";
-
   monthlyAllowance = 0;
   totalSpentMoney = 0;
   totalMonthlyAllowanceSpan.textContent = 0;
@@ -527,6 +558,8 @@ resetButton.addEventListener("click", async function () {
     });
   }
   monthlyAllowanceContainer.classList.remove("hide");
+  calendar.removeAllEvents();
+  document.querySelector(".spinner").classList.remove("show");
 });
 
 // Sign up password validation
@@ -701,14 +734,26 @@ const submitForgotPasswordEmail = document.querySelector(
   "#submit-forgot-password-email"
 );
 
-submitForgotPasswordEmail.addEventListener("click", async function () {
-  const res = await fetch("/forget-password", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: forgotPasswordEmailInput.value,
-    }),
-  });
+submitForgotPasswordEmail.addEventListener("click", async function (e) {
+  e.preventDefault();
+  var properEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  var properEmailTest = properEmail.test(forgotPasswordEmailInput.value);
+
+  if (properEmailTest) {
+    document.querySelector(".reset-password-fail").classList.remove("show");
+
+    document.querySelector(".reset-password-success").classList.add("show");
+    const res = await fetch("/forget-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: forgotPasswordEmailInput.value,
+      }),
+    });
+  } else {
+    document.querySelector(".reset-password-fail").classList.add("show");
+  }
 });
 
 // Remember me logic
@@ -716,20 +761,32 @@ submitForgotPasswordEmail.addEventListener("click", async function () {
 const allTheButtons = document.querySelectorAll("button");
 
 allTheButtons.forEach((button) => {
-  if (
-    localStorage.getItem("total-have") &&
-    localStorage.getItem("total-spend")
-  ) {
-    button.addEventListener("click", function () {
-      localStorage.setItem("total-have", monthlyAllowance);
-      localStorage.setItem("total-spend", totalSpentMoney);
-    });
-  }
+  button.addEventListener("click", function () {
+    if (
+      button.classList.contains("submit-spent-money") ||
+      button.classList.contains("reset-button")
+    ) {
+      if (
+        localStorage.getItem("total-have") !== null &&
+        localStorage.getItem("total-spend") !== null
+      ) {
+        localStorage.setItem("total-have", monthlyAllowance);
+        localStorage.setItem("total-spend", totalSpentMoney);
+        localStorage.setItem("token", sessionStorage.getItem("token"));
+        localStorage.setItem(
+          "refreshToken",
+          sessionStorage.getItem("refreshToken")
+        );
+      } else {
+      }
+    } else {
+    }
+  });
 });
 
 const signOutButton = document.querySelector(".sign-out-button");
 
-signOutButton.addEventListener("click", function () {
+signOutButton.addEventListener("click", async function () {
   localStorage.clear();
   location.reload();
   rememberMe = false;

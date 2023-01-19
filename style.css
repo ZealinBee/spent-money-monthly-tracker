@@ -7,11 +7,10 @@ body {
   --gray-color: #888888;
   --accent-color: #759bd9;
   --dark-overlay: 0.8;
-  --light-overlay: 0.3;
+  --light-overlay: 0.4;
   --dark-rgb: 0;
   --light-rgb: 200;
   overflow: auto;
-
 }
 
 body.dark {
@@ -168,6 +167,12 @@ section {
 .forgot-password {
   z-index: 9999;
   display: none;
+  min-width: 200px;
+  max-width: 40%;
+}
+
+.forgot-password form {
+  width: 100%;
 }
 
 .forgot-password h1 {
@@ -390,11 +395,17 @@ section p span:hover {
   transition: all 0.3s ease-in-out;
 }
 
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
 #remember-me {
   margin: 0;
   margin-left: 1rem;
   margin-right: 0.5rem;
-  padding: 0;
+  width: 18px;
+  height: 18px;
 }
 
 .sign-up-error {
@@ -559,7 +570,7 @@ section p span:hover {
 }
 
 .money-input-wrapper {
-  margin-top: 2rem;
+  margin-top: 3.5rem;
   display: none;
 }
 
@@ -595,6 +606,11 @@ section p span:hover {
   display: none;
   margin-top: 1rem;
   margin-bottom: 2rem;
+}
+
+.fc-event-title-container {
+  /* display:flex;
+  justify-content: center; */
 }
 
 .fc-header-toolbar {
@@ -672,13 +688,68 @@ section p span:hover {
   border-bottom: 2px red solid;
 }
 
+.sign-out-button {
+  position: absolute;
+  top: 10px;
+  left: 19px;
+  background: var(--accent-color);
+  color: var(--light-color);
+  border-radius: 1.2rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  z-index: 100;
+}
+
+.reset-password-success,
+.reset-password-fail {
+  display: none;
+}
+
+.reset-password-fail {
+  color: red;
+}
+
+.reset-everything-confirmation {
+  background-color: rgb(244, 244, 244);
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  border-radius: 1rem;
+  padding: 0.85rem 1.5rem;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  display:none;
+}
+
+.confirmation-buttons {
+  display:flex;
+  justify-content: center;
+  margin-top:1rem;
+}
+
+.reset-everything-confirmation button {
+  background: var(--accent-color);
+  color: var(--light-color);
+  border-radius: 1.2rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 1rem;
+  margin:0 1rem;
+}
+
 /* Mobile */
 
 @media (max-width: 800px) {
-
   .monthly-allowance-container {
     margin: 0 auto;
     width: 75%;
+  }
+
+  .money-input-wrapper {
+    margin-top: 2rem;
   }
 
   .money-input-wrapper h1 {
@@ -731,6 +802,10 @@ section p span:hover {
   #remember-me-label {
     font-size: 0.8rem;
   }
+  .forgot-password h1 {
+    font-size: 1.2rem;
+  }
+
   #remember-me {
     margin-right: 0.2rem;
   }
@@ -739,5 +814,58 @@ section p span:hover {
     min-width: 100vw;
     height: 100vh;
     object-fit: cover;
+  }
+
+  .sign-out-button {
+    bottom: 1rem;
+    top: inherit;
+  }
+}
+
+.spinner {
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  z-index: 9999999999999999999999999999;
+  background-repeat: no-repeat;
+  background-image: url("./public/assets/background.jpg");
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner::before {
+  z-index: 9999999999999999999999999999;
+  position: absolute;
+  content: "";
+  background: rgba(
+    var(--dark-rgb),
+    var(--dark-rgb),
+    var(--dark-rgb),
+    var(--dark-overlay)
+  );
+  height: 100vh;
+  background-size: 100vw;
+  width: 100%;
+}
+
+.actual-spinner {
+  z-index: 19999999999999999999999999999;
+  width: 125px;
+  height: 125px;
+  border: var(--light-color) 15px solid;
+  border-top-color: var(--accent-color);
+  border-radius: 100%;
+  margin: auto;
+  animation: loading 1.75s ease-out infinite;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
   }
 }

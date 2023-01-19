@@ -32,7 +32,7 @@ const saverefreshtoken=async (refreshToken,email,line,remembered)=>{
   num++;
   tokens=await refreshTokenModel.findOne({email:email,line:num})
   }}
-  crypt.cryptToken(refreshToken).then((hash)=>{
+  await crypt.cryptToken(refreshToken).then((hash)=>{
         refrtoken = new refreshTokenModel({
           email:email,
           token1:hash[0],
@@ -68,9 +68,8 @@ router.post("/refresh", async (req, res) => {
     tokensDB = await refreshTokenModel.find({email:email});
     isfound=false
     tokenDB=0;
-    let num=0
     tokensDB.forEach(tokenelem  => {
-      num++
+
       if ((bcrypt.compareSync(token.slice(0,50),tokenelem.token1))&&(bcrypt.compareSync(token.slice(50,100),tokenelem.token2))&&(bcrypt.compareSync(token.slice(100,token.length),tokenelem.token3))){
       isfound=true
       tokenDB=tokenelem
@@ -100,7 +99,7 @@ router.post("/refresh", async (req, res) => {
       }
     );
     token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-      expiresIn: "3s",
+      expiresIn: "10s",
     });
     refreshToken = jwt.sign(
       {
@@ -209,7 +208,7 @@ router.post("/register", async (req, res) => {
         totalSpend: 0,
       });
       token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, {
-        expiresIn: "3s",
+        expiresIn: "10s",
       });
       refreshToken = jwt.sign(
         {
@@ -257,7 +256,7 @@ router.post("/login", async (req, res) => {
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-        expiresIn: "3s",
+        expiresIn: "10s",
       });
         refreshToken = jwt.sign(
           {
