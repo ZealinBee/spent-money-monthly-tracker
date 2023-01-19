@@ -1,5 +1,5 @@
 //Imports
-import numberOfDaysInAMonth from "https://spent-money-monthly-tracker-production.up.railway.app/";
+import numberOfDaysInAMonth from "https://spent-money-monthly-tracker-production.up.railway.app/main.js";
 
 // window.addEventListener("beforeunload", function (e) {
 //   e.preventDefault();
