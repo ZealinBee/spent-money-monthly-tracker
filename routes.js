@@ -9,7 +9,6 @@ const refreshTokenModel = require("./models/refreshtoken");
 const crypt = require("./cryptography");
 const auth = require("./service/authentication");
 const mailer = require("./mail.js");
-const { findOne } = require("./models/user");
 const router = express.Router();
 
 
@@ -21,14 +20,15 @@ const saverefreshtoken= async (refreshToken,email,line,remembered)=>{
   tokens=await refreshTokenModel.findOne({email:email,line:num})
   while (tokens){
   if (num==10){
-    for (let i=1;i<=10;i++){
+    let i;
+    for (i=1;i<=10;i++){
       token=await refreshTokenModel.findOne({email:email,line:i})
       if (!token.remembered) {allbusy=false;break;}
     }
     if (!allbusy)
-    refreshTokenModel.deleteMany({email:email,line:i})
+    await refreshTokenModel.deleteMany({email:email,line:i})
     else return false
-    num=0
+    num=i-1
   }
   num++;
   tokens=await refreshTokenModel.findOne({email:email,line:num})
@@ -162,7 +162,14 @@ router.put("/password-reset/:userid/:token", async (req, res) => {
     const token=req.params.token
     const tokenInfo = await Token.find({ token: token });
     if (tokenInfo[0].expdate < now){
-      return res.status(400).send("invalid link");}
+      Token.deleteOne({token:token},(err,result)=>{
+        if (err){
+          return res.status(500).json({ message: err.message });
+        }
+      else
+      return res.status(400).send("invalid link");
+    })
+      }
     const userEmail = userInfo.email;
     const tokenEmail = tokenInfo[0].email;
     if (userEmail === tokenEmail) {
@@ -181,7 +188,6 @@ router.put("/password-reset/:userid/:token", async (req, res) => {
                       return res.status(500).json({ message: err.message });
                     }
                     else {
-                        console.log(req.body.id)
                         res.status(200).json({ result: "done" });
                     }})
               
@@ -192,7 +198,6 @@ router.put("/password-reset/:userid/:token", async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err.message)
     return res.status(500).json({ message: err.message });
   }
 });
@@ -217,13 +222,13 @@ router.post("/register", async (req, res) => {
         },
         process.env.REFRESH_TOKEN_SECRET
       );
-      result=await saverefreshtoken(refreshToken,req.body.email,0,false)
-      if (!result) return res.status(500).json({ message: 'too many devices' });
       return user;
     })
     .then(async () => {
       try {
         await user.save();
+        result=await saverefreshtoken(refreshToken,req.body.email,0,false)
+        if (!result) return res.status(500).json({ message: 'too many devices' });
         setTimeout(() => {
           deleteRefreshToken(req.body.email,result)
         }, 1000*60*60*6)
