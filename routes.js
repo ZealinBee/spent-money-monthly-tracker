@@ -9,6 +9,7 @@ const refreshTokenModel = require("./models/refreshtoken");
 const crypt = require("./cryptography");
 const auth = require("./service/authentication");
 const mailer = require("./mail.js");
+const { findOne } = require("./models/user");
 const router = express.Router();
 
 
@@ -236,12 +237,38 @@ router.post("/register", async (req, res) => {
     });
 });
 
+router.post("/logout",async (req,res)=>{
+  try{
+    token = req.header("Authorization");
+    if (!token) return res.status(500).json({message:false})
+    auth.refrcheck(req).then(async (result) => {
+    if (!result) return res.status(500).json({message:false})
+    const email=result.email
+    tokensDB = await refreshTokenModel.find({email:email});
+    isfound=false
+    tokenDB=0;
+    tokensDB.forEach(tokenelem  => {
+      if ((bcrypt.compareSync(token.slice(0,50),tokenelem.token1))&&(bcrypt.compareSync(token.slice(50,100),tokenelem.token2))&&(bcrypt.compareSync(token.slice(100,token.length),tokenelem.token3))){
+      isfound=true
+      tokenDB=tokenelem
+      }
+    });
+    if (!isfound) return res.status(500).json({ message: false })
+    const line=tokenDB.line
+    deleteRefreshToken(email,line)
+    return res.status(200).json({ message: true })
+    })
+  } catch(err){
+    return res.status(500).json({ message: err.message });
+  }
 
+})
 
 router.post("/login", async (req, res) => {
   try {
     const user = await User.find({ email: req.body.email });
     if (!user[0]) return res.status(500).json({ message: "doesn't exist" });
+    let remembered=req.body.remembered||0
     let answer = false;
     let token = "0";
     let refreshtoken = "0";
@@ -264,7 +291,7 @@ router.post("/login", async (req, res) => {
           },
           process.env.REFRESH_TOKEN_SECRET
         );
-        result=await saverefreshtoken(refreshToken,req.body.email,0,req.body.remembered)
+        result=await saverefreshtoken(refreshToken,req.body.email,0,remembered)
         if (!result) return res.status(500).json({ message: "too many devices" });
     }
     setTimeout(() => {
