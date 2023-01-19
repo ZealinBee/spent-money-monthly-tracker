@@ -191,15 +191,19 @@ const updatingTokenHandler = async () => {
     .then((res) => res.json())
     .then(async (data) => {
       let message = data.message;
-      if (message) {
+      if (message === true) {
         let token = data.token;
         let refreshToken = data.refreshtoken;
 
         // await sessionStorage.clear();
         await sessionStorage.setItem("token", token);
         await sessionStorage.setItem("refreshToken", refreshToken);
-      } else {
+      } else if(message == "Bad request"){
         //Force the user to login again
+        localStorage.clear();
+        rememberMe = false;
+        location.reload();
+        alert("Sorry, something wrong happened, please login again")
       }
     });
 };
@@ -408,7 +412,6 @@ async function loginUser(e) {
     if (document.querySelector("#remember-me").checked) {
       rememberMe = true;
     }
-    console.log(rememberMe);
     const response = await fetch("/login", {
       method: "POST",
       headers: {
@@ -795,6 +798,9 @@ signOutButton.addEventListener("click", async function () {
   location.reload();
   rememberMe = false;
 });
+
+
+
 
 // const changePasswordSubmit = document.querySelector('#change-password-button')
 
