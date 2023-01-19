@@ -269,7 +269,7 @@ router.post("/login", async (req, res) => {
     }
     setTimeout(() => {
       deleteRefreshToken(req.body.email,result)
-    }, 10000*60*30)
+    }, 10000*10)
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,
