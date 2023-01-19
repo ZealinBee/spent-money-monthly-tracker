@@ -395,7 +395,6 @@ loginButton.addEventListener("click", loginUser);
 
 async function loginUser(e) {
   e.preventDefault();
-
   let userNameInputValue = loginUserNameInput.value;
   let passwordInputValue = loginPasswordInput.value;
   if (passwordInputValue.length == 0 || userNameInputValue.length == 0) {
@@ -406,6 +405,10 @@ async function loginUser(e) {
     fillEmptyErrorMessage.classList.remove("show");
     loginUserNameInput.classList.remove("error-login");
     loginPasswordInput.classList.remove("error-login");
+    if (document.querySelector("#remember-me").checked) {
+      rememberMe = true;
+    }
+    console.log(rememberMe);
     const response = await fetch("/login", {
       method: "POST",
       headers: {
@@ -414,6 +417,7 @@ async function loginUser(e) {
       body: JSON.stringify({
         email: userNameInputValue,
         password: passwordInputValue,
+        remembered: rememberMe,
       }),
     })
       .then((response) => response.json())
