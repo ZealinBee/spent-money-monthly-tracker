@@ -429,6 +429,9 @@ async function loginUser(e) {
 }
 
 function checkLogin(data) {
+  if(data.message === 'too many devices') {
+    alert("Too many devices logged in!")
+  }
   let answer = data.answer;
   let totalSpend = data.totalSpend;
   let totalHave = data.totalHave;
