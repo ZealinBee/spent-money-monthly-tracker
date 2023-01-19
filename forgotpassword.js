@@ -1,7 +1,7 @@
 const submitNewPasswordButton = document.querySelector("#submit-new-password");
 
 let currentUrl = window.location.href;
-let newCurrentUrl = currentUrl.replace("http://localhost:3000", "");
+let newCurrentUrl = currentUrl.replace("https://spent-money-monthly-tracker-production.up.railway.app/", "");
 
 const eyeToggles = document.querySelectorAll(".eye-icon");
 const eyeIconLogin = document.querySelector("#eye-icon-login");
