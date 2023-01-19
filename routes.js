@@ -33,8 +33,8 @@ const saverefreshtoken= async (refreshToken,email,line,remembered)=>{
   num++;
   tokens=await refreshTokenModel.findOne({email:email,line:num})
   }}
-  await crypt.cryptToken(refreshToken).then((hash)=>{
-        refrtoken = new refreshTokenModel({
+  await crypt.cryptToken(refreshToken).then(async (hash)=>{
+        refrtoken = await new refreshTokenModel({
           email:email,
           token1:hash[0],
           token2:hash[1],
@@ -60,9 +60,12 @@ const deleteRefreshToken=async(email,line,remembered)=>{
 router.post("/refresh", async (req, res) => {
   try {
     token = req.header("Authorization");
-    if (!token) return res.status(400).json({ message: "Bad request" });
+    if (!token) {console.log("1lmao")
+      return res.status(400).json({ message: "Bad request" });
+  }
     auth.refrcheck(req).then(async (result) => {
       if (!result) {
+        console.log('2lmao')
         return res.status(400).json({ message: "Bad request" });
       }
     const email=result.email
@@ -76,17 +79,19 @@ router.post("/refresh", async (req, res) => {
       tokenDB=tokenelem
       }
     });
-    if (!isfound) return res.status(400).json({ message: "Bad request" });
+    if (!isfound) {console.log('3lmao'); return res.status(400).json({ message: "Bad request" })};
     remembered=tokenDB.remembered
     if (tokenDB.expired) {
       await refreshTokenModel.deleteMany(
         { email: email },
         (err, result) => {
           if (err) {
+            console.log('lmao4')
             return res.status(500).json({ message: "Bad request" });
           }
         }
       );
+      console.log('lmao5')
       return res.status(400).json({ message: "Bad request" });
     }
     await refreshTokenModel.findOneAndUpdate(
@@ -95,12 +100,13 @@ router.post("/refresh", async (req, res) => {
       { new: true },
       (err, result) => {
         if (err) {
+          console.log('lmao6')
           return res.status(500).json({ message: "Bad request" });
         }
       }
     );
     token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-      expiresIn: "10s",
+      expiresIn: "3m",
     });
     refreshToken = jwt.sign(
       {
@@ -108,7 +114,7 @@ router.post("/refresh", async (req, res) => {
       },
       process.env.REFRESH_TOKEN_SECRET
     );
-    saverefreshtoken(refreshToken,email,tokenDB.line,remembered)
+    await saverefreshtoken(refreshToken,email,tokenDB.line,remembered)
     return res
       .status(201)
       .json({ message: true, token: token, refreshtoken: refreshToken });})
@@ -214,7 +220,7 @@ router.post("/register", async (req, res) => {
         totalSpend: 0,
       });
       token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, {
-        expiresIn: "10s",
+        expiresIn: "3m",
       });
       refreshToken = jwt.sign(
         {
@@ -288,7 +294,7 @@ router.post("/login", async (req, res) => {
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
       token = await jwt.sign({ email: email }, process.env.SECRET_KEY, {
-        expiresIn: "10s",
+        expiresIn: "3m",
       });
          refreshToken = await jwt.sign(
           {
