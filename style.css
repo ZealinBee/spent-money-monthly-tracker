@@ -818,6 +818,7 @@ section p span:hover {
 
   .sign-out-button {
     bottom: 1rem;
+    position:fixed;
     top: inherit;
   }
 }
