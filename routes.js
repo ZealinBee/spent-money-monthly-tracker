@@ -12,7 +12,7 @@ const mailer = require("./mail.js");
 const router = express.Router();
 
 
-const saverefreshtoken=async (refreshToken,email,line,remembered)=>{
+const saverefreshtoken= async (refreshToken,email,line,remembered)=>{
   let num=line
   let allbusy=true
   if (line===0){
@@ -59,10 +59,10 @@ const deleteRefreshToken=async(email,line)=>{
 router.post("/refresh", async (req, res) => {
   try {
     token = req.header("Authorization");
-    if (!token) return res.status(400).json({ message: "Bad request1" });
+    if (!token) return res.status(400).json({ message: "Bad request" });
     auth.refrcheck(req).then(async (result) => {
       if (!result) {
-        return res.status(400).json({ message: "Bad request1.5" });
+        return res.status(400).json({ message: "Bad request" });
       }
     const email=result.email
     tokensDB = await refreshTokenModel.find({email:email});
@@ -75,18 +75,18 @@ router.post("/refresh", async (req, res) => {
       tokenDB=tokenelem
       }
     });
-    if (!isfound) return res.status(400).json({ message: "Bad request2" });
+    if (!isfound) return res.status(400).json({ message: "Bad request" });
     remembered=tokenDB.remembered
     if (tokenDB.expired) {
       await refreshTokenModel.deleteMany(
         { email: email },
         (err, result) => {
           if (err) {
-            return res.status(500).json({ message: "Bad request2.5" });
+            return res.status(500).json({ message: "Bad request" });
           }
         }
       );
-      return res.status(400).json({ message: "Bad request3" });
+      return res.status(400).json({ message: "Bad request" });
     }
     await refreshTokenModel.findOneAndUpdate(
       { token1: tokenDB.token1,token2: tokenDB.token2,token3: tokenDB.token3 },
@@ -94,7 +94,7 @@ router.post("/refresh", async (req, res) => {
       { new: true },
       (err, result) => {
         if (err) {
-          return res.status(500).json({ message: "Bad request4" });
+          return res.status(500).json({ message: "Bad request" });
         }
       }
     );
@@ -225,7 +225,7 @@ router.post("/register", async (req, res) => {
         await user.save();
         setTimeout(() => {
           deleteRefreshToken(req.body.email,result)
-        }, 1000*60*30)
+        }, 1000*60*60*6)
         return res
           .status(201)
           .json({ message: true, token: token, refreshtoken: refreshToken });
@@ -269,7 +269,7 @@ router.post("/login", async (req, res) => {
     }
     setTimeout(() => {
       deleteRefreshToken(req.body.email,result)
-    }, 10000*10)
+    }, 1000*60*60*6)//6 hours
     return res.status(200).json({
       answer: answer,
       totalSpend: totalSpend,
