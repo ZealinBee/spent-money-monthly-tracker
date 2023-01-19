@@ -1,5 +1,5 @@
 //Imports
-import numberOfDaysInAMonth from "http://localhost:3000/daysCount.js";
+import numberOfDaysInAMonth from "https://spent-money-monthly-tracker-production.up.railway.app/";
 
 // window.addEventListener("beforeunload", function (e) {
 //   e.preventDefault();
