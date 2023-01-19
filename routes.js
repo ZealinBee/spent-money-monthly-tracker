@@ -276,7 +276,7 @@ router.post("/login", async (req, res) => {
     let remembered=req.body.remembered||0
     let answer = false;
     let token = "0";
-    let refreshtoken = "0";
+    let refreshToken = "0";
     let totalHave = 0;
     let totalSpend = 0;
     const hashword = user[0].password;
@@ -287,10 +287,10 @@ router.post("/login", async (req, res) => {
       answer = true;
       totalHave = totalHaveUser;
       totalSpend = totalSpendUser;
-      token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
+      token = await jwt.sign({ email: email }, process.env.SECRET_KEY, {
         expiresIn: "10s",
       });
-        refreshToken = jwt.sign(
+         refreshToken = await jwt.sign(
           {
             email: req.body.email,
           },
