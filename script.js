@@ -158,6 +158,7 @@ const submitMonthlyMoneyHandler = async (e) => {
     totalMonthlyAllowanceSpan.textContent = monthlyAllowance;
     dailyAllowance = (monthlyAllowance / numberOfDaysInAMonth).toFixed(2);
     dailyAllowanceSpan.textContent = dailyAllowance;
+
     if (useAsGuest === false) {
       const ress = await fetch("/money", {
         method: "PUT",
@@ -282,19 +283,7 @@ const submitSpentMoneyHandler = async (e) => {
       });
       currentDay = i + 1;
     }
-
-    const ress = await fetch("/money", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ totalSpend: totalSpentMoney }),
-    });
-
-    if (ress.status === 400) {
-      await updatingTokenHandler();
-
+    if (useAsGuest === false) {
       const ress = await fetch("/money", {
         method: "PUT",
         headers: {
@@ -303,6 +292,19 @@ const submitSpentMoneyHandler = async (e) => {
         },
         body: JSON.stringify({ totalSpend: totalSpentMoney }),
       });
+
+      if (ress.status === 400) {
+        await updatingTokenHandler();
+
+        const ress = await fetch("/money", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ totalSpend: totalSpentMoney }),
+        });
+      }
     }
   }
 };
@@ -321,6 +323,7 @@ goToLoginLink.addEventListener("click", function (e) {
 toggleLogin.addEventListener("click", function (e) {
   loginSection.classList.toggle("hide");
   program.classList.add("show");
+  useAsGuest = true;
   // document.querySelector('.background-image').style.display = "none"
 });
 
